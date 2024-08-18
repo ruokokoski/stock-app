@@ -1,7 +1,7 @@
 # Comparison of **free** stock market APIs
 
-| API Name       | Update Frequency | Free Tier Limits       | Link                         | Review                |
-|----------------|------------------|------------------------|--------------------------------------------|----------------------|
+| API Name       | Update Frequency | Free Tier Limits       | Review                |
+|----------------|------------------|------------------------|-----------------------|
 | [Polygon.io](https://www.polygon.io/pricing) | End of day | 5 API calls/min | fundamentals, technical, 2 years historical but **no real-time data** |
 | [Alphavantage](https://www.alphavantage.co/documentation/) | End of day | 25 requests per day | good documentation, lots of fundamentals,  +15 years of history data,  **no real time** |
 | [Twelvedata](https://twelvedata.com/) | Real-time | 800 API credits/day | 1 call is 1 credit or more, it is unclear what 800 daily credits actually mean |
