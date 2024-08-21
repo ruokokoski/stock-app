@@ -26,33 +26,47 @@ The application is a web application designed for monitoring stock markets. It f
    ```bash
    git clone https://github.com/Ethervortex/stock-app.git
    cd stock-app
+   ```
 2. **Install backend dependencies**:
    ```bash
-   cd backend
    npm install
+   ```
 3. **Set Up Environment Variables**:
    
    Create a .env file in the backend directory and add the necessary environment variables
+   ```bash
+   DATABASE_URL=xx
+   PORT=3000
+   SECRET=<your own secret>
+   ```
 4. **xx**:
 
-## Building frontend
+### Building frontend
 
-xxxxx
+To build the frontend, use:
+```bash
+   npm run build
+```
 
-## Running the app
+### Running the app
 
-To start the app, use:
+To start the development server, use:
+```bash
+   npm run dev
+```
+
+To start the app in production mode, use:
 ```bash
    npm start
 ```
-## Testing
+### Testing
 
 To run tests for the application, use the following command:
 ```bash
    npm test
 ```
 
-## Eslint
+### Eslint
 
 Run ESLint to check for code quality and style issues. To run ESLint, use:
 ```bash
