@@ -28,7 +28,8 @@
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.12.0",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "umzug": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

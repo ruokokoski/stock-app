@@ -1,6 +1,6 @@
 const User = require('./user')
 
-User.sync()
+User.sync({ alter: true })
 
 module.exports = {
   User
