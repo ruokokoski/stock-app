@@ -6,6 +6,12 @@
 app = 'stock-app-tr'
 primary_region = 'arn'
 
+[env]
+  PORT = '8080'
+
+[processes]
+  app = 'node index.js'
+
 [http_service]
   internal_port = 8080
   force_https = true
