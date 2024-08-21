@@ -7,6 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint .",
+    "migration:down": "node util/rollback.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
