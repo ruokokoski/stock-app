@@ -16,6 +16,12 @@ const errorHandler = (error, request, response) => {
     return response.status(400).json({
       error: error.errors.map(e => e.message)
     })
+  } else if (error.name ===  'JsonWebTokenError') {
+    return response.status(401).json({ error: 'Token invalid' })
+  } else if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
+      error: 'token expired'
+    })
   }
   response.status(error.status || 500).json({
     error: error.message || 'Internal Server Error'
@@ -35,7 +41,7 @@ const tokenExtractor = async (req, res, next) => {
     }
   } else {
     return res.status(401).json({ error: 'token missing' })
-  }
+  } 
   next()
 }
 

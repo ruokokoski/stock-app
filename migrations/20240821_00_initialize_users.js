@@ -17,6 +17,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      passwordhash: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       disabled: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
