@@ -1,6 +1,6 @@
 PUT http://localhost:3000/api/users/frodo@shire.com
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRydW9rb0BnbWFpbC5jb20iLCJpZCI6MSwiaWF0IjoxNzI0MjQ4Njk1LCJleHAiOjE3MjQyNTU4OTV9.4Cca29QuIcDQ4KhnbXjRn_EYo56kPxxzhqHbDT7HGvM
+Authorization: Bearer <token here>
 
 {
   "disabled": true
