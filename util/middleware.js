@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('./config.js')
+const { User } = require('../models')
 const Session = require('../models/session')
 
 const errorHandler = (error, request, response) => {
@@ -27,7 +28,7 @@ const tokenExtractor = async (req, res, next) => {
     try {
       const token = authorization.substring(7)
       req.decodedToken = jwt.verify(token, SECRET)
-      console.log('Decoded token:', req.decodedToken)
+      //console.log('Decoded token:', req.decodedToken)
       req.token = token
     } catch {
       return res.status(401).json({ error: 'token invalid' })
@@ -62,4 +63,12 @@ const checkSession = async (req, res, next) => {
   }
 }
 
-module.exports = { errorHandler, tokenExtractor, checkSession }
+const isAdmin = async (req, res, next) => {
+  const user = await User.findByPk(req.decodedToken.id)
+  if (!user.admin) {
+    return res.status(401).json({ error: 'operation not allowed' })
+  }
+  next()
+}
+
+module.exports = { errorHandler, tokenExtractor, checkSession, isAdmin }

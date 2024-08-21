@@ -1,6 +1,7 @@
 const router = require('express').Router()
 
 const { User } = require('../models')
+const { tokenExtractor, isAdmin } = require('../util/middleware')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll()
@@ -32,7 +33,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.put('/:username', async (req, res) => {
+router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
   const user = await User.findOne({
     where: {
       username: req.params.username

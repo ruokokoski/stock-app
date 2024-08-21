@@ -1,5 +1,6 @@
 PUT http://localhost:3000/api/users/frodo@shire.com
 Content-Type: application/json
+Authorization: Bearer your_jwt_token_here
 
 {
   "disabled": true

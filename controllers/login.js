@@ -34,7 +34,7 @@ router.post('/', async (request, response) => {
   }
 
   const token = jwt.sign(userForToken, SECRET)
-  console.log('Generated token:', token)
+  //console.log('Generated token:', token)
   await Session.create({ token })
 
   response

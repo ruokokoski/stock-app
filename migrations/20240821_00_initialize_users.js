@@ -21,6 +21,10 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
+      admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
