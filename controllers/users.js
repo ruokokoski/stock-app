@@ -19,14 +19,29 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const user = await User.findByPk(req.params.id, {
     attributes: {
-      exclude: [
-        'id', 
+      exclude: [ 
         'createdAt', 
         'updatedAt'
       ]
     },
   })
   if (user) {
+    res.json(user)
+  } else {
+    res.status(404).end()
+  }
+})
+
+router.put('/:username', async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      username: req.params.username
+    }
+  })
+
+  if (user) {
+    user.disabled = req.body.disabled
+    await user.save()
     res.json(user)
   } else {
     res.status(404).end()
