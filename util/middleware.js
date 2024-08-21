@@ -50,7 +50,7 @@ const checkSession = async (req, res, next) => {
       return res.status(401).json({ error: 'Session not found' })
     }
     
-    if (session.expired) {
+    if (!session.valid) {
       return res.status(401).json({ error: 'Session expired' })
     }
 

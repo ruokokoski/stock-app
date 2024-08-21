@@ -13,9 +13,9 @@ Session.init({
     unique: true,
     allowNull: false,
   },
-  expired: {
+  valid: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
   }
 }, {
   sequelize,
