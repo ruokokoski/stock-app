@@ -8,7 +8,6 @@ const App = () => {
 
   return (
     <Container className="mt-10">
-      <h1>Login</h1>
       <LoginForm onLogin={handleLogin} />
     </Container>
   )
