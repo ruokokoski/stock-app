@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Alert } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import '../styles/styles.css'
 
@@ -8,13 +8,15 @@ const SignupForm = ({ onSignup }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
 
   const handleSignup = (event) => {
     event.preventDefault()
     if (password === confirmPassword) {
       onSignup(name, username, password)
+      setShowAlert(false)
     } else {
-      alert("Passwords do not match!")
+      setShowAlert(true)
     }
   }
 
@@ -29,6 +31,12 @@ const SignupForm = ({ onSignup }) => {
         }}
       >
         <h1>Signup</h1>
+
+        {showAlert && (
+          <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+            Passwords do not match!
+          </Alert>
+        )}
         
         <Form.Group controlId="userName">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Name</Form.Label>
