@@ -18,3 +18,20 @@
 .gradient-button:hover {
   background: linear-gradient(to right, #0d76d6, #36a4d8);
 }
+
+.nav-link {
+  color: #007bff !important;
+}
+
+.nav-link:hover {
+  color: #0056b3 !important;
+}
+
+.navbar-padding {
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+}
+
+.content-padding {
+  padding-top: 20px;
+}

@@ -6,4 +6,5 @@
 | 18.08 | 2    | more research on free stock APIs |
 | 21.08 | 6    | start backend development by adding user management |
 | 23.08 | 2    | initialize frontend, create simple login form with bootstrap |
-| **Total** | **13** | |
+| 28.08 | 4    | improve styling and layout, add SignupForm and NavigationBar |
+| **Total** | **17** | |
