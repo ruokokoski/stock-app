@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
 import Home from './components/Home'
@@ -6,11 +6,22 @@ import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
 import loginService from './services/login'
+import logoutService from './services/logout'
+import stockService from './services/stocks'
 
 const App = () => {
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
   //const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+		const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+		if (loggedUserJSON) {
+			const user = JSON.parse(loggedUserJSON)
+			setUser(user)
+			stockService.setToken(user.token)
+		}
+	}, [])
 
   const handleLogin = async (username, password) => {
     try {
@@ -18,8 +29,11 @@ const App = () => {
 				username,
 				password,
 			})
-      console.log('Logging in with', username, password)
+      console.log('Logging in with', username)
       setUser(user)
+      window.localStorage.setItem(
+        'loggedStockappUser', JSON.stringify(user)
+      )
       navigate('/')
     } catch (error) {
       console.log('Login failed', error)
@@ -31,10 +45,20 @@ const App = () => {
     console.log('Signing up with', name, username, password)
   }
 
-  const handleLogout = () => {
-    console.log('Logging out')
-    setUser(null)
-    navigate('/login')
+  const handleLogout = async () => {
+    try {
+      const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        await logoutService.logout(user.token)
+        setUser(null)
+        window.localStorage.removeItem('loggedStockappUser')
+        console.log('Logout successful')
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log('Logout failed', error)
+    }
   }
 
   return (
