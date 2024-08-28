@@ -1,9 +1,16 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+  }
+
 .gradient-button {
   background: linear-gradient(to right, #1389ea, #42c3ff);
-  border: none;
+  border: none !important;
   color: #fff;
   padding: 7px 10px;
-  border-radius: 8px;
+  border-radius: 8px !important;
   margin-top: 10px;
   margin-bottom: 5px;
 }

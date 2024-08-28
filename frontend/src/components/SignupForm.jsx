@@ -3,27 +3,44 @@ import { Form, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import '../styles/styles.css'
 
-const LoginForm = ({ onLogin }) => {
+const SignupForm = ({ onSignup }) => {
+  const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
-  const handleLogin = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault()
-    onLogin(username, password)
+    if (password === confirmPassword) {
+      onSignup(name, username, password)
+    } else {
+      alert("Passwords do not match!")
+    }
   }
 
   return (
     <div className='form-container'>
-    
       <Form
-        onSubmit={handleLogin}
+        onSubmit={handleSignup}
         autoComplete="off"
         style={{
           width: '100%',
           maxWidth: '400px',
         }}
       >
-        <h1>Login</h1>
+        <h1>Signup</h1>
+        
+        <Form.Group controlId="userName">
+          <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={name}
+            placeholder="full name"
+            onChange={({ target }) => setName(target.value)}
+            autoComplete="off"
+          />
+        </Form.Group>
+
         <Form.Group controlId="userEmail">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Username</Form.Label>
           <Form.Control
@@ -46,17 +63,28 @@ const LoginForm = ({ onLogin }) => {
           />
         </Form.Group>
 
+        <Form.Group controlId="userConfirmPassword">
+          <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            value={confirmPassword}
+            placeholder="confirm password"
+            onChange={({ target }) => setConfirmPassword(target.value)}
+            autoComplete="off"
+          />
+        </Form.Group>
+
         <Button type="submit" className="gradient-button">
-          Login
+          Signup
         </Button>
 
         <p>
-          Don't have an account?{' '}
-          <Link to="/signup">Signup</Link>
+          Already have an account?{' '}
+          <Link to="/">Login</Link>
         </p>
       </Form>
     </div>
   )
 }
 
-export default LoginForm
+export default SignupForm
