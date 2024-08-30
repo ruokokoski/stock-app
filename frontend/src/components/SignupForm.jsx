@@ -17,7 +17,7 @@ const SignupForm = ({ onSignup }) => {
     return re.test(email)
   }
 
-  const handleSignup = (event) => {
+  const handleSignup = async (event) => {
     event.preventDefault()
     if (!name || !username || !password || !confirmPassword) {
       setMessageVariant('danger')
@@ -34,9 +34,19 @@ const SignupForm = ({ onSignup }) => {
       setMessage('Passwords do not match!')
       return
     }
-    onSignup(name, username, password)
-    setMessageVariant('success')
-    setMessage('Created user', username)
+    try {
+      await onSignup(name, username, password)
+      setMessage('Created user',  username)
+      setMessageVariant('success')
+      setName('')
+      setUsername('')
+      setPassword('')
+      setConfirmPassword('')
+    } catch (error) {
+      console.error('Signup failed:', error)
+      setMessage('Signup failed.')
+      setMessageVariant('danger')
+    }
   }
 
   return (

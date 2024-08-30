@@ -10,7 +10,7 @@ const NavigationBar = ({ user, onLogout }) => {
         <Nav className="me-auto">
           {user && (
             <Nav.Link as="span">
-              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Home</Link>
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Markets</Link>
             </Nav.Link>
           )}
         </Nav>

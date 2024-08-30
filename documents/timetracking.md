@@ -7,5 +7,5 @@
 | 21.08 | 6    | start backend development by adding user management |
 | 23.08 | 2    | initialize frontend, create simple login form with bootstrap |
 | 28.08 | 6    | improve styling, add SignupForm, NavigationBar, login- , logout- and stockService & localStorage|
-| 30.08 | 3    | tests for frontend and backend, create Message component |
-| **Total** | **22** | |
+| 30.08 | 5    | tests for frontend and backend, create Message component, connect signup to backend |
+| **Total** | **24** | |

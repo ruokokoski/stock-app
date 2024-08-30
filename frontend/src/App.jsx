@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
-import Home from './components/Home'
+import Markets from './components/Markets'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import stockService from './services/stocks'
+import signupService from './services/signup'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -24,6 +25,7 @@ const App = () => {
 	}, [])
 
   const handleLogin = async (username, password) => {
+    console.log('Logging in with', username, password)
     try {
       const user = await loginService.login({
 				username,
@@ -42,8 +44,15 @@ const App = () => {
     
   }
 
-  const handleSignup = (name, username, password) => {
+  const handleSignup = async (name, username, password) => {
     console.log('Signing up with', name, username, password)
+    try {
+      await signupService.signup({ name, username, password })
+      navigate('/login')
+    } catch (error) {
+      console.log('Signup failed', error)
+      throw error
+    }
   }
 
   const handleLogout = async () => {
@@ -67,7 +76,7 @@ const App = () => {
       <NavigationBar user={user} onLogout={handleLogout} />
       <Container className="mt-10">
         <Routes>
-          <Route path="/" element={user ? <Home /> : <Navigate replace to="/login" />} />
+          <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} />} />
         </Routes>
