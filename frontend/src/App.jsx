@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
 import Home from './components/Home'
 import LoginForm from './components/LoginForm'
@@ -37,6 +37,7 @@ const App = () => {
       navigate('/')
     } catch (error) {
       console.log('Login failed', error)
+      throw error
     }
     
   }
@@ -66,7 +67,7 @@ const App = () => {
       <NavigationBar user={user} onLogout={handleLogout} />
       <Container className="mt-10">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={user ? <Home /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} />} />
         </Routes>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import Message from './Message'
 import '../styles/styles.css'
 
 const SignupForm = ({ onSignup }) => {
@@ -8,16 +9,34 @@ const SignupForm = ({ onSignup }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [showAlert, setShowAlert] = useState(false)
+  const [message, setMessage] = useState('')
+  const [messageVariant, setMessageVariant] = useState('')
+
+  const isEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return re.test(email)
+  }
 
   const handleSignup = (event) => {
     event.preventDefault()
-    if (password === confirmPassword) {
-      onSignup(name, username, password)
-      setShowAlert(false)
-    } else {
-      setShowAlert(true)
+    if (!name || !username || !password || !confirmPassword) {
+      setMessageVariant('danger')
+      setMessage('All fields are required!')
+      return
     }
+    if (!isEmail(username)) {
+      setMessageVariant('danger')
+      setMessage('Invalid email address!')
+      return
+    }
+    if (password !== confirmPassword) {
+      setMessageVariant('danger')
+      setMessage('Passwords do not match!')
+      return
+    }
+    onSignup(name, username, password)
+    setMessageVariant('success')
+    setMessage('Created user', username)
   }
 
   return (
@@ -32,11 +51,11 @@ const SignupForm = ({ onSignup }) => {
       >
         <h1>Signup</h1>
 
-        {showAlert && (
-          <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
-            Passwords do not match!
-          </Alert>
-        )}
+        <Message 
+          message={message} 
+          variant={messageVariant}
+          onClose={() => setMessage('')} 
+        />
         
         <Form.Group controlId="userName">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Name</Form.Label>

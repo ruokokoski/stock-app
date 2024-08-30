@@ -1,15 +1,34 @@
 import { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import Message from './Message'
 import '../styles/styles.css'
 
 const LoginForm = ({ onLogin }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [messageVariant, setMessageVariant] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    onLogin(username, password)
+    if (!username || !password) {
+      setMessage('Please enter both username and password.')
+      setMessageVariant('danger')
+      return
+    }
+
+    try {
+      await onLogin(username, password)
+      setUsername('')
+      setPassword('')
+      setMessage('')
+      setMessageVariant('')
+    } catch (error) {
+      console.error('Login failed:', error)
+      setMessage('Login failed. Please check your username and password.')
+      setMessageVariant('danger')
+    }
   }
 
   return (
@@ -24,6 +43,13 @@ const LoginForm = ({ onLogin }) => {
         }}
       >
         <h1>Login</h1>
+
+        <Message 
+          message={message} 
+          variant={messageVariant} 
+          onClose={() => setMessage('')} 
+        />
+
         <Form.Group controlId="userEmail">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Username</Form.Label>
           <Form.Control
