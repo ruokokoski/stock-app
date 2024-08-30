@@ -11,7 +11,7 @@
 | [EODHD](https://eodhd.com/) | 15 min delayed | 20 API calls/day | only 20 calls/day for free, 1 year history data |
 | [Marketstack](https://marketstack.com/product) | End of day | 100 API calls/month | number of calls in free tier is very limited |
 | [Yahoo Finance](https://developer.yahoo.com/api/) | Real-time | ? | unofficial API, probably based on webscraping and thus unreliable |
-| [Bavest](https://www.bavest.co/en) | ? | ? | API key requested |
+| [Bavest](https://www.bavest.co/en) | ? | ? | API key requested - no answer |
 | [Tiingo](https://www.tiingo.com/) | Real-time | 1000 API calls/day |  real-time price data, news, company descriptions |
 | [Alpaca Markets](https://alpaca.markets/) | Real-time | 200 API calls/min | Only IEX exchange included in free tier |
 | [Stockdata.org](https://www.stockdata.org/) | ? | 100 API calls/day | intra-day / historical data |

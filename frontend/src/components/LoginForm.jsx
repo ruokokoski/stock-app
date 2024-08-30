@@ -51,7 +51,7 @@ const LoginForm = ({ onLogin }) => {
         </Button>
 
         <p>
-          Don't have an account?{' '}
+          Don&#39;t have an account?{' '}
           <Link to="/signup">Signup</Link>
         </p>
       </Form>

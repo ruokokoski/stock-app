@@ -8,7 +8,10 @@
     "dev": "nodemon index.js",
     "lint": "eslint .",
     "migration:down": "node util/rollback.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test",
+    "auth": "flyctl auth login",
+    "deploy": "fly deploy",
+    "proxy": "flyctl proxy 5432 -a stock-app-tr-db"
   },
   "repository": {
     "type": "git",
@@ -39,6 +42,7 @@
     "@stylistic/eslint-plugin-js": "^2.6.4",
     "eslint": "^9.9.0",
     "globals": "^15.9.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
   }
 }

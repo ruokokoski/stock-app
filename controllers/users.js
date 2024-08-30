@@ -28,9 +28,10 @@ router.post('/', async (req, res) => {
       passwordhash
     })
 
-    res.status(201).json(user);
+    res.status(201).json(user)
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create user' });
+    console.log(error)
+    res.status(500).json({ error: 'Failed to create user' })
   }
 })
 
