@@ -25,7 +25,6 @@ const App = () => {
 	}, [])
 
   const handleLogin = async (username, password) => {
-    console.log('Logging in with', username, password)
     try {
       const user = await loginService.login({
 				username,

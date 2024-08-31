@@ -8,8 +8,13 @@ const Session = require('../models/session')
 
 router.post('/', async (request, response) => {
   const { username, password } = request.body
-
-  const user = await User.findOne({ username }) // korjaa tämä
+  
+  const user = await User.findOne({
+    where: {
+      username: username
+    }
+  })
+  //console.log('User:', user)
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(password, user.passwordhash)
