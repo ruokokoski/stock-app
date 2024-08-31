@@ -36,8 +36,6 @@ const SignupForm = ({ onSignup }) => {
     }
     try {
       await onSignup(name, username, password)
-      setMessage('Created user',  username)
-      setMessageVariant('success')
       setName('')
       setUsername('')
       setPassword('')

@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
 import Markets from './components/Markets'
+import Users from './components/Users'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
 import loginService from './services/login'
 import logoutService from './services/logout'
-import stockService from './services/stocks'
+import userService from './services/users'
+//import stockService from './services/stocks'
 import signupService from './services/signup'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   //const [message, setMessage] = useState(null)
 
@@ -19,9 +22,16 @@ const App = () => {
 		const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON)
-			setUser(user)
-			stockService.setToken(user.token)
+			if (user.token) {
+        setUser(user)
+        //stockService.setToken(user.token)
+        userService.setToken(user.token)
+        console.log('Token is in localstorage')
+      } else {
+        console.log('No token found in localStorage')
+      }
 		}
+    setLoading(false)
 	}, [])
 
   const handleLogin = async (username, password) => {
@@ -30,11 +40,12 @@ const App = () => {
 				username,
 				password,
 			})
-      console.log('Logging in with', username)
+      console.log('Logged in user:', user)
       setUser(user)
       window.localStorage.setItem(
         'loggedStockappUser', JSON.stringify(user)
       )
+      userService.setToken(user.token)
       navigate('/')
     } catch (error) {
       console.log('Login failed', error)
@@ -47,7 +58,7 @@ const App = () => {
     console.log('Signing up with', name, username, password)
     try {
       await signupService.signup({ name, username, password })
-      navigate('/login')
+      navigate('/login', { state: { message: 'User created successfully. Please log in.', variant: 'success' } })
     } catch (error) {
       console.log('Signup failed', error)
       throw error
@@ -70,12 +81,17 @@ const App = () => {
     }
   }
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
       <Container className="mt-10">
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
+          <Route path="/users" element={user ? (user.admin ? <Users /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} />} />
         </Routes>

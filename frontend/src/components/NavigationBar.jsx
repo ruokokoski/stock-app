@@ -12,6 +12,12 @@ const NavigationBar = ({ user, onLogout }) => {
             <Nav.Link as="span">
               <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Markets</Link>
             </Nav.Link>
+            
+          )}
+          {user?.admin && (
+            <Nav.Link as="span">
+              <Link to="/users" style={{ textDecoration: 'none', color: 'inherit' }}>Users</Link>
+            </Nav.Link>
           )}
         </Nav>
         <Nav className="ms-auto">

@@ -7,9 +7,9 @@ describe('LoginForm', () => {
   it('renders the header "Login"', () => {
 
     render(
-        <MemoryRouter>
-            <LoginForm onLogin={() => {}} />
-        </MemoryRouter>
+      <MemoryRouter>
+          <LoginForm onLogin={() => {}} />
+      </MemoryRouter>
     )
   
     expect(screen.getByRole('heading', { name: /Login/i })).toBeInTheDocument()

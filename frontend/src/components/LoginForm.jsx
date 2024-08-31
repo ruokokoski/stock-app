@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Message from './Message'
 import '../styles/styles.css'
 
@@ -9,6 +9,16 @@ const LoginForm = ({ onLogin }) => {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [messageVariant, setMessageVariant] = useState('')
+
+  const location = useLocation()
+
+  useEffect(() => {
+    // Check if there is a message in the location state
+    if (location.state?.message && location.state?.variant) {
+      setMessage(location.state.message)
+      setMessageVariant(location.state.variant)
+    }
+  }, [location.state])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -25,9 +35,13 @@ const LoginForm = ({ onLogin }) => {
       setMessage('')
       setMessageVariant('')
     } catch (error) {
-      console.error('Login failed:', error)
-      setMessage('Login failed. Please check your username and password.')
-      setMessageVariant('danger')
+      if (error.response && error.response.data && error.response.data.error) {
+        setMessage(error.response.data.error)
+        setMessageVariant('danger')
+      } else {
+        setMessage('Login failed.')
+        setMessageVariant('danger')
+      }
     }
   }
 

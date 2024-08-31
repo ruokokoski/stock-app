@@ -1,7 +1,7 @@
 const Markets = () => {
   return (
     <div className='content-padding'>
-      <h1>Markets overview</h1>
+      <h2>Markets overview</h2>
     </div>
   )
 }
