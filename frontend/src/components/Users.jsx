@@ -10,14 +10,9 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const cachedUsers = localStorage.getItem('users')
-        if (cachedUsers) {
-          setUsers(JSON.parse(cachedUsers))
-        } else {
-          const fetchedUsers = await userService.getAllUsers()
-          setUsers(fetchedUsers)
-          localStorage.setItem('users', JSON.stringify(fetchedUsers))
-        }
+        const fetchedUsers = await userService.getAllUsers()
+        setUsers(fetchedUsers)
+        //localStorage.setItem('users', JSON.stringify(fetchedUsers))
       } catch (error) {
         console.log('Failed to fetch users:', error)
       }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom'
+//import { FaUserCircle, FaLock } from 'react-icons/fa'
 import Message from './Message'
 import '../styles/styles.css'
 

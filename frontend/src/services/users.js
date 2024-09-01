@@ -30,4 +30,12 @@ const deleteUser = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
-export default { getAllUsers, setToken, updateUser, deleteUser }
+const changePassword = async ({ currentPassword, newPassword }) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+  const response = await axios.post(`${baseUrl}/change-password`, { currentPassword, newPassword }, config)
+  return response.data
+}
+
+export default { getAllUsers, setToken, updateUser, deleteUser, changePassword }

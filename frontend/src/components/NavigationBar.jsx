@@ -22,16 +22,21 @@ const NavigationBar = ({ user, onLogout }) => {
         </Nav>
         <Nav className="ms-auto">
           {user ? (
-            <Nav.Link
-              as="span"
-              onClick={(e) => {
-                e.preventDefault();
-                onLogout();
-              }}
-              style={{ cursor: 'pointer', color: 'inherit' }}
-            >
-              Logout
-            </Nav.Link>
+            <>
+              <Nav.Link as="span">
+                <Link to="/change-password" style={{ textDecoration: 'none', color: 'inherit' }}>Change Password</Link>
+              </Nav.Link>
+              <Nav.Link
+                as="span"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onLogout();
+                }}
+                style={{ cursor: 'pointer', color: 'inherit' }}
+              >
+                Logout
+              </Nav.Link>
+            </>
           ) : (
             <>
               <Nav.Link as="span">

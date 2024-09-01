@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
 import Markets from './components/Markets'
 import Users from './components/Users'
+import Password from './components/Password'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
@@ -55,7 +56,7 @@ const App = () => {
   }
 
   const handleSignup = async (name, username, password) => {
-    console.log('Signing up with', name, username, password)
+    //console.log('Signing up with', name, username, password)
     try {
       await signupService.signup({ name, username, password })
       navigate('/login', { state: { message: 'User created successfully. Please log in.', variant: 'success' } })
@@ -92,6 +93,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
+          <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} />} />
         </Routes>

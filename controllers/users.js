@@ -52,24 +52,6 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-/*
-router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
-  const user = await User.findOne({
-    where: {
-      username: req.params.username
-    }
-  })
-
-  if (user) {
-    user.disabled = req.body.disabled
-    await user.save()
-    res.json(user)
-  } else {
-    res.status(404).end()
-  }
-})
-*/
-
 router.put('/:id', tokenExtractor, isAdmin, async (req, res) => {
   const user = await User.findByPk(req.params.id)
   if (!user) {
@@ -96,5 +78,27 @@ router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
   await user.destroy()
   res.status(204).end()
 })
+
+router.post('/change-password', tokenExtractor, async (req, res) => {
+  const { currentPassword, newPassword } = req.body
+  const user = await User.findByPk(req.decodedToken.id)
+
+  const passwordCorrect = user === null
+    ? false
+    : await bcrypt.compare(currentPassword, user.passwordhash)
+
+  if (!passwordCorrect) {
+    return res.status(401).json({
+      error: 'Invalid current password'
+    })
+  }
+
+  const saltRounds = 10
+  user.passwordhash = await bcrypt.hash(newPassword, saltRounds)
+  await user.save()
+
+  res.status(200).json({ message: 'Password changed successfully' })
+})
+
 
 module.exports = router
