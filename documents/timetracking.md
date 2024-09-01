@@ -9,4 +9,5 @@
 | 28.08 | 6    | improve styling, add SignupForm, NavigationBar, login- , logout- and stockService & localStorage|
 | 30.08 | 5    | tests for frontend and backend, create Message component, connect signup to backend |
 | 31.08 | 3    | fix bug in login, create Users page for admins |
-| **Total** | **27** | |
+| 01.09 | 1    | admin user can disable/enable and delete users at Users page |
+| **Total** | **28** | |

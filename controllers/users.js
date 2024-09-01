@@ -52,6 +52,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+/*
 router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
   const user = await User.findOne({
     where: {
@@ -66,6 +67,34 @@ router.put('/:username', tokenExtractor, isAdmin, async (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+*/
+
+router.put('/:id', tokenExtractor, isAdmin, async (req, res) => {
+  const user = await User.findByPk(req.params.id)
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' })
+  }
+  if (user.admin) {
+    return res.status(400).json({ error: 'Cannot disable an admin user' })
+  }
+
+  user.disabled = req.body.disabled
+  await user.save()
+  res.json(user)
+})
+
+router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
+  const user = await User.findByPk(req.params.id)
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' })
+  }
+  if (user.admin) {
+    return res.status(400).json({ error: 'Cannot delete an admin user' })
+  }
+  
+  await user.destroy()
+  res.status(204).end()
 })
 
 module.exports = router
