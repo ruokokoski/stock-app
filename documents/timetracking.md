@@ -10,4 +10,5 @@
 | 30.08 | 5    | tests for frontend and backend, create Message component, connect signup to backend |
 | 31.08 | 3    | fix bug in login, create Users page for admins |
 | 01.09 | 3    | admin user can disable/enable and delete users at Users page, create page for changing password |
-| **Total** | **30** | |
+| 03.09 | 3    | add icons, create ticker controller and tickerService, test Tiingo API from frontend |
+| **Total** | **33** | |

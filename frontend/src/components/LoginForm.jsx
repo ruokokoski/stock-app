@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, InputGroup } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom'
-//import { FaUserCircle, FaLock } from 'react-icons/fa'
+import { FaUserCircle, FaLock } from 'react-icons/fa'
 import Message from './Message'
 import '../styles/styles.css'
 
@@ -67,24 +67,32 @@ const LoginForm = ({ onLogin }) => {
 
         <Form.Group controlId="userEmail">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Username</Form.Label>
-          <Form.Control
-            type="text"
-            value={username}
-            placeholder="email address"
-            onChange={({ target }) => setUsername(target.value)}
-            autoComplete="off"
-          />
+          <InputGroup>
+            <InputGroup.Text><FaUserCircle /></InputGroup.Text>
+            <Form.Control
+              type="text"
+              value={username}
+              placeholder="email address"
+              onChange={({ target }) => setUsername(target.value)}
+              autoComplete="off"
+              style={{ backgroundColor: '#f0f8ff' }}
+            />
+          </InputGroup>
         </Form.Group>
 
         <Form.Group controlId="userPassword">
           <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            placeholder="password"
-            onChange={({ target }) => setPassword(target.value)}
-            autoComplete="off"
-          />
+          <InputGroup>
+            <InputGroup.Text><FaLock /></InputGroup.Text>
+            <Form.Control
+              type="password"
+              value={password}
+              placeholder="password"
+              onChange={({ target }) => setPassword(target.value)}
+              autoComplete="off"
+              style={{ backgroundColor: '#f0f8ff' }}
+            />
+          </InputGroup>
         </Form.Group>
 
         <Button type="submit" className="gradient-button">

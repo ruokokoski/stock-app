@@ -36,7 +36,13 @@ const Password = () => {
   return (
     <div className='content-padding'>
     <h2>Change password</h2>
-    <Form onSubmit={handleChangePassword}>
+    <Form 
+      onSubmit={handleChangePassword}
+      style={{
+        width: '100%',
+        maxWidth: '400px',
+      }}
+    >
       <Message 
         message={message} 
         variant={messageVariant} 
