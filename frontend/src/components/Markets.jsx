@@ -26,24 +26,35 @@ const Markets = () => {
 
     fetchData()
   }, [])
-   
+
+  const getColor = (percentageChange) => {
+    if (!percentageChange || percentageChange === '-') return { color: 'black' }
+    if (percentageChange.startsWith('-')) {
+      return { color: 'red' }
+    } else {
+      return { color: 'green' }
+    }
+  }
+
   return (
     <div className='content-padding'>
       <h2>Markets overview</h2>
-      <Table striped bordered hover>
+      <Table striped bordered hover style={{ width: '80%', maxWidth: '1200px' }}>
         <thead>
           <tr>
-            <th>Index</th>
-            <th>Points</th>
-            <th>% Change</th>
-            <th>Date/Time</th>
+            <th style={{ width: '20%' }}>Index</th>
+            <th style={{ width: '10%' }}>Points</th>
+            <th style={{ width: '10%' }}>% Change</th>
+            <th style={{ width: '15%' }}>Date/Time</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>🇺🇸 S&P 500</td>
             <td>{marketData.sp500.latest.close}</td>
-            <td>{marketData.sp500.previous.percentageChange}</td>
+            <td style={getColor(marketData.sp500.previous.percentageChange)}>
+              {marketData.sp500.previous.percentageChange}
+            </td>
             <td>{marketData.sp500.latest.datetime}</td>
           </tr>
           <tr>

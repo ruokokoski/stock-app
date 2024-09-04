@@ -1,4 +1,4 @@
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const NavigationBar = ({ user, onLogout }) => {
@@ -22,21 +22,18 @@ const NavigationBar = ({ user, onLogout }) => {
         </Nav>
         <Nav className="ms-auto">
           {user ? (
-            <>
-              <Nav.Link as="span">
-                <Link to="/change-password" style={{ textDecoration: 'none', color: 'inherit' }}>Change Password</Link>
-              </Nav.Link>
-              <Nav.Link
-                as="span"
+            <NavDropdown title={user.name} id="user-dropdown">
+              <NavDropdown.Item as={Link} to="/change-password">Change Password</NavDropdown.Item>
+              <NavDropdown.Item
                 onClick={(e) => {
                   e.preventDefault();
                   onLogout();
                 }}
-                style={{ cursor: 'pointer', color: 'inherit' }}
+                style={{ cursor: 'pointer' }}
               >
                 Logout
-              </Nav.Link>
-            </>
+            </NavDropdown.Item>
+          </NavDropdown>
           ) : (
             <>
               <Nav.Link as="span">
