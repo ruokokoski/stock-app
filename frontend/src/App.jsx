@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
@@ -18,6 +19,19 @@ const App = () => {
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   //const [message, setMessage] = useState(null)
+
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response && error.response.status === 401) {
+        console.log('Token expired or invalid')
+        window.localStorage.removeItem('loggedStockappUser')
+        setUser(null)
+        navigate('/login')
+      }
+      return Promise.reject(error)
+    }
+  )
 
   useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')

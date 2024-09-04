@@ -1,6 +1,6 @@
 const axios = require('axios')
 const router = require('express').Router()
-const { TIINGO_API_KEY } = require('../util/config')
+const { TIINGO_API_KEY, TWELVEDATA_API_KEY } = require('../util/config')
 
 router.post('/', async (request, response) => {
   const { ticker } = request.body
