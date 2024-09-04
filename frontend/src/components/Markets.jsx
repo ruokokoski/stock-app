@@ -3,18 +3,22 @@ import twelvedataService from '../services/twelvedata'
 import { Table } from 'react-bootstrap'
 
 const Markets = () => {
-  const [marketData, setMarketData] = useState({})
+  const [marketData, setMarketData] = useState({
+    sp500: {
+      latest: { close: '-', datetime: '-' },
+      previous: { close: '-' },
+    },
+  })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const sp500Data = await twelvedataService.getTicker('SPX')
         console.log('S&P 500 Data:', sp500Data)
-
         setMarketData(prevData => ({
           ...prevData,
           sp500: sp500Data,
-        }))
+        }))  
       } catch (error) {
         console.error('Error fetching S&P500 data:', error)
       }
@@ -27,12 +31,20 @@ const Markets = () => {
     <div className='content-padding'>
       <h2>Markets overview</h2>
       <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Points</th>
+            <th>% Change</th>
+            <th>Date/Time</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
             <td>🇺🇸 S&P 500</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
+            <td>{marketData.sp500.latest.close}</td>
+            <td>{marketData.sp500.previous.percentageChange}</td>
+            <td>{marketData.sp500.latest.datetime}</td>
           </tr>
           <tr>
             <td>🇺🇸 Nasdaq</td>
