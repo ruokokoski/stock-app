@@ -1,6 +1,6 @@
 const axios = require('axios')
 const router = require('express').Router()
-const { TIINGO_API_KEY, TWELVEDATA_API_KEY } = require('../util/config')
+const { TIINGO_API_KEY } = require('../util/config')
 
 router.post('/', async (request, response) => {
   const { ticker } = request.body
@@ -14,6 +14,9 @@ router.post('/', async (request, response) => {
   try {
     const url = `https://api.tiingo.com/tiingo/daily/${ticker}/prices`
     const { data } = await axios.get(url, tiingoHeader)
+
+    // TODO: Save data also to database here
+
     response.status(200).json(data)
   } catch (error) {
     console.log('API call failed:', error)

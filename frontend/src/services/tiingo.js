@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/tickers'
+const baseUrl = '/api/tiingo'
 
 const getTicker = async (ticker) => {
   /*

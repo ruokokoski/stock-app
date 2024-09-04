@@ -9,7 +9,8 @@ const { connectToDatabase } = require('./util/db')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const logoutRouter = require('./controllers/logout')
-const tickersRouter = require('./controllers/tickers')
+const tiingoRouter = require('./controllers/tiingo')
+const twelvedataRouter = require('./controllers/twelvedata')
 
 const { errorHandler } = require('./util/middleware')
 
@@ -21,7 +22,8 @@ app.use(express.json())
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/logout', logoutRouter)
-app.use('/api/tickers', tickersRouter)
+app.use('/api/tiingo', tiingoRouter)
+app.use('/api/twelvedata', twelvedataRouter)
 
 app.use(errorHandler)
 
