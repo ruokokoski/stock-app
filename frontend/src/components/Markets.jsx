@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react'
 import twelvedataService from '../services/twelvedata'
 import { Table } from 'react-bootstrap'
 
+const TICKERS = [
+  { ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
+  { ticker: 'NDX', name: 'Nasdaq', flag: '🇺🇸' },
+  { ticker: 'DAX', name: 'DAX', flag: '🇩🇪' },
+  { ticker: 'FTSE', name: 'FTSE 100', flag: '🇬🇧' },
+  { ticker: 'OMXH', name: 'OMX Helsinki', flag: '🇫🇮' },
+  { ticker: 'OMXS', name: 'OMX Stockholm', flag: '🇸🇪' },
+  { ticker: 'N225', name: 'Nikkei 225', flag: '🇯🇵' }
+]
+
 const Markets = () => {
   const [marketData, setMarketData] = useState({
     sp500: {
@@ -89,12 +99,6 @@ const Markets = () => {
           </tr>
           <tr>
             <td>🇯🇵 Nikkei 225</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇨🇳 Shanghai Composite</td>
             <td>-</td>
             <td>%</td>
             <td>-</td>

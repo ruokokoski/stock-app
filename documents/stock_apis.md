@@ -18,7 +18,7 @@
 
 ### Conclusion
 
-Free real-time stock market APIs are relatively scarce and often come with strict limitations. For those needing real-time data, some providers offer options, but with restrictions on the number of calls. Alphavantage provides a robust range of market coverage and fundamental data, though it is limited to end-of-day updates in its free tier.
+Free real-time stock market APIs are relatively scarce and often come with strict limitations. For those needing real-time data, some providers offer options, but with restrictions on the number of calls. Alphavantage provides a robust range of market coverage and fundamental data, though it is limited to end-of-day updates in its free tier. However, fundamental metrics don't need to be updated in real-time, as they typically reflect longer-term financial data and trends, making end-of-day updates sufficient for most users. The 25 calls/day limitation can be managed by storing the data in own database, allowing for more efficient access.
 
 Tiingo is a versatile and comprehensive API offering real-time stock price data, along with additional features like news, company descriptions, and historical data. With its free tier, users can make up to 1,000 API calls per day.
 Using Tiingo, Twelvedata and Stockdata.org (and maybe also Finnhub and Alpaca) together, it might be possible to create a robust and diverse stock market application that taps into the strengths of each API.

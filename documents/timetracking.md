@@ -12,4 +12,5 @@
 | 01.09 | 3    | admin user can disable/enable and delete users at Users page, create page for changing password |
 | 03.09 | 3    | add icons, create ticker controller and tickerService, test Tiingo API from frontend |
 | 04.09 | 4    | fix token bug, add endpoint to fetch ticker data from TwelveData API, display S&P500 data, edit Navbar and style |
-| **Total** | **37** | |
+| 05.09 | 2    | update documents, study Tiingo and Twelvedata APIs |
+| **Total** | **39** | |
