@@ -6,9 +6,9 @@
 | [Alphavantage](https://www.alphavantage.co/documentation/) | End of day | 25 requests per day | good documentation, lots of fundamentals,  +15 years of history data,  **no real time** |
 | [Twelvedata](https://twelvedata.com/) | Real-time | 800 API credits/day | 1 call is 1 credit or more, it is unclear what 800 daily credits actually mean |
 | [Finnhub](https://finnhub.io/pricing) | Real-time | 60 API calls/min | only US market and market data for 50 symbols |
-| [Financial Modeling Prep API](https://intelligence.financialmodelingprep.com/developer/docs/pricing) | End of day | 250 calls/day | 5 year historical, **no real-time** |
+| [Financial Modeling Prep API](https://intelligence.financialmodelingprep.com/developer/docs/pricing) | End of day | 250 calls/day | 5 year historical, very limited symbols, **tested not good** |
 | [Barchart On Demand](https://www.barchart.com/ondemand/api) | Real-time | ? | global markets, availability of free tier is questionable - requires registration and company details |
-| [EODHD](https://eodhd.com/) | 15 min delayed | 20 API calls/day | only 20 calls/day for free, 1 year history data |
+| [EODHD](https://eodhd.com/) | 15 min delayed | 20 API calls/day | limited calls for free, 1 year history data, fundamentals |
 | [Marketstack](https://marketstack.com/product) | End of day | 100 API calls/month | number of calls in free tier is very limited |
 | [Yahoo Finance](https://developer.yahoo.com/api/) | Real-time | ? | unofficial API, probably based on webscraping and thus unreliable |
 | [Bavest](https://www.bavest.co/en) | ? | ? | API key requested - no answer |

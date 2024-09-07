@@ -13,4 +13,5 @@
 | 03.09 | 3    | add icons, create ticker controller and tickerService, test Tiingo API from frontend |
 | 04.09 | 4    | fix token bug, add endpoint to fetch ticker data from TwelveData API, display S&P500 data, edit Navbar and style |
 | 05.09 | 2    | update documents, study Tiingo and Twelvedata APIs |
-| **Total** | **39** | |
+| 07.09 | 2    | test Twelvedata, FMP, EODHD APIs, display major US indices on Markets page |
+| **Total** | **41** | |

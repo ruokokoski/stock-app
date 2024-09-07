@@ -9,7 +9,7 @@ const getTicker = async (ticker) => {
     },
   }
   */
- console.log('Twelvedata getTicker')
+ //console.log('Twelvedata getTicker')
   const response = await axios.post(baseUrl, { ticker })
   return response.data
 }

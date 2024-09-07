@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react'
 import twelvedataService from '../services/twelvedata'
 import { Table } from 'react-bootstrap'
 
+// Free plan for Twelvedata provides only US indices
 const TICKERS = [
   { ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
   { ticker: 'NDX', name: 'Nasdaq', flag: '🇺🇸' },
-  { ticker: 'DAX', name: 'DAX', flag: '🇩🇪' },
-  { ticker: 'FTSE', name: 'FTSE 100', flag: '🇬🇧' },
-  { ticker: 'OMXH', name: 'OMX Helsinki', flag: '🇫🇮' },
-  { ticker: 'OMXS', name: 'OMX Stockholm', flag: '🇸🇪' },
-  { ticker: 'N225', name: 'Nikkei 225', flag: '🇯🇵' }
+  { ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
+  //{ ticker: 'GDAXI', name: 'DAX', flag: '🇩🇪' },
+  //{ ticker: 'FTSE', name: 'FTSE 100', flag: '🇬🇧' },
+  //{ ticker: 'OMXH25', name: 'OMX Helsinki 25', flag: '🇫🇮' },
+  //{ ticker: 'OMX', name: 'OMX Stockholm 30', flag: '🇸🇪' },
+  //{ ticker: 'N225', name: 'Nikkei 225', flag: '🇯🇵' }
 ]
 
 const Markets = () => {
@@ -22,16 +24,22 @@ const Markets = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const sp500Data = await twelvedataService.getTicker('SPX')
-        console.log('S&P 500 Data:', sp500Data)
-        setMarketData(prevData => ({
-          ...prevData,
-          sp500: sp500Data,
-        }))  
-      } catch (error) {
-        console.error('Error fetching S&P500 data:', error)
+      const newMarketData = {}
+
+      for (const { ticker } of TICKERS) {
+        try {
+          const data = await twelvedataService.getTicker(ticker)
+          console.log(`${ticker} data:`, data)
+          newMarketData[ticker] = data
+        } catch (error) {
+          console.error(`Error fetching ${ticker} data:`, error)
+          newMarketData[ticker] = {
+            latest: { close: '-', datetime: '-' },
+            previous: { close: '-', percentageChange: '-' },
+          }
+        }
       }
+      setMarketData(newMarketData)
     }
 
     fetchData()
@@ -59,50 +67,16 @@ const Markets = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>🇺🇸 S&P 500</td>
-            <td>{marketData.sp500.latest.close}</td>
-            <td style={getColor(marketData.sp500.previous.percentageChange)}>
-              {marketData.sp500.previous.percentageChange}
-            </td>
-            <td>{marketData.sp500.latest.datetime}</td>
-          </tr>
-          <tr>
-            <td>🇺🇸 Nasdaq</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇩🇪 DAX</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇬🇧 FTSE 100</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇫🇮 OMX Helsinki</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇸🇪 OMX Stockholm</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
-          <tr>
-            <td>🇯🇵 Nikkei 225</td>
-            <td>-</td>
-            <td>%</td>
-            <td>-</td>
-          </tr>
+          {TICKERS.map(({ ticker, name, flag }) => (
+            <tr key={ticker}>
+              <td>{flag} {name}</td>
+              <td>{marketData[ticker]?.latest?.close || '-'}</td>
+              <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
+                {marketData[ticker]?.previous?.percentageChange || '-'}
+              </td>
+              <td>{marketData[ticker]?.latest?.datetime || '-'}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
