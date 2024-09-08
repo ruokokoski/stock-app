@@ -1,5 +1,7 @@
 # Tickers for European (and Japan) indices at Polygon.io
 
+| Ticker       | Name |
+|----------------|------------------|
 | I:DE30 | Dow Jones Germany |
 | I:DKDOW | Dow Jones Denmark |
 | I:FIDOW | Dow Jones Finland |
@@ -11,7 +13,7 @@
 | I:NQFI | Nasdaq Finland |
 | I:NQJP | Nasdaq Japan |
 | I:NQSE | Nasdaq Sweden |
-| I:OMXC20 Copenhagen ja 25
+| I:OMXC25 | OMX Copenhagen |
 | I:OMXH25 | OMX Helsinki 25 |
 | I:OMXHPI | OMX Helsinki PI |
 | I:OMXS30 | OMX Stockholm 30 |
