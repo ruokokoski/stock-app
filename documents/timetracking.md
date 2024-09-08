@@ -14,4 +14,5 @@
 | 04.09 | 4    | fix token bug, add endpoint to fetch ticker data from TwelveData API, display S&P500 data, edit Navbar and style |
 | 05.09 | 2    | update documents, study Tiingo and Twelvedata APIs |
 | 07.09 | 2    | test Twelvedata, FMP, EODHD APIs, display major US indices on Markets page |
-| **Total** | **41** | |
+| 08.09 | 2    | survey of European market index tickers -> Polygon.io one of only sources |
+| **Total** | **43** | |
