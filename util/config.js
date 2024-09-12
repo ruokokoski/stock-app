@@ -5,5 +5,6 @@ module.exports = {
   PORT: process.env.PORT || 3001,
   SECRET: process.env.SECRET,
   TIINGO_API_KEY: process.env.TIINGO_API_KEY,
-  TWELVEDATA_API_KEY: process.env.TWELVEDATA_API_KEY
+  TWELVEDATA_API_KEY: process.env.TWELVEDATA_API_KEY,
+  EODHD_API_KEY: process.env.EODHD_API_KEY
 }

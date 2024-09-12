@@ -25,27 +25,6 @@ router.post('/', async (request, response) => {
     const previousClose = parseFloat(previousDay.close)
     const percentageChange = ((latestClose - previousClose) / previousClose) * 100
     //console.log('last:', data.data.values[254])
-    
-    /*Following logic does not provide exact results, because daily close is from 15:59 hours:
-    const url = `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=1min&apikey=${TWELVEDATA_API_KEY}&outputsize=1440`
-    const data = await axios.get(url, twelvedataHeader)
-    
-    const latest = data.data.values[0]
-    console.log('latest:', latest)
-    const latestDate = new Date(data.data.values[0].datetime)
-    console.log('last entry date:', latestDate)
-    const latestClose = parseFloat(latest.close)
-    let previousClose = null
-    for (const entry of data.data.values) {
-      const date = new Date(entry.datetime)
-      if (date.getDate() !== latestDate.getDate()) {
-        previousClose = parseFloat(entry.close)
-        console.log('Previous day:', date)
-        break
-      }
-    }
-    const percentageChange = ((latestClose - previousClose) / previousClose) * 100
-    */
 
     // TODO: Save data also to database here
 

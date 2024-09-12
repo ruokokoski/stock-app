@@ -11,6 +11,7 @@ const loginRouter = require('./controllers/login')
 const logoutRouter = require('./controllers/logout')
 const tiingoRouter = require('./controllers/tiingo')
 const twelvedataRouter = require('./controllers/twelvedata')
+const eodhdRouter = require('./controllers/eodhd')
 
 const { errorHandler } = require('./util/middleware')
 
@@ -24,6 +25,7 @@ app.use('/api/login', loginRouter)
 app.use('/api/logout', logoutRouter)
 app.use('/api/tiingo', tiingoRouter)
 app.use('/api/twelvedata', twelvedataRouter)
+app.use('/api/eodhd', eodhdRouter)
 
 app.use(errorHandler)
 
