@@ -16,4 +16,5 @@
 | 07.09 | 2    | test Twelvedata, FMP, EODHD APIs, display major US indices on Markets page |
 | 08.09 | 2    | survey of European market index tickers -> Polygon.io one of only sources |
 | 12.09 | 2    | create EODHD endpoint for OMH25 data |
-| **Total** | **45** | |
+| 17.09 | 2    | create Polygon.io endpoint for European/Japan indices, modify EODHD to fetch free tickers |
+| **Total** | **47** | |

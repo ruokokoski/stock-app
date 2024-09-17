@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import twelvedataService from '../services/twelvedata'
-import eodhdService from '../services/eodhd'
+//import eodhdService from '../services/eodhd'
+import polygonService from '../services/polygon'
 import { Table } from 'react-bootstrap'
 
 // Free plan for Twelvedata provides only US indices
@@ -9,15 +10,23 @@ const TICKERS = [
   { ticker: 'NDX', name: 'Nasdaq', flag: '🇺🇸' },
   { ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
   { ticker: 'RUT', name: 'Russell 2000', flag: '🇺🇸' },
-  //{ ticker: 'GDAXI', name: 'DAX', flag: '🇩🇪' },
-  //{ ticker: 'FTSE', name: 'FTSE 100', flag: '🇬🇧' },
-  //{ ticker: 'OMX', name: 'OMX Stockholm 30', flag: '🇸🇪' },
-  //{ ticker: 'N225', name: 'Nikkei 225', flag: '🇯🇵' }
 ]
 
-// EODHD:
+// EODHD free tickers:
+/*
 const EODHD_TICKERS = [
-  { ticker: 'SLGOMXH25.HE', name: 'OMX Helsinki 25', flag: '🇫🇮' }
+  { ticker: 'AMZN.US', name: 'Amazon', flag: '🇺🇸' },
+  { ticker: 'AAPL.US', name: 'Apple', flag: '🇺🇸' },
+  { ticker: 'TSLA.US', name: 'Tesla', flag: '🇺🇸' },
+  { ticker: 'BTC-USD.CC', name: 'BTC/USD', flag: '🇺🇸' },
+  { ticker: 'EURUSD.FOREX', name: 'EUR/USD', flag: '🇺🇸' },
+]
+*/
+
+const POLYGON_TICKERS = [
+  { ticker: 'I:OMXHPI', name: 'OMX Helsinki PI', flag: '🇫🇮' },
+  { ticker: 'I:OMXS30', name: 'OMX Stockholm 30', flag: '🇸🇪' },
+  //{ ticker: 'I:NQJP', name: 'Nasdaq Japan Index', flag: '🇯🇵' },
 ]
 
 const Markets = () => {
@@ -30,7 +39,7 @@ const Markets = () => {
       for (const { ticker } of TICKERS) {
         try {
           const data = await twelvedataService.getTicker(ticker)
-          console.log(`${ticker} data:`, data)
+          //console.log(`${ticker} data:`, data)
           newMarketData[ticker] = data
         } catch (error) {
           console.error(`Error fetching ${ticker} data:`, error)
@@ -41,10 +50,10 @@ const Markets = () => {
         }
       }
 
-      for (const { ticker } of EODHD_TICKERS) {
+      for (const { ticker } of POLYGON_TICKERS) {
         try {
-          const data = await eodhdService.getTicker(ticker)
-          console.log(`${ticker} EODHD data:`, data)
+          const data = await polygonService.getTicker(ticker)
+          //console.log(`${ticker} Polygon data:`, data)
           newMarketData[ticker] = data
         } catch (error) {
           console.error(`Error fetching ${ticker} data:`, error)
@@ -76,14 +85,14 @@ const Markets = () => {
       <Table striped bordered hover style={{ width: '80%', maxWidth: '1200px' }}>
         <thead>
           <tr>
-            <th style={{ width: '20%' }}>Index</th>
-            <th style={{ width: '10%' }}>Points</th>
-            <th style={{ width: '10%' }}>% Change</th>
-            <th style={{ width: '15%' }}>Date/Time</th>
+            <th style={{ width: '40%' }}>Index</th>
+            <th style={{ width: '15%' }}>Points</th>
+            <th style={{ width: '15%' }}>% Change</th>
+            <th style={{ width: '30%' }}>Date/Time</th>
           </tr>
         </thead>
         <tbody>
-          {[...TICKERS, ...EODHD_TICKERS].map(({ ticker, name, flag }) => (
+          {[...TICKERS, ...POLYGON_TICKERS].map(({ ticker, name, flag }) => (
             <tr key={ticker}>
               <td>{flag} {name}</td>
               <td>{marketData[ticker]?.latest?.close || '-'}</td>

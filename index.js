@@ -12,6 +12,7 @@ const logoutRouter = require('./controllers/logout')
 const tiingoRouter = require('./controllers/tiingo')
 const twelvedataRouter = require('./controllers/twelvedata')
 const eodhdRouter = require('./controllers/eodhd')
+const polygonRouter = require('./controllers/polygon')
 
 const { errorHandler } = require('./util/middleware')
 
@@ -26,6 +27,7 @@ app.use('/api/logout', logoutRouter)
 app.use('/api/tiingo', tiingoRouter)
 app.use('/api/twelvedata', twelvedataRouter)
 app.use('/api/eodhd', eodhdRouter)
+app.use('/api/polygon', polygonRouter)
 
 app.use(errorHandler)
 

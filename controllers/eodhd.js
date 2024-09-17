@@ -1,12 +1,13 @@
 const axios = require('axios')
 const router = require('express').Router()
-const { EODHD_API_KEY } = require('../util/config')
+//const { EODHD_API_KEY } = require('../util/config')
 
 router.post('/', async (request, response) => {
   const { ticker } = request.body
 
   try {
-    const url = `https://eodhd.com/api/real-time/${ticker}?api_token=${EODHD_API_KEY}&fmt=json`
+    //const url = `https://eodhd.com/api/real-time/${ticker}?api_token=${EODHD_API_KEY}&fmt=json`
+    const url = `https://eodhd.com/api/real-time/${ticker}?api_token=demo&fmt=json`
     const data = await axios.get(url)
     
     console.log('Full API response:', JSON.stringify(data.data, null, 2))
