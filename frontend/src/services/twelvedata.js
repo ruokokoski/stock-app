@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/twelvedata'
 
-const getTicker = async (ticker) => {
+const getTicker = async (ticker, range = '1day', dailyChange = false) => {
   /*
   const config = {
     headers: {
@@ -9,8 +9,7 @@ const getTicker = async (ticker) => {
     },
   }
   */
- //console.log('Twelvedata getTicker')
-  const response = await axios.post(baseUrl, { ticker })
+  const response = await axios.post(baseUrl, { ticker, range, dailyChange })
   return response.data
 }
 
