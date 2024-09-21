@@ -70,10 +70,13 @@ router.post('/', async (request, response) => {
     }
 
     // General case for presenting chart data
-    const chartData = data.data.values.map((entry) => ({
-      datetime: entry.datetime,
-      close: parseFloat(entry.close).toFixed(2),
-    }))
+    const chartData = data.data.values
+      .map((entry) => ({
+        time: entry.datetime,
+        value: parseFloat(entry.close).toFixed(2),
+        //volume: parseInt(entry.volume)
+      }))
+      .sort((a, b) => new Date(a.time) - new Date(b.time))
 
     response.status(200).json({
       ticker,
