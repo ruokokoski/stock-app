@@ -8,10 +8,12 @@ import { getColor } from '../utils/helpers'
 const IndexPage = () => {
   const { ticker } = useParams()
   const location = useLocation()
-  const { name, percentageChange } = location.state || {}
+  const { name, percentageChange, chartData: forwardedChartData } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [chart, setChart] = useState(null)
   const [lineSeries, setLineSeries] = useState(null)
+  const [lastUpdated, setLastUpdated] = useState('')
+  const [initialDataUsed, setInitialDataUsed] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,14 +21,27 @@ const IndexPage = () => {
         const response = ticker.startsWith('I:') 
           ? await polygonService.getTicker(ticker)
           : await twelvedataService.getTicker(ticker, '1month')
-        console.log('chartData:', response.chartData)
         setChartData(response.chartData || [])
+        if (response.chartData && response.chartData.length > 0) {
+          const latestTime = response.chartData[response.chartData.length - 1].time
+          setLastUpdated(new Date(latestTime).toDateString())
+        }
+        console.log('Chart data was fecthed from API')
       } catch (error) {
-        console.error(`Error fetching data for ${ticker}:`, error)
+          console.error(`Error fetching data for ${ticker}:`, error)
       }
     }
-    fetchData()
-  }, [ticker])
+  
+    // Use forwarded data for initial render only
+    if (forwardedChartData && forwardedChartData.length > 0 && !initialDataUsed) {
+      setChartData(forwardedChartData)
+      const latestTime = forwardedChartData[forwardedChartData.length - 1].time
+      setLastUpdated(new Date(latestTime).toDateString())
+      setInitialDataUsed(true)
+    } else if (initialDataUsed) {
+      fetchData()
+    }
+  }, [ticker, forwardedChartData, initialDataUsed])
 
   useEffect(() => {
     const container = document.getElementById('chart');
@@ -72,6 +87,7 @@ const IndexPage = () => {
       <span style={getColor(percentageChange)}>
         {percentageChange}
       </span>
+      <p>Last updated: {lastUpdated}</p>
       <div id="chart">
       </div>
       <div className="buttons-container">

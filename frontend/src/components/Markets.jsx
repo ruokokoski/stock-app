@@ -89,7 +89,13 @@ const Markets = () => {
             <tr key={ticker}>
               <td>
                 <span>{flag} </span>
-                <Link to={`/index/${ticker}`} state={{ name, percentageChange: marketData[ticker]?.previous?.percentageChange }}>
+                <Link
+                  to={`/index/${ticker}`}
+                  state={{
+                    name,
+                    percentageChange: marketData[ticker]?.previous?.percentageChange,
+                    chartData: marketData[ticker]?.chartData
+                  }}>
                   {name}
                 </Link>
               </td>
