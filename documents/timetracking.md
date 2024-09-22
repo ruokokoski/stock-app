@@ -18,5 +18,5 @@
 | 12.09 | 2    | create EODHD endpoint for OMH25 data |
 | 17.09 | 2    | create Polygon.io endpoint for European/Japan indices, modify EODHD to fetch free tickers |
 | 21.09 | 3    | add link to Lightweight chart for indices |
-| 22.09 | 2    | improve logic for fetching data, enhance style for IndexPage |
-| **Total** | **52** | |
+| 22.09 | 7    | improve logic for fetching data, enhance style for charts, add choosable ranges, add tooltip |
+| **Total** | **57** | |
