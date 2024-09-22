@@ -1,11 +1,14 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import twelvedataService from '../services/twelvedata'
 import polygonService from '../services/polygon'
 import { createChart } from 'lightweight-charts'
+import { getColor } from '../utils/helpers'
 
 const IndexPage = () => {
   const { ticker } = useParams()
+  const location = useLocation()
+  const { name, percentageChange } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [chart, setChart] = useState(null)
   const [lineSeries, setLineSeries] = useState(null)
@@ -15,7 +18,7 @@ const IndexPage = () => {
       try {
         const response = ticker.startsWith('I:') 
           ? await polygonService.getTicker(ticker)
-          : await twelvedataService.getTicker(ticker, '1month', false)
+          : await twelvedataService.getTicker(ticker, '1month')
         console.log('chartData:', response.chartData)
         setChartData(response.chartData || [])
       } catch (error) {
@@ -59,18 +62,25 @@ const IndexPage = () => {
 
   const setChartInterval = (interval) => {
     // Adjust data fetching logic based on interval
-    // E.g., fetch different data sets
     console.log(`Interval set to: ${interval}`)
   }
 
   return (
     <div className="content-padding">
-      <h2>{ticker}</h2>
+      <h4>{name} Index</h4>
+      <span>ticker: {ticker}, change: </span>
+      <span style={getColor(percentageChange)}>
+        {percentageChange}
+      </span>
       <div id="chart">
       </div>
       <div className="buttons-container">
         {['1D', '1W', '1M', '1Y'].map(interval => (
-          <button key={interval} onClick={() => setChartInterval(interval)}>
+          <button 
+            key={interval}
+            className="gradient-button"
+            onClick={() => setChartInterval(interval)}
+          >
             {interval}
           </button>
         ))}

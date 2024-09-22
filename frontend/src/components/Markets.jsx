@@ -4,11 +4,12 @@ import twelvedataService from '../services/twelvedata'
 //import eodhdService from '../services/eodhd'
 import polygonService from '../services/polygon'
 import { Table } from 'react-bootstrap'
+import { getColor } from '../utils/helpers'
 
 // Free plan for Twelvedata provides only US indices
 const TICKERS = [
   { ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
-  { ticker: 'NDX', name: 'Nasdaq', flag: '🇺🇸' },
+  //{ ticker: 'NDX', name: 'Nasdaq Composite', flag: '🇺🇸' },
   //{ ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
   //{ ticker: 'RUT', name: 'Russell 2000', flag: '🇺🇸' },
 ]
@@ -39,7 +40,7 @@ const Markets = () => {
 
       for (const { ticker } of TICKERS) {
         try {
-          const data = await twelvedataService.getTicker(ticker, '1day', true)
+          const data = await twelvedataService.getTicker(ticker, '1month')
           console.log(`${ticker} data:`, data)
           console.log(`Percentage Change for ${ticker}:`, data.previous?.percentageChange)
           newMarketData[ticker] = data
@@ -68,18 +69,8 @@ const Markets = () => {
 
       setMarketData(newMarketData)
     }
-
     fetchData()
   }, [])
-
-  const getColor = (percentageChange) => {
-    if (!percentageChange || percentageChange === '-') return { color: 'black' }
-    if (percentageChange.startsWith('-')) {
-      return { color: 'red' }
-    } else {
-      return { color: 'green' }
-    }
-  }
 
   return (
     <div className='content-padding'>
@@ -97,7 +88,10 @@ const Markets = () => {
           {TICKERS.map(({ ticker, name, flag }) => (
             <tr key={ticker}>
               <td>
-                <Link to={`/index/${ticker}`}>{flag} {name}</Link>
+                <span>{flag} </span>
+                <Link to={`/index/${ticker}`} state={{ name, percentageChange: marketData[ticker]?.previous?.percentageChange }}>
+                  {name}
+                </Link>
               </td>
               <td>{marketData[ticker]?.latest?.close || '-'}</td>
               <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
