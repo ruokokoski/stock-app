@@ -105,7 +105,7 @@ const App = () => {
   return (
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
-      <Marquee />
+      {/* <Marquee /> */}
       <Container className="mt-10">
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />

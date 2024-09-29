@@ -7,8 +7,8 @@ import { getColor } from '../utils/helpers'
 
 // Free plan for Twelvedata provides only US indices
 const TICKERS = [
-  { ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
-  { ticker: 'NDX', name: 'Nasdaq Composite', flag: '🇺🇸' },
+  //{ ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
+  //{ ticker: 'NDX', name: 'Nasdaq Composite', flag: '🇺🇸' },
   //{ ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
   //{ ticker: 'RUT', name: 'Russell 2000', flag: '🇺🇸' },
 ]
@@ -29,8 +29,8 @@ const Markets = () => {
       for (const { ticker } of TICKERS) {
         try {
           const data = await twelvedataService.getTicker(ticker, '1m')
-          console.log(`${ticker} data:`, data)
-          console.log(`Percentage Change for ${ticker}:`, data.previous?.percentageChange)
+          //console.log(`${ticker} data:`, data)
+          //console.log(`Percentage Change for ${ticker}:`, data.previous?.percentageChange)
           newMarketData[ticker] = data
         } catch (error) {
           console.error(`Error fetching ${ticker} data:`, error)
@@ -82,7 +82,7 @@ const Markets = () => {
                   state={{
                     name,
                     percentageChange: marketData[ticker]?.previous?.percentageChange,
-                    chartData: marketData[ticker]?.chartData
+                    chartData: marketData[ticker]?.chartData,
                   }}>
                   {name}
                 </Link>
@@ -96,7 +96,18 @@ const Markets = () => {
           ))}
           {POLYGON_TICKERS.map(({ ticker, name, flag }) => (
             <tr key={ticker}>
-              <td>{flag} {name}</td>
+              <td>
+                <span>{flag} </span>
+                <Link
+                  to={`/index/${ticker}`}
+                  state={{
+                    name,
+                    percentageChange: marketData[ticker]?.previous?.percentageChange,
+                    chartData: marketData[ticker]?.chartData,
+                  }}>
+                  {name}
+                </Link>
+              </td>
               <td>{marketData[ticker]?.latest?.close || '-'}</td>
               <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
                 {marketData[ticker]?.previous?.percentageChange || '-'}

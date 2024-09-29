@@ -60,7 +60,8 @@ router.post('/', async (request, response) => {
       const latestClose = parseFloat(latestEntry.close)
       const previousClose = parseFloat(previousEntry.close)
       const percentageChange = ((latestClose - previousClose) / previousClose) * 100
-      
+      console.log('LatestEntry twelve:', latestEntry.datetime)
+
       latest = {
         close: latestClose.toFixed(2),
         datetime: latestEntry.datetime,

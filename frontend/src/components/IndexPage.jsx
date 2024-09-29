@@ -8,6 +8,7 @@ import Chart from './Chart'
 const IndexPage = () => {
   const { ticker } = useParams()
   const location = useLocation()
+  // Testaa vielä initialDataUsed toimivuutta:
   const { name, percentageChange, chartData: forwardedChartData } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [lastUpdated, setLastUpdated] = useState('')
@@ -33,15 +34,16 @@ const IndexPage = () => {
   useEffect(() => {
     // Use forwarded data for initial render only
     if (forwardedChartData && forwardedChartData.length > 0 && !initialDataUsed) {
+      console.log('initialDataUsed:', initialDataUsed)
       setChartData(forwardedChartData)
       const latestTime = forwardedChartData[forwardedChartData.length - 1].time
       console.log('Latest time:', latestTime)
       setLastUpdated(formatDate(latestTime))
       setInitialDataUsed(true)
-    } else if (initialDataUsed) {
+    } else {
       fetchData(selectedInterval)
     }
-  }, [ticker, forwardedChartData, initialDataUsed, selectedInterval])
+  }, [ticker, forwardedChartData, selectedInterval])
 
   const setChartInterval = (interval) => {
     // Adjust data fetching logic based on interval
@@ -63,17 +65,19 @@ const IndexPage = () => {
         name={name} 
         selectedInterval={selectedInterval} 
       />
-      <div className="buttons-container">
-        {['1d', '1w', '1m', '1y'].map(interval => (
-          <button 
-            key={interval}
-            className="gradient-button gradient-button-small"
-            onClick={() => setChartInterval(interval)}
-          >
-            {interval}
-          </button>
-        ))}
-      </div>
+      {!ticker.startsWith('I:') && (
+        <div className="buttons-container">
+          {['1d', '1w', '1m', '1y'].map(interval => (
+            <button
+              key={interval}
+              className="gradient-button gradient-button-small"
+              onClick={() => setChartInterval(interval)}
+            >
+              {interval}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
