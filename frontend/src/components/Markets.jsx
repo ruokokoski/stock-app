@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import twelvedataService from '../services/twelvedata'
-//import eodhdService from '../services/eodhd'
 import polygonService from '../services/polygon'
 import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
@@ -13,17 +12,6 @@ const TICKERS = [
   //{ ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
   //{ ticker: 'RUT', name: 'Russell 2000', flag: '🇺🇸' },
 ]
-
-// EODHD free tickers:
-/*
-const EODHD_TICKERS = [
-  { ticker: 'AMZN.US', name: 'Amazon', flag: '🇺🇸' },
-  { ticker: 'AAPL.US', name: 'Apple', flag: '🇺🇸' },
-  { ticker: 'TSLA.US', name: 'Tesla', flag: '🇺🇸' },
-  { ticker: 'BTC-USD.CC', name: 'BTC/USD', flag: '🇺🇸' },
-  { ticker: 'EURUSD.FOREX', name: 'EUR/USD', flag: '🇺🇸' },
-]
-*/
 
 const POLYGON_TICKERS = [
   { ticker: 'I:OMXHPI', name: 'OMX Helsinki PI', flag: '🇫🇮' },

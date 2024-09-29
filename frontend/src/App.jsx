@@ -9,6 +9,7 @@ import Password from './components/Password'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
+import Marquee from './components/Marquee'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import userService from './services/users'
@@ -104,6 +105,7 @@ const App = () => {
   return (
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
+      <Marquee />
       <Container className="mt-10">
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />

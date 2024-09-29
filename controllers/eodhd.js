@@ -10,10 +10,9 @@ router.post('/', async (request, response) => {
     const url = `https://eodhd.com/api/real-time/${ticker}?api_token=demo&fmt=json`
     const data = await axios.get(url)
     
-    console.log('Full API response:', JSON.stringify(data.data, null, 2))
+    //console.log('Full API response:', JSON.stringify(data.data, null, 2))
 
     const latest = data.data
-    console.log('latest:', latest)
     const latestClose = latest.close !== 'NA' ? parseFloat(latest.close) : null
     const previousClose = latest.previousClose !== 'NA' ? parseFloat(latest.previousClose) : 0.0
     const percentageChange = latest.change_p !== 'NA' ? parseFloat(latest.change_p) : '-'
