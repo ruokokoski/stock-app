@@ -19,6 +19,11 @@
   background: linear-gradient(to right, #0d76d6, #36a4d8);
 }
 
+.gradient-button-small {
+  padding: 2px 8px;
+  margin: 1px;
+}
+
 .nav-link {
   color: #007bff !important;
 }
