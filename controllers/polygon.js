@@ -24,7 +24,7 @@ router.post('/', async (request, response) => {
     const currentFormatted = formatDate(currentDate);
     const previousYearFormatted = formatDate(previousYear)
 
-    const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${previousYearFormatted}/${currentFormatted}?sort=desc&apiKey=${POLYGON_API_KEY}&outputsize=2`
+    const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${previousYearFormatted}/${currentFormatted}?sort=desc&apiKey=${POLYGON_API_KEY}`
     const { data } = await axios.get(url)
 
     const chartData = data.results
@@ -55,7 +55,6 @@ router.post('/', async (request, response) => {
         close: previousClose.toFixed(2),
         percentageChange: percentageChange.toFixed(2) + '%',
       }
-
 
       // TODO: Save data also to database here
 

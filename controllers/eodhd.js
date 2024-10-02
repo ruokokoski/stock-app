@@ -19,11 +19,8 @@ router.post('/', async (request, response) => {
 
     const close = latestClose !== null ? latestClose : previousClose
 
-    // Handle Unix timestamp
     const timestamp = latest.timestamp !== 'NA' ? parseInt(latest.timestamp) : null
     const datetimeUTC = timestamp ? new Date(timestamp * 1000).toUTCString() : '-'
-
-    // TODO: Save data also to database here
 
     response.status(200).json({
       latest: {

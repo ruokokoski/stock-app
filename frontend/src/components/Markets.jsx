@@ -7,7 +7,7 @@ import { getColor } from '../utils/helpers'
 
 // Free plan for Twelvedata provides only US indices
 const TICKERS = [
-  //{ ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
+  { ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
   //{ ticker: 'NDX', name: 'Nasdaq Composite', flag: '🇺🇸' },
   //{ ticker: 'DJI', name: 'Dow Jones', flag: '🇺🇸' },
   //{ ticker: 'RUT', name: 'Russell 2000', flag: '🇺🇸' },

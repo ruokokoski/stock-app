@@ -8,9 +8,9 @@ import Chart from './Chart'
 const IndexPage = () => {
   const { ticker } = useParams()
   const location = useLocation()
-  // Testaa vielä initialDataUsed toimivuutta:
   const { name, percentageChange, chartData: forwardedChartData } = location.state || {}
   const [chartData, setChartData] = useState([])
+  const [fullData, setFullData] = useState([]) // Used for Polygon data
   const [lastUpdated, setLastUpdated] = useState('')
   const [initialDataUsed, setInitialDataUsed] = useState(false)
   const [selectedInterval, setSelectedInterval] = useState('1m')
@@ -18,7 +18,7 @@ const IndexPage = () => {
   const fetchData = async (range) => {
     try {
       const response = ticker.startsWith('I:') 
-        ? await polygonService.getTicker(ticker)
+        ? await polygonService.getTicker(ticker) // turha?
         : await twelvedataService.getTicker(ticker, range)
       setChartData(response.chartData || [])
       if (response.chartData && response.chartData.length > 0) {
@@ -32,7 +32,7 @@ const IndexPage = () => {
   }
 
   useEffect(() => {
-    // Use forwarded data for initial render only
+    setFullData(forwardedChartData)
     if (forwardedChartData && forwardedChartData.length > 0 && !initialDataUsed) {
       console.log('initialDataUsed:', initialDataUsed)
       setChartData(forwardedChartData)
@@ -40,16 +40,30 @@ const IndexPage = () => {
       console.log('Latest time:', latestTime)
       setLastUpdated(formatDate(latestTime))
       setInitialDataUsed(true)
-    } else {
+    } else if (!ticker.startsWith('I:')) {
       fetchData(selectedInterval)
     }
   }, [ticker, forwardedChartData, selectedInterval])
 
   const setChartInterval = (interval) => {
-    // Adjust data fetching logic based on interval
     console.log(`Interval set to: ${interval}`)
+    console.log(`Ticker: ${ticker}`)
     setSelectedInterval(interval)
-    fetchData(interval)
+
+    // Polygon data has 1 year range: full year data is also used for 1m and 1w:
+    if (ticker.startsWith('I:')) {
+      if (interval === '1w') {
+        const oneWeekData = fullData.slice(-5)
+        setChartData(oneWeekData)
+      } else if (interval === '1m') {
+        const oneMonthData = fullData.slice(-23)
+        setChartData(oneMonthData)
+      } else {
+        setChartData(fullData)
+      }
+    } else {
+      fetchData(interval)
+    }
   }
 
   return (
@@ -65,9 +79,22 @@ const IndexPage = () => {
         name={name} 
         selectedInterval={selectedInterval} 
       />
-      {!ticker.startsWith('I:') && (
+      {!ticker.startsWith('I:') && ( // Twelvedata tickers
         <div className="buttons-container">
           {['1d', '1w', '1m', '1y'].map(interval => (
+            <button
+              key={interval}
+              className="gradient-button gradient-button-small"
+              onClick={() => setChartInterval(interval)}
+            >
+              {interval}
+            </button>
+          ))}
+        </div>
+      )}
+      {ticker.startsWith('I:') && (  // Polygon tickers
+        <div className="buttons-container">
+          {['1w', '1m', '1y'].map(interval => (
             <button
               key={interval}
               className="gradient-button gradient-button-small"

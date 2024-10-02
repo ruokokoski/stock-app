@@ -13,7 +13,6 @@ import Marquee from './components/Marquee'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import userService from './services/users'
-//import stockService from './services/stocks'
 import signupService from './services/signup'
 
 const App = () => {
@@ -67,8 +66,7 @@ const App = () => {
     } catch (error) {
       console.log('Login failed', error)
       throw error
-    }
-    
+    }    
   }
 
   const handleSignup = async (name, username, password) => {
@@ -105,7 +103,7 @@ const App = () => {
   return (
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
-      {/* <Marquee /> */}
+      <Marquee />
       <Container className="mt-10">
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />

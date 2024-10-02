@@ -23,4 +23,10 @@ Free real-time stock market APIs are relatively scarce and often come with stric
 Tiingo is a versatile and comprehensive API offering real-time stock price data, along with additional features like news, company descriptions, and historical data. With its free tier, users can make up to 1,000 API calls per day.
 Using Tiingo, Twelvedata and Stockdata.org (and maybe also Finnhub and Alpaca) together, it might be possible to create a robust and diverse stock market application that taps into the strengths of each API.
 
-However, for comprehensive and real-time data, web scraping might be a necessary approach to bypass these limitations. 
+However, for comprehensive and real-time data, web scraping might be a necessary approach to bypass these limitations.
+
+
+### Crypto APIs
+
+CoinCap
+CoinGecko
