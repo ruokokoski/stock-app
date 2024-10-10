@@ -21,4 +21,5 @@
 | 22.09 | 7    | improve logic for fetching data, enhance style for charts, add choosable ranges, add tooltip |
 | 29.09 | 5    | refactor code, add scrolling tickers, create charts also for polygon data, fix chart rendering bug |
 | 02.10 | 2    | study crypto APIs, add ranges for Polygon charts |
-| **Total** | **64** | |
+| 10.10 | 3    | add Crypto page |
+| **Total** | **67** | |

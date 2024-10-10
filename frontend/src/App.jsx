@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap'
 import Markets from './components/Markets'
 import IndexPage from './components/IndexPage'
+import Crypto from './components/Crypto'
 import Users from './components/Users'
 import Password from './components/Password'
 import LoginForm from './components/LoginForm'
@@ -108,6 +109,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
           <Route path="/index/:ticker" element={<IndexPage />} />
+          <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />

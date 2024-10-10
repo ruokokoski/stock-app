@@ -9,10 +9,14 @@ const NavigationBar = ({ user, onLogout }) => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
           {user && (
-            <Nav.Link as="span">
-              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Markets</Link>
-            </Nav.Link>
-            
+            <>
+              <Nav.Link as="span">
+                <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>Markets</Link>
+              </Nav.Link>
+              <Nav.Link as="span">
+                <Link to="/crypto" style={{ textDecoration: 'none', color: 'inherit' }}>Crypto</Link>
+              </Nav.Link>
+            </>
           )}
           {user?.admin && (
             <Nav.Link as="span">

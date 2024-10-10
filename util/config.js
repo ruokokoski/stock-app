@@ -8,4 +8,5 @@ module.exports = {
   TWELVEDATA_API_KEY: process.env.TWELVEDATA_API_KEY,
   EODHD_API_KEY: process.env.EODHD_API_KEY,
   POLYGON_API_KEY: process.env.POLYGON_API_KEY,
+  COINCAP_API_KEY: process.env.COINCAP_API_KEY,
 }
