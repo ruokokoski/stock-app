@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createChart } from 'lightweight-charts'
+import { formatChartData, createToolTip } from '../utils/helpers'
 
 const Chart = ({ chartData, name, selectedInterval }) => {
+  const chartContainerRef = useRef(null)
   const [chart, setChart] = useState(null)
   const [areaSeries, setAreaSeries] = useState(null)
+  const [toolTip, setToolTip] = useState(null)
 
   useEffect(() => {
-    const container = document.getElementById('chart')
+    const container = chartContainerRef.current
     const width = container.clientWidth
     const height = Math.round((width) / 3)
 
@@ -27,83 +30,19 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       lineWidth: 2,
     })
 
-    newChart.applyOptions({
-      rightPriceScale: {
-        scaleMargins: {
-          top: 0.3,
-          bottom: 0.25,
-        },
-      },
-      crosshair: {
-        horzLine: {
-          visible: false,
-          labelVisible: false,
-        },
-        vertLine: {
-          labelVisible: false,
-        },
-      },
-    })
-
-    const toolTipWidth = 100
-    const toolTipHeight = 90
-    const toolTipMargin = 10
-    const leftOffset = 100
-    const topOffset = 220
-
-    const toolTip = document.createElement('div')
-    toolTip.style = `width: ${toolTipWidth}px; height: ${toolTipHeight}px; position: absolute; display: none; padding: 8px; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; pointer-events: none; border: 1px solid; border-radius: 2px; background: white; color: black; border-color: rgba(38, 166, 154, 1);`
-    container.appendChild(toolTip)
+    const toolTipInstance = createToolTip(container, name)
 
     newChart.subscribeCrosshairMove(param => {
-      if (
-        param.point === undefined ||
-        !param.time ||
-        param.point.x < 0 ||
-        param.point.x > container.clientWidth ||
-        param.point.y < 0 ||
-        param.point.y > container.clientHeight
-      ) {
-        toolTip.style.display = 'none'
-      } else {
-        const dateStr = new Date(param.time * 1000).toLocaleDateString('en-US', {
-          year: 'numeric', month: 'short', day: 'numeric'
-        })
-        toolTip.style.display = 'block'
-        const data = param.seriesData.get(newAreaSeries)
-        const price = data.value !== undefined ? data.value : data.close
-
-        toolTip.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${name.split(' ')[0]}</div>
-          <div style="font-size: 16px; margin: 4px 0px; color: black">
-            ${Math.round(100 * price) / 100}
-          </div>
-          <div style="color: black">
-            ${dateStr}
-          </div>`
-    
-        const y = param.point.y
-        let left = param.point.x + toolTipMargin + leftOffset
-        if (left > container.clientWidth - toolTipWidth) {
-          left = param.point.x - toolTipMargin - toolTipWidth + leftOffset
-        }
-
-        let top = y + toolTipMargin + topOffset
-    
-        if (top > container.clientHeight - toolTipHeight) {
-          top = y - toolTipHeight - toolTipMargin + topOffset
-        }
-    
-        toolTip.style.left = left + 'px'
-        toolTip.style.top = top + 'px'
-      }
+      handleToolTipMove(param, newAreaSeries, toolTipInstance)
     })
 
     setChart(newChart)
     setAreaSeries(newAreaSeries)
+    setToolTip(toolTipInstance)
 
     return () => {
       newChart.remove()
-      container.removeChild(toolTip)
+      container.removeChild(toolTipInstance)
     }
   }, [])
 
@@ -130,9 +69,53 @@ const Chart = ({ chartData, name, selectedInterval }) => {
     }
   }, [areaSeries, chartData])
 
+  const handleToolTipMove = (param, newAreaSeries, toolTipInstance) => {
+    if (
+      param.point === undefined ||
+      !param.time ||
+      param.point.x < 0 ||
+      param.point.x > chartContainerRef.current.clientWidth ||
+      param.point.y < 0 ||
+      param.point.y > chartContainerRef.current.clientHeight
+    ) {
+      toolTipInstance.style.display = 'none'
+    } else {
+      const dateStr = new Date(param.time * 1000).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+      toolTipInstance.style.display = 'block'
+      const data = param.seriesData.get(newAreaSeries)
+      const price = data.value !== undefined ? data.value : data.close
+
+      toolTipInstance.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${name.split(' ')[0]}</div>
+        <div style="font-size: 16px; margin: 4px 0px; color: black">
+          ${Math.round(100 * price) / 100}
+        </div>
+        <div style="color: black">
+          ${dateStr}
+        </div>`
+
+      const y = param.point.y
+      let left = param.point.x + 100 + 10
+      if (left > chartContainerRef.current.clientWidth - 100) {
+        left = param.point.x - 100 - 10 + 100
+      }
+
+      let top = y + 10 + 220
+      if (top > chartContainerRef.current.clientHeight - 90) {
+        top = y - 90 - 10 + 220
+      }
+
+      toolTipInstance.style.left = left + 'px'
+      toolTipInstance.style.top = top + 'px'
+    }
+  }
+
   return (
     <div>
-      <div id="chart"></div>
+      <div ref={chartContainerRef} id="chart"></div>
     </div>
   )
 }

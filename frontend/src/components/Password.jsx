@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Form, Button } from 'react-bootstrap'
 import userService from '../services/users'
-import Message from './Message'
+import AuthForm from './AuthForm'
+import AuthInput from './AuthInput'
+import { FaLock } from 'react-icons/fa'
 import '../styles/styles.css'
 
 const Password = () => {
@@ -34,55 +35,42 @@ const Password = () => {
   }
 
   return (
-    <div className='content-padding'>
-    <h2>Change password</h2>
-    <Form 
+    <AuthForm
+      title="Change Password"
+      titleSize="1.5rem"
+      message={message}
+      messageVariant={messageVariant}
+      onCloseMessage={() => setMessage(null)}
       onSubmit={handleChangePassword}
-      style={{
-        width: '100%',
-        maxWidth: '400px',
-      }}
     >
-      <Message 
-        message={message} 
-        variant={messageVariant} 
-        onClose={() => setMessage('')} 
+      <AuthInput
+        controlId="currentPassword"
+        label="Current Password"
+        type="password"
+        value={currentPassword}
+        placeholder="Enter current password"
+        onChange={({ target }) => setCurrentPassword(target.value)}
+        icon={FaLock}
       />
-      <Form.Group controlId="currentPassword">
-        <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Current Password</Form.Label>
-        <Form.Control
-          type="password"
-          value={currentPassword}
-          onChange={({ target }) => setCurrentPassword(target.value)}
-          required
-        />
-      </Form.Group>
-
-      <Form.Group controlId="newPassword">
-        <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>New Password</Form.Label>
-        <Form.Control
-          type="password"
-          value={newPassword}
-          onChange={({ target }) => setNewPassword(target.value)}
-          required
-        />
-      </Form.Group>
-
-      <Form.Group controlId="confirmPassword">
-        <Form.Label style={{ marginTop: '10px', marginBottom: '3px' }}>Confirm New Password</Form.Label>
-        <Form.Control
-          type="password"
-          value={confirmPassword}
-          onChange={({ target }) => setConfirmPassword(target.value)}
-          required
-        />
-      </Form.Group>
-
-      <Button type="submit" className="gradient-button">
-        Change Password
-      </Button>
-    </Form>
-    </div>
+      <AuthInput
+        controlId="newPassword"
+        label="New Password"
+        type="password"
+        value={newPassword}
+        placeholder="Enter new password"
+        onChange={({ target }) => setNewPassword(target.value)}
+        icon={FaLock}
+      />
+      <AuthInput
+        controlId="confirmPassword"
+        label="Confirm New Password"
+        type="password"
+        value={confirmPassword}
+        placeholder="Confirm new password"
+        onChange={({ target }) => setConfirmPassword(target.value)}
+        icon={FaLock}
+      />
+    </AuthForm>
   )
 }
 

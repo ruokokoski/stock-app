@@ -2,10 +2,24 @@ const axios = require('axios')
 const router = require('express').Router()
 //const { EODHD_API_KEY } = require('../util/config')
 
+let lastFetchTime = 0
+let cachedData = null
+const MIN_FETCH_INTERVAL = 2 * 60 * 1000 // 2 min
+
 router.post('/', async (request, response) => {
   const { ticker } = request.body
+  const currentTime = Date.now()
+
+  if (currentTime - lastFetchTime < MIN_FETCH_INTERVAL) {
+    if (cachedData) {
+      return response.status(200).json(cachedData)
+    } else {
+      return response.status(200).json({ error: 'No data available yet, please try again after the cooldown.' })
+    }
+  }
 
   try {
+    lastFetchTime = currentTime
     //const url = `https://eodhd.com/api/real-time/${ticker}?api_token=${EODHD_API_KEY}&fmt=json`
     const url = `https://eodhd.com/api/real-time/${ticker}?api_token=demo&fmt=json`
     const data = await axios.get(url)
@@ -22,7 +36,7 @@ router.post('/', async (request, response) => {
     const timestamp = latest.timestamp !== 'NA' ? parseInt(latest.timestamp) : null
     const datetimeUTC = timestamp ? new Date(timestamp * 1000).toUTCString() : '-'
 
-    response.status(200).json({
+    cachedData = {
       latest: {
         close: close.toFixed(2),
         datetime: datetimeUTC,
@@ -31,7 +45,9 @@ router.post('/', async (request, response) => {
         close: previousClose.toFixed(2),
         percentageChange: percentageChange === '-' ? '-' : percentageChange.toFixed(2) + '%',
       },
-    })
+    }
+
+    response.status(200).json(cachedData)
   } catch (error) {
     console.error('EODHD API call failed:', error)
     response.status(500).json({ error: 'Failed to fetch data from EODHD API' })

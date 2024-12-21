@@ -66,6 +66,18 @@ const IndexPage = () => {
     }
   }
 
+  const renderIntervalButtons = (intervals) => {
+    return intervals.map(interval => (
+      <button
+        key={interval}
+        className="gradient-button gradient-button-small"
+        onClick={() => setChartInterval(interval)}
+      >
+        {interval}
+      </button>
+    ))
+  }
+
   return (
     <div className="content-padding">
       <h4>{name} Index</h4>
@@ -79,32 +91,9 @@ const IndexPage = () => {
         name={name} 
         selectedInterval={selectedInterval} 
       />
-      {!ticker.startsWith('I:') && ( // Twelvedata tickers
-        <div className="buttons-container">
-          {['1d', '1w', '1m', '1y'].map(interval => (
-            <button
-              key={interval}
-              className="gradient-button gradient-button-small"
-              onClick={() => setChartInterval(interval)}
-            >
-              {interval}
-            </button>
-          ))}
-        </div>
-      )}
-      {ticker.startsWith('I:') && (  // Polygon tickers
-        <div className="buttons-container">
-          {['1w', '1m', '1y'].map(interval => (
-            <button
-              key={interval}
-              className="gradient-button gradient-button-small"
-              onClick={() => setChartInterval(interval)}
-            >
-              {interval}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="buttons-container">
+        {renderIntervalButtons(ticker.startsWith('I:') ? ['1w', '1m', '1y'] : ['1d', '1w', '1m', '1y'])}
+      </div>
     </div>
   )
 }

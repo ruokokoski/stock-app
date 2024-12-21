@@ -1,7 +1,27 @@
 import { useState, useEffect } from 'react'
 import cryptoService from '../services/coincap'
 import { Table } from 'react-bootstrap'
-import { getColor } from '../utils/helpers'
+import { getColor, formatCurrency, formatMarketCap } from '../utils/helpers'
+
+const CryptoRow = ({ coin }) => (
+  <tr key={coin.id}>
+    <td>{coin.rank}</td>
+    <td>
+      <img 
+        src={`https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`} 
+        alt={`${coin.symbol} icon`}
+        style={{ width: '20px', height: '20px', marginRight: '10px' }}
+      />
+      {coin.name}
+    </td>
+    <td>{coin.symbol}</td>
+    <td>{formatCurrency(coin.priceUsd)}</td>
+    <td>{formatMarketCap(coin.marketCapUsd)}</td>
+    <td style={getColor(coin.changePercent24Hr)}>
+      {parseFloat(coin.changePercent24Hr).toFixed(2)}%
+    </td>
+  </tr>
+)
 
 const Crypto = () => {
   const [cryptoData, setCryptoData] = useState([])
@@ -35,24 +55,8 @@ const Crypto = () => {
           </tr>
         </thead>
         <tbody>
-          {cryptoData.map((coin) => (
-            <tr key={coin.id}>
-              <td>{coin.rank}</td>
-              <td>
-                <img 
-                  src={`https://assets.coincap.io/assets/icons/${coin.symbol.toLowerCase()}@2x.png`} 
-                  alt={`icon`}
-                  style={{ width: '20px', height: '20px', marginRight: '10px' }}
-                />
-                {coin.name}
-              </td>
-              <td>{coin.symbol}</td>
-              <td>${parseFloat(coin.priceUsd).toFixed(2)}</td>
-              <td>${parseFloat(coin.marketCapUsd / 1e9).toFixed(2)}B</td>
-              <td style={ getColor(coin.changePercent24Hr) }>
-                {parseFloat(coin.changePercent24Hr).toFixed(2)}%
-              </td>
-            </tr>
+          {cryptoData.map(coin => (
+            <CryptoRow key={coin.id} coin={coin} />
           ))}
         </tbody>
       </Table>
