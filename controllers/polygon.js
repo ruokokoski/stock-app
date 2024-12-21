@@ -21,7 +21,7 @@ router.post('/', async (request, response) => {
     const currentDate = new Date()
     const previousYear = new Date()
     previousYear.setFullYear(currentDate.getFullYear() - 1)
-    const currentFormatted = formatDate(currentDate);
+    const currentFormatted = formatDate(currentDate)
     const previousYearFormatted = formatDate(previousYear)
 
     const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${previousYearFormatted}/${currentFormatted}?sort=desc&apiKey=${POLYGON_API_KEY}`
@@ -67,7 +67,7 @@ router.post('/', async (request, response) => {
         previous,
       })
     } else {
-      response.status(404).json({ error: 'Not enough data returned from Polygon.io API' });
+      response.status(404).json({ error: 'Not enough data returned from Polygon.io API' })
     }
   } catch (error) {
     console.error('Polygon API call failed:', error)

@@ -14,28 +14,28 @@ router.post('/', async (request, response) => {
   let interval, outputsize
 
   switch (range) {
-    case '1d':
-      interval = '1min'
-      outputsize = 390 // Approx. 1 trading day of minute data
-      break
-    case '1w':
-      interval = '1h'
-      outputsize = 40 // 5 trading days
-      break
-    case '1m':
-      interval = '1day'
-      outputsize = 23 // Approx. 1 month of trading days
-      break
-    case '1y':
-      interval = '1day'
-      outputsize = 255 // Approx. 1 year of trading days
-      break
-    case 'max':
-      interval = '1week'
-      outputsize = 100 // Max data (check API limits)
-      break
-    default:
-      return response.status(400).json({ error: 'Invalid range specified' })
+  case '1d':
+    interval = '1min'
+    outputsize = 390 // Approx. 1 trading day of minute data
+    break
+  case '1w':
+    interval = '1h'
+    outputsize = 40 // 5 trading days
+    break
+  case '1m':
+    interval = '1day'
+    outputsize = 23 // Approx. 1 month of trading days
+    break
+  case '1y':
+    interval = '1day'
+    outputsize = 255 // Approx. 1 year of trading days
+    break
+  case 'max':
+    interval = '1week'
+    outputsize = 100 // Max data (check API limits)
+    break
+  default:
+    return response.status(400).json({ error: 'Invalid range specified' })
   }
 
   try {

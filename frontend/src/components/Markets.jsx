@@ -5,8 +5,8 @@ import polygonService from '../services/polygon'
 import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 
-// Free plan for Twelvedata provides only US indices
-const TICKERS = [
+// Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
+const TWELVEDATA_TICKERS = [
   { ticker: 'SPY', name: 'S&P 500 (SPY)', flag: '🇺🇸' },
   //{ ticker: 'SPX', name: 'S&P 500', flag: '🇺🇸' },
   //{ ticker: 'QQQ', name: 'Nasdaq (QQQ)', flag: '🇺🇸' },
@@ -16,6 +16,7 @@ const TICKERS = [
   //{ ticker: 'FTSE', name: 'FTSE100', flag: '🇺🇸' },
 ]
 
+// Polygon tickers are not real-time
 const POLYGON_TICKERS = [
   { ticker: 'I:OMXHPI', name: 'OMX Helsinki PI', flag: '🇫🇮' },
   //{ ticker: 'I:OMXS30', name: 'OMX Stockholm 30', flag: '🇸🇪' },
@@ -28,40 +29,52 @@ const Markets = () => {
   useEffect(() => {
     const fetchData = async () => {
       const newMarketData = {}
-
-      for (const { ticker } of TICKERS) {
-        try {
-          const data = await twelvedataService.getTicker(ticker, '1m')
-          //console.log(`${ticker} data:`, data)
-          //console.log(`Percentage Change for ${ticker}:`, data.previous?.percentageChange)
-          newMarketData[ticker] = data
-        } catch (error) {
-          console.error(`Error fetching ${ticker} data:`, error)
-          newMarketData[ticker] = {
-            latest: { close: '-', datetime: '-' },
-            previous: { close: '-', percentageChange: '-' },
+      const fetchTickerData = async (tickers, fetchService) => {
+        for (const { ticker } of tickers) {
+          try {
+            const data = await fetchService(ticker)
+            newMarketData[ticker] = data
+          } catch (error) {
+            console.error(`Error fetching ${ticker} data:`, error)
+            newMarketData[ticker] = {
+              latest: { close: '-', datetime: '-' },
+              previous: { close: '-', percentageChange: '-' },
+            }
           }
         }
       }
-
-      for (const { ticker } of POLYGON_TICKERS) {
-        try {
-          const data = await polygonService.getTicker(ticker)
-          //console.log(`${ticker} Polygon data:`, data)
-          newMarketData[ticker] = data
-        } catch (error) {
-          console.error(`Error fetching ${ticker} data:`, error)
-          newMarketData[ticker] = {
-            latest: { close: '-', datetime: '-' },
-            previous: { close: '-', percentageChange: '-' },
-          }
-        }
-      }
-
+  
+      await fetchTickerData(TWELVEDATA_TICKERS, async (ticker) => twelvedataService.getTicker(ticker, '1m'))
+      await fetchTickerData(POLYGON_TICKERS, async (ticker) => polygonService.getTicker(ticker))
+  
       setMarketData(newMarketData)
     }
     fetchData()
   }, [])
+
+  const renderTableRows = (tickers) => {
+    return tickers.map(({ ticker, name, flag }) => (
+      <tr key={ticker}>
+        <td>
+          <span>{flag} </span>
+          <Link
+            to={`/index/${ticker}`}
+            state={{
+              name,
+              percentageChange: marketData[ticker]?.previous?.percentageChange,
+              chartData: marketData[ticker]?.chartData,
+            }}>
+            {name}
+          </Link>
+        </td>
+        <td>{marketData[ticker]?.latest?.close || '-'}</td>
+        <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
+          {marketData[ticker]?.previous?.percentageChange || '-'}
+        </td>
+        <td>{marketData[ticker]?.latest?.datetime || '-'}</td>
+      </tr>
+    ))
+  }
 
   return (
     <div className='content-padding'>
@@ -76,48 +89,8 @@ const Markets = () => {
           </tr>
         </thead>
         <tbody>
-          {TICKERS.map(({ ticker, name, flag }) => (
-            <tr key={ticker}>
-              <td>
-                <span>{flag} </span>
-                <Link
-                  to={`/index/${ticker}`}
-                  state={{
-                    name,
-                    percentageChange: marketData[ticker]?.previous?.percentageChange,
-                    chartData: marketData[ticker]?.chartData,
-                  }}>
-                  {name}
-                </Link>
-              </td>
-              <td>{marketData[ticker]?.latest?.close || '-'}</td>
-              <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
-                {marketData[ticker]?.previous?.percentageChange || '-'}
-              </td>
-              <td>{marketData[ticker]?.latest?.datetime || '-'}</td>
-            </tr>
-          ))}
-          {POLYGON_TICKERS.map(({ ticker, name, flag }) => (
-            <tr key={ticker}>
-              <td>
-                <span>{flag} </span>
-                <Link
-                  to={`/index/${ticker}`}
-                  state={{
-                    name,
-                    percentageChange: marketData[ticker]?.previous?.percentageChange,
-                    chartData: marketData[ticker]?.chartData,
-                  }}>
-                  {name}
-                </Link>
-              </td>
-              <td>{marketData[ticker]?.latest?.close || '-'}</td>
-              <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
-                {marketData[ticker]?.previous?.percentageChange || '-'}
-              </td>
-              <td>{marketData[ticker]?.latest?.datetime || '-'}</td>
-            </tr>
-          ))}
+          {renderTableRows(TWELVEDATA_TICKERS)}
+          {renderTableRows(POLYGON_TICKERS)}
         </tbody>
       </Table>
     </div>

@@ -22,4 +22,5 @@
 | 29.09 | 5    | refactor code, add scrolling tickers, create charts also for polygon data, fix chart rendering bug |
 | 02.10 | 2    | study crypto APIs, add ranges for Polygon charts |
 | 10.10 | 3    | add Crypto page |
-| **Total** | **67** | |
+| 21.12 | 1    | refactor code |
+| **Total** | **68** | |
