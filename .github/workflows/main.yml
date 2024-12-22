@@ -26,8 +26,13 @@ jobs:
           echo "DB_STORAGE=:memory:" >> $GITHUB_ENV
       - name: Check coding style
         run: npm run lint
-      - name: Run tests
+      - name: Run backend tests
         env:
           DB_DIALECT: ${{ env.DB_DIALECT }}
           DB_STORAGE: ${{ env.DB_STORAGE }}
         run: npm test
+      - name: Run frontend tests
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm test
