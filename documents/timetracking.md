@@ -23,4 +23,5 @@
 | 02.10 | 2    | study crypto APIs, add ranges for Polygon charts |
 | 10.10 | 3    | add Crypto page |
 | 21.12 | 3    | refactor frontend components |
-| **Total** | **70** | |
+| 22.12 | 1    | add CI pipeline |
+| **Total** | **71** | |
