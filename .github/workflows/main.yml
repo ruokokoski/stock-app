@@ -17,8 +17,17 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies 
-        run: npm install  
+        run: npm install
+      - name: Install SQLite dependencies
+        run: npm install sqlite3
+      - name: Configure environment for SQLite
+        run: |
+          echo "DB_DIALECT=sqlite" >> $GITHUB_ENV
+          echo "DB_STORAGE=:memory:" >> $GITHUB_ENV
       - name: Check coding style
         run: npm run lint
       - name: Run tests
+        env:
+          DB_DIALECT: ${{ env.DB_DIALECT }}
+          DB_STORAGE: ${{ env.DB_STORAGE }}
         run: npm test

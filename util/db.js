@@ -2,12 +2,19 @@ const Sequelize = require('sequelize')
 const { DATABASE_URL } = require('./config')
 const { Umzug, SequelizeStorage } = require('umzug')
 
-const sequelize = new Sequelize(DATABASE_URL
+const sequelize = new Sequelize(
+  process.env.DB_DIALECT === 'sqlite'
+    ? {
+        dialect: 'sqlite',
+        storage: process.env.DB_STORAGE || ':memory:',
+        logging: false, // Disable logging for CI
+      }
+    : DATABASE_URL,
   /* Disable logging:
-  , {
+  {
     logging: false,
   }
-    */
+  */
 )
 
 const connectToDatabase = async () => {
