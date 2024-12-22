@@ -5,10 +5,10 @@ const { Umzug, SequelizeStorage } = require('umzug')
 const sequelize = new Sequelize(
   process.env.DB_DIALECT === 'sqlite'
     ? {
-        dialect: 'sqlite',
-        storage: process.env.DB_STORAGE || ':memory:',
-        logging: false, // Disable logging for CI
-      }
+      dialect: 'sqlite',
+      storage: process.env.DB_STORAGE || ':memory:',
+      logging: false, // Disable logging for CI
+    }
     : DATABASE_URL,
   /* Disable logging:
   {
