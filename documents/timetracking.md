@@ -24,4 +24,5 @@
 | 10.10 | 3    | add Crypto page |
 | 21.12 | 3    | refactor frontend components |
 | 22.12 | 1    | add CI pipeline |
-| **Total** | **71** | |
+| 26.12 | 3    | more tests for frontend components |
+| **Total** | **74** | |

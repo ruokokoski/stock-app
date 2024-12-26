@@ -55,7 +55,7 @@ const LoginForm = ({ onLogin }) => {
       onSubmit={handleSubmit}
       footer={
         <p>
-          Don't have an account? <Link to="/signup">Signup</Link>
+          Don&#39;t have an account? <Link to="/signup">Signup</Link>
         </p>
       }
     >
