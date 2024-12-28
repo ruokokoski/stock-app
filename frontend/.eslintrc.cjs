@@ -12,7 +12,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:vitest-globals/recommended',
     ],
-    ignorePatterns: ['dist', '.eslintrc.cjs'],
+    ignorePatterns: ['dist', '.eslintrc.cjs', 'src/components/*.test.jsx'],
     parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
     settings: { react: { version: '18.2' } },
     plugins: ['react-refresh'],

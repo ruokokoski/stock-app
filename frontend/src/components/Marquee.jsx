@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import eodhdService from '../services/eodhd'
+import { eodhdService } from '../services/stockServices'
 import '../styles/styles.css'
 import { getColor } from '../utils/helpers'
 

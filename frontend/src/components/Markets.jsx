@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import twelvedataService from '../services/twelvedata'
-import polygonService from '../services/polygon'
+import { twelvedataService, polygonService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 

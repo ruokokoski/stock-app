@@ -6,12 +6,41 @@ const Chart = ({ chartData, name, selectedInterval }) => {
   const chartContainerRef = useRef(null)
   const [chart, setChart] = useState(null)
   const [areaSeries, setAreaSeries] = useState(null)
+  /* eslint-disable no-unused-vars */
   const [toolTip, setToolTip] = useState(null)
+  /* eslint-enable no-unused-vars */
 
   useEffect(() => {
     const container = chartContainerRef.current
     const width = container.clientWidth
     const height = Math.round((width) / 3)
+
+    const tickMarkFormatter = (time) => {
+      const date = new Date(time * 1000)
+
+      const utcDate = new Date(Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        date.getUTCHours(),
+        date.getUTCMinutes(),
+        date.getUTCSeconds()
+      ))
+
+      if (selectedInterval === '1d') {
+        return utcDate.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZone: 'UTC',
+        })
+      } else {
+        return utcDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
+      }
+    }
 
     const chartOptions = {
       layout: {
@@ -21,7 +50,11 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       width: width,
       height: height,
       //autoSize: true,
+      timeScale: {
+        tickMarkFormatter: tickMarkFormatter,
+      }
     }
+
     const newChart = createChart(container, chartOptions)
     const newAreaSeries = newChart.addAreaSeries({
       topColor: 'rgba(41, 98, 255, 0.4)',
@@ -44,14 +77,11 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       newChart.remove()
       container.removeChild(toolTipInstance)
     }
-  }, [])
+  }, [selectedInterval])
 
   useEffect(() => {
     if (areaSeries && chartData.length > 0) {
-      const formattedData = chartData.map(point => ({
-        time: Math.floor(new Date(point.time + 'Z').getTime() / 1000),
-        value: parseFloat(point.value),
-      }))
+      const formattedData = formatChartData(chartData)
   
       areaSeries.setData(formattedData)
       chart.timeScale().fitContent()
@@ -97,25 +127,42 @@ const Chart = ({ chartData, name, selectedInterval }) => {
           ${dateStr}
         </div>`
 
+      const padding = 10
+      const margin = 250
+      /*
+      const tooltipWidth = toolTipInstance.offsetWidth
+      const tooltipHeight = toolTipInstance.offsetHeight
+      const x = param.point.x
       const y = param.point.y
-      let left = param.point.x + 100 + 10
-      if (left > chartContainerRef.current.clientWidth - 100) {
-        left = param.point.x - 100 - 10 + 100
-      }
 
-      let top = y + 10 + 220
-      if (top > chartContainerRef.current.clientHeight - 90) {
-        top = y - 90 - 10 + 220
+      let left = x + tooltipWidth + padding
+      if (left + tooltipWidth > chartContainerRef.current.clientWidth) {
+        left = x
       }
+      left = Math.max(left, padding)
 
-      toolTipInstance.style.left = left + 'px'
-      toolTipInstance.style.top = top + 'px'
+      let top = y + padding + margin
+      if (top + tooltipHeight > chartContainerRef.current.clientHeight) {
+        top = y - tooltipHeight - padding + margin
+      }
+      top = Math.max(top, padding)
+
+      toolTipInstance.style.left = `${left}px`
+      toolTipInstance.style.top = `${top}px`
+      */
+
+      toolTipInstance.style.left = `${padding}}px`
+      toolTipInstance.style.top = `${margin + padding}px`
     }
   }
 
   return (
     <div>
-      <div ref={chartContainerRef} id="chart"></div>
+      <div
+        ref={chartContainerRef}
+        id="chart"
+      >
+      </div>
     </div>
   )
 }

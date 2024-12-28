@@ -1,7 +1,6 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import twelvedataService from '../services/twelvedata'
-import polygonService from '../services/polygon'
+import { twelvedataService, polygonService } from '../services/stockServices'
 import { getColor, formatDate } from '../utils/helpers'
 import Chart from './Chart'
 

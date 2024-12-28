@@ -25,4 +25,5 @@
 | 21.12 | 3    | refactor frontend components |
 | 22.12 | 1    | add CI pipeline |
 | 26.12 | 3    | more tests for frontend components |
-| **Total** | **74** | |
+| 28.12 | 4    | refactor frontend code and fix Chart |
+| **Total** | **78** | |
