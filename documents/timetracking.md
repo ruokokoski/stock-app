@@ -26,4 +26,5 @@
 | 22.12 | 1    | add CI pipeline |
 | 26.12 | 3    | more tests for frontend components |
 | 28.12 | 4    | refactor frontend code and fix Chart |
-| **Total** | **78** | |
+| 02.01 | 1    | fix marquee and session |
+| **Total** | **79** | |

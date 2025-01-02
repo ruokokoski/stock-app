@@ -4,13 +4,15 @@ const router = require('express').Router()
 
 let lastFetchTime = 0
 let cachedData = null
+let requestCounter = 0
+const MAX_REQUESTS = 6
 const MIN_FETCH_INTERVAL = 2 * 60 * 1000 // 2 min
 
 router.post('/', async (request, response) => {
   const { ticker } = request.body
   const currentTime = Date.now()
 
-  if (currentTime - lastFetchTime < MIN_FETCH_INTERVAL) {
+  if (requestCounter >= MAX_REQUESTS && currentTime - lastFetchTime < MIN_FETCH_INTERVAL) {
     if (cachedData) {
       return response.status(200).json(cachedData)
     } else {
@@ -18,7 +20,12 @@ router.post('/', async (request, response) => {
     }
   }
 
+  if (currentTime - lastFetchTime >= MIN_FETCH_INTERVAL) {
+    requestCounter = 0
+  }
+
   try {
+    requestCounter += 1
     lastFetchTime = currentTime
     //const url = `https://eodhd.com/api/real-time/${ticker}?api_token=${EODHD_API_KEY}&fmt=json`
     const url = `https://eodhd.com/api/real-time/${ticker}?api_token=demo&fmt=json`

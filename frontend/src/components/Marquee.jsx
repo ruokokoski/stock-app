@@ -7,6 +7,7 @@ import { getColor } from '../utils/helpers'
 const EODHD_TICKERS = [
   { ticker: 'AMZN.US', name: 'Amazon', flag: '🇺🇸' },
   { ticker: 'AAPL.US', name: 'Apple', flag: '🇺🇸' },
+  { ticker: 'MSFT.US', name: 'Microsoft', flag: '🇺🇸' },
   { ticker: 'TSLA.US', name: 'Tesla', flag: '🇺🇸' },
   { ticker: 'BTC-USD.CC', name: 'BTC/USD', flag: '🇺🇸' },
   { ticker: 'EURUSD.FOREX', name: 'EUR/USD', flag: '🇺🇸' },
