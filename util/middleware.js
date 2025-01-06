@@ -52,6 +52,10 @@ const isAdmin = async (req, res, next) => {
   next()
 }
 
+const unknownEndpoint = (_request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
 const errorHandler = (error, request, response, next) => {
   console.error('Error:', error, request)
 
@@ -78,4 +82,4 @@ const errorHandler = (error, request, response, next) => {
   next()
 }
 
-module.exports = { errorHandler, tokenExtractor, checkSession, isAdmin }
+module.exports = { tokenExtractor, checkSession, isAdmin, unknownEndpoint, errorHandler }

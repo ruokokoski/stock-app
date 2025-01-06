@@ -27,4 +27,5 @@
 | 26.12 | 3    | more tests for frontend components |
 | 28.12 | 4    | refactor frontend code and fix Chart |
 | 02.01 | 1    | fix marquee and session |
-| **Total** | **79** | |
+| 06.01 | 2    | fix EODHD controller and eslint |
+| **Total** | **81** | |

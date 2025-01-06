@@ -15,12 +15,12 @@ const eodhdRouter = require('./controllers/eodhd')
 const polygonRouter = require('./controllers/polygon')
 const cryptoRouter = require('./controllers/coincap')
 
-const { errorHandler } = require('./util/middleware')
+const { unknownEndpoint, errorHandler } = require('./util/middleware')
 
 app.use(cors())
 
 app.use(express.json())
-//app.use(express.static('dist')) for using frontend later
+//app.use(express.static('dist')) // for using frontend build later
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
@@ -31,6 +31,7 @@ app.use('/api/eodhd', eodhdRouter)
 app.use('/api/polygon', polygonRouter)
 app.use('/api/crypto', cryptoRouter)
 
+app.use(unknownEndpoint)
 app.use(errorHandler)
 
 const start = async () => {
