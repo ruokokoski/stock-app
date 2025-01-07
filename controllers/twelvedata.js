@@ -47,6 +47,8 @@ router.post('/', async (request, response) => {
       .map((entry) => ({
         time: entry.datetime,
         value: parseFloat(entry.close).toFixed(2),
+        high: parseFloat(entry.high).toFixed(2),
+        low: parseFloat(entry.low).toFixed(2),
         //volume: parseInt(entry.volume)
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))

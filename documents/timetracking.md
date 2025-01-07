@@ -28,4 +28,5 @@
 | 28.12 | 4    | refactor frontend code and fix Chart |
 | 02.01 | 1    | fix marquee and session |
 | 06.01 | 2    | fix EODHD controller and eslint |
-| **Total** | **81** | |
+| 07.01 | 6    | Stocks page, study APIs and find mappings for US ticker to company name |
+| **Total** | **87** | |
