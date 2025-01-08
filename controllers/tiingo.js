@@ -2,6 +2,7 @@ const axios = require('axios')
 const router = require('express').Router()
 const { TIINGO_API_KEY } = require('../util/config')
 const { getStockByTicker } = require('../util/tickerHelper')
+const { saveStockDataToDatabase } = require('../util/stockService')
 
 router.post('/', async (request, response) => {
   const { ticker } = request.body
@@ -19,9 +20,6 @@ router.post('/', async (request, response) => {
     const { data } = await axios.get(url, tiingoHeader)
 
     //console.log('Real-time Data:', data)
-    const { name, sector } = getStockByTicker(ticker)
-    console.log('Stock Name:', name)
-    console.log('Sector:', sector)
 
     if (data.length > 0) {
       const latestEntry = data[0]
@@ -41,6 +39,22 @@ router.post('/', async (request, response) => {
         ? ((latest - previousClose) / previousClose * 100).toFixed(2)
         : '-'
 
+      const { name, sector } = getStockByTicker(ticker)
+      //console.log('Stock Name:', name)
+      //console.log('Sector:', sector)
+
+      const stockData = {
+        ticker: latestEntry.ticker,
+        name,
+        timestamp: formattedTimestamp,
+        latest,
+        pchange: changePercentage,
+        sector,
+        description: 'No description available', // API call to Tiingo required
+      }
+
+      await saveStockDataToDatabase(stockData)
+
       const formattedData = {
         ticker: latestEntry.ticker,
         name,
@@ -48,8 +62,6 @@ router.post('/', async (request, response) => {
         latest,
         percentageChange: `${changePercentage}%`,
       }
-
-      // TODO: Save data also to database here
 
       response.status(200).json(formattedData)
     } else {

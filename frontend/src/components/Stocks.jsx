@@ -12,7 +12,7 @@ const COMMON_STOCKS = [
   //{ ticker: 'AVGO', name: 'Broadcom Inc.' },
   //{ ticker: 'BAC', name: 'Bank of America Corp.' },
   //{ ticker: 'COST', name: 'Costco Wholesale Corp.' },
-  { ticker: 'CRM', name: 'Salesforce Inc.' },
+  //{ ticker: 'CRM', name: 'Salesforce Inc.' },
   //{ ticker: 'GOOGL', name: 'Alphabet Inc.' },
   //{ ticker: 'JPM', name: 'JPMorgan Chase & Co.' },
   //{ ticker: 'KO', name: 'Coca-Cola Co.' },
@@ -23,7 +23,7 @@ const COMMON_STOCKS = [
   //{ ticker: 'T', name: 'AT&T Inc.' },
   //{ ticker: 'TSLA', name: 'Tesla Inc.' },
   //{ ticker: 'UNH', name: 'UnitedHealth Group Inc.' },
-  //{ ticker: 'V', name: 'Visa Inc.' },
+  { ticker: 'V', name: 'Visa Inc.' },
   //{ ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 

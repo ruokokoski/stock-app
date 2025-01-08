@@ -12,7 +12,8 @@
     "test": "node --test",
     "auth": "flyctl auth login",
     "deploy": "fly deploy",
-    "proxy": "flyctl proxy 5432 -a stock-app-tr-db"
+    "proxy": "flyctl proxy 5432 -a stock-app-tr-db",
+    "db": "flyctl postgres connect -a stock-app-tr-db"
   },
   "repository": {
     "type": "git",
