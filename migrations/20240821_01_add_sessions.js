@@ -18,9 +18,14 @@ module.exports = {
         defaultValue: true,
       }
     })
+    await queryInterface.removeColumn('sessions', 'valid')
   },
   
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('sessions')
+    await queryInterface.addColumn('sessions', 'valid', {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    })
   }
 }

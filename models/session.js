@@ -8,15 +8,16 @@ Session.init({
     primaryKey: true,
     autoIncrement: true,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'users', key: 'id' },
+  },
   token: {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
   },
-  valid: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  }
 }, {
   sequelize,
   underscored: true,

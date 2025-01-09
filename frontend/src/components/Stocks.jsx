@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 
 const COMMON_STOCKS = [
-  //{ ticker: 'AAPL', name: 'Apple Inc.' },
+  { ticker: 'AAPL', name: 'Apple Inc.' },
   //{ ticker: 'ABBV', name: 'AbbVie Inc.' },
   //{ ticker: 'AMD', name: 'Advanced Micro Devices Inc.' },
   //{ ticker: 'AMZN', name: 'Amazon.com Inc.' },
@@ -23,7 +23,7 @@ const COMMON_STOCKS = [
   //{ ticker: 'T', name: 'AT&T Inc.' },
   //{ ticker: 'TSLA', name: 'Tesla Inc.' },
   //{ ticker: 'UNH', name: 'UnitedHealth Group Inc.' },
-  { ticker: 'V', name: 'Visa Inc.' },
+  //{ ticker: 'V', name: 'Visa Inc.' },
   //{ ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 

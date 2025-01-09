@@ -63,6 +63,15 @@ router.put('/:id', tokenExtractor, isAdmin, async (req, res) => {
 
   user.disabled = req.body.disabled
   await user.save()
+  /*
+  if (req.body.disabled) {
+    await Session.destroy({
+      where: {
+        userId: user.id,
+      },
+    })
+  }
+  */
   res.json(user)
 })
 
@@ -81,7 +90,8 @@ router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
 
 router.post('/change-password', tokenExtractor, async (req, res) => {
   const { currentPassword, newPassword } = req.body
-  const user = await User.findByPk(req.decodedToken.id)
+  //const user = await User.findByPk(req.decodedToken.id)
+  const user = req.user
 
   const passwordCorrect = user === null
     ? false

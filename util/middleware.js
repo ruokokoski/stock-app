@@ -1,53 +1,43 @@
-const jwt = require('jsonwebtoken')
-const { SECRET } = require('./config.js')
+//const jwt = require('jsonwebtoken')
+//const { SECRET } = require('./config.js')
 const { User } = require('../models')
 const Session = require('../models/session')
   
 const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    try {
-      const token = authorization.substring(7)
-      req.decodedToken = jwt.verify(token, SECRET)
-      //console.log('Decoded token:', req.decodedToken)
-      req.token = token
-    } catch {
-      return res.status(401).json({ error: 'token invalid' })
-    }
-  } else {
+  if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
     return res.status(401).json({ error: 'token missing' })
-  } 
+  }
+
+  const session = await checkSession(authorization.substring(7))
+
+  if (!session) {
+    return res.status(401).json({ error: 'Session invalid' })
+  }
+
+  if (session.user.disabled) {
+    return res.status(401).json({ error: 'User disabled' })
+  }
+
+  req.user = session.user
+  
   next()
 }
 
-const checkSession = async (req, res, next) => {
-  if (!req.token) {
-    return res.status(401).json({ error: 'token missing' })
-  }
-
-  try {
-    const session = await Session.findOne({ where: { token: req.token } })
-    
-    if (!session) {
-      return res.status(401).json({ error: 'Session not found' })
+const checkSession = async (token) => {
+  return await Session.findOne({
+    where: {
+      token
+    },
+    include: {
+      model: User
     }
-    
-    if (!session.valid) {
-      return res.status(401).json({ error: 'Session expired' })
-    }
-
-    req.session = session
-    next()
-  } catch (error) {
-    console.log('Error: ', error)
-    return res.status(401).json({ error: 'Session invalid' })
-  }
+  })
 }
 
 const isAdmin = async (req, res, next) => {
-  const user = await User.findByPk(req.decodedToken.id)
-  if (!user.admin) {
-    return res.status(401).json({ error: 'operation not allowed' })
+  if (!req.user || !req.user.admin) {
+    return res.status(401).json({ error: 'Operation not allowed' })
   }
   next()
 }
@@ -82,4 +72,4 @@ const errorHandler = (error, request, response, next) => {
   next()
 }
 
-module.exports = { tokenExtractor, checkSession, isAdmin, unknownEndpoint, errorHandler }
+module.exports = { tokenExtractor, isAdmin, unknownEndpoint, errorHandler }

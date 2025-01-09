@@ -19,7 +19,12 @@ router.post('/', async (request, response) => {
     const url = `https://api.tiingo.com/iex/?tickers=${ticker}`
     const { data } = await axios.get(url, tiingoHeader)
 
+    const urlMetadata = `https://api.tiingo.com/tiingo/daily/${ticker}`
+    const metadata = await axios.get(urlMetadata, tiingoHeader)
+    const description = metadata.data.description
+
     //console.log('Real-time Data:', data)
+    //console.log('Description:', description)
 
     if (data.length > 0) {
       const latestEntry = data[0]
@@ -50,7 +55,7 @@ router.post('/', async (request, response) => {
         latest,
         pchange: changePercentage,
         sector,
-        description: 'No description available', // API call to Tiingo required
+        description: description || 'No description available',
       }
 
       await saveStockDataToDatabase(stockData)

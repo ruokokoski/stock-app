@@ -32,7 +32,7 @@ Stock.init({
     type: DataTypes.STRING,
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
   }
 }, {
   sequelize,
