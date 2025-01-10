@@ -31,4 +31,5 @@
 | 07.01 | 6    | Stocks page, study APIs and find mappings for US ticker to company name |
 | 08.01 | 5    | tickers to names, add stocks table to database, save stock data to database |
 | 09.01 | 3    | change session logic, fetch company descriptions from Tiingo API |
-| **Total** | **95** | |
+| 10.01 | 1    | fix updating stock data logic |
+| **Total** | **96** | |

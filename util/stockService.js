@@ -5,7 +5,12 @@ const saveStockDataToDatabase = async (stockData) => {
     const existingStock = await Stock.findOne({ where: { ticker: stockData.ticker } })
 
     if (existingStock) {
-      await existingStock.update(stockData)
+      const updatedData = { ...stockData }
+
+      if (stockData.description === 'No description') {
+        delete updatedData.description
+      }
+      await existingStock.update(updatedData)
       console.log('Stock data updated in the database')
     } else {
       await Stock.create(stockData)
