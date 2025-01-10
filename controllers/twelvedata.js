@@ -39,9 +39,10 @@ router.post('/', async (request, response) => {
   }
 
   try {
-    const url = `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=${TWELVEDATA_API_KEY}&outputsize=${outputsize}`
+    //const url = `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=demo&outputsize=${outputsize}`
+    const url = `https://api.twelvedata.com/time_series?apikey=${TWELVEDATA_API_KEY}&interval=${interval}&symbol=${ticker}&outputsize=${outputsize}`
     const data = await axios.get(url, twelvedataHeader)
-    //console.log('Data:', data.data)
+    console.log('Data:', data.data)
 
     const chartData = data.data.values
       .map((entry) => ({
