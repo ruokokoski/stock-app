@@ -32,4 +32,5 @@
 | 08.01 | 5    | tickers to names, add stocks table to database, save stock data to database |
 | 09.01 | 3    | change session logic, fetch company descriptions from Tiingo API |
 | 10.01 | 2    | fix updating stock data logic, store descriptions |
-| **Total** | **97** | |
+| 15.01 | 3    | improve messages and move Message component to App |
+| **Total** | **100** | |

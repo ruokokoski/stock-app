@@ -12,6 +12,7 @@ import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
 import Marquee from './components/Marquee'
+import Message from './components/Message'
 import loginService from './services/login'
 import logoutService from './services/logout'
 import userService from './services/users'
@@ -21,7 +22,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-  //const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState('')
+  const [messageVariant, setMessageVariant] = useState('')
 
   axios.interceptors.response.use(
     response => response,
@@ -42,7 +44,6 @@ const App = () => {
 			const user = JSON.parse(loggedUserJSON)
 			if (user.token) {
         setUser(user)
-        //stockService.setToken(user.token)
         userService.setToken(user.token)
         console.log('Token is in localstorage')
       } else {
@@ -58,15 +59,18 @@ const App = () => {
 				username,
 				password,
 			})
-      console.log('Logged in user:', user)
+      //console.log('Logged in user:', user)
       setUser(user)
       window.localStorage.setItem(
         'loggedStockappUser', JSON.stringify(user)
       )
       userService.setToken(user.token)
       navigate('/')
+      setMessage('logged in.')
+      setMessageVariant('success')
     } catch (error) {
-      console.log('Login failed', error)
+      setMessage(error.response?.data?.error || 'Login failed.')
+      setMessageVariant('danger')
       throw error
     }    
   }
@@ -77,7 +81,9 @@ const App = () => {
       await signupService.signup({ name, username, password })
       navigate('/login', { state: { message: 'User created successfully. Please log in.', variant: 'success' } })
     } catch (error) {
-      console.log('Signup failed', error)
+      //console.log('Signup failed', error)
+      setMessage('Signup failed.')
+      setMessageVariant('danger')
       throw error
     }
   }
@@ -90,11 +96,15 @@ const App = () => {
         await logoutService.logout(user.token)
         setUser(null)
         window.localStorage.removeItem('loggedStockappUser')
-        console.log('Logout successful')
+        //console.log('Logout successful')
         navigate('/login')
+        setMessage('Logout successful')
+        setMessageVariant('success')
       }
     } catch (error) {
       console.log('Logout failed', error)
+      setMessage('Logout failed!')
+      setMessageVariant('danger')
     }
   }
 
@@ -106,6 +116,7 @@ const App = () => {
     <>
       <NavigationBar user={user} onLogout={handleLogout} />
       <Marquee />
+      <Message message={message} variant={messageVariant} onClose={() => setMessage('')} />
       <Container className="mt-10">
         <Routes>
           <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
@@ -114,8 +125,8 @@ const App = () => {
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
-          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
-          <Route path="/signup" element={<SignupForm onSignup={handleSignup} />} />
+          <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
+          <Route path="/signup" element={<SignupForm onSignup={handleSignup} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
         </Routes>
       </Container>
     </>

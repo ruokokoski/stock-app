@@ -5,13 +5,13 @@ import AuthForm from './AuthForm'
 import AuthInput from './AuthInput'
 import '../styles/styles.css'
 
-const SignupForm = ({ onSignup }) => {
+const SignupForm = ({ onSignup, setMessage, setMessageVariant }) => {
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [messageVariant, setMessageVariant] = useState('')
+  //const [message, setMessage] = useState('')
+  //const [messageVariant, setMessageVariant] = useState('')
 
   const isEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -51,9 +51,6 @@ const SignupForm = ({ onSignup }) => {
   return (
     <AuthForm
       title="Signup"
-      message={message}
-      messageVariant={messageVariant}
-      onCloseMessage={() => setMessage('')}
       onSubmit={handleSignup}
       footer={
         <p>

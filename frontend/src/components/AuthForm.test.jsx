@@ -27,18 +27,4 @@ describe('AuthForm Component', () => {
 
     expect(handleSubmit).toHaveBeenCalled()
   })
-
-  it('renders message component with message', () => {
-    render(
-      <AuthForm
-        title="Login"
-        onSubmit={vi.fn()}
-        message="Test message"
-        messageVariant="success"
-        onCloseMessage={vi.fn()}
-      />
-    )
-
-    expect(screen.getByText(/Test message/i)).toBeInTheDocument()
-  })
 })

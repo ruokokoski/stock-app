@@ -5,11 +5,11 @@ import AuthForm from './AuthForm'
 import AuthInput from './AuthInput'
 import '../styles/styles.css'
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, setMessage, setMessageVariant }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [messageVariant, setMessageVariant] = useState('')
+  //const [message, setMessage] = useState('')
+  //const [messageVariant, setMessageVariant] = useState('')
 
   const location = useLocation()
 
@@ -33,8 +33,8 @@ const LoginForm = ({ onLogin }) => {
       await onLogin(username, password)
       setUsername('')
       setPassword('')
-      setMessage('')
-      setMessageVariant('')
+      setMessage(`${username} logged in`)
+      setMessageVariant('success')
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         setMessage(error.response.data.error)
@@ -49,9 +49,6 @@ const LoginForm = ({ onLogin }) => {
   return (
     <AuthForm
       title="Login"
-      message={message}
-      messageVariant={messageVariant}
-      onCloseMessage={() => setMessage('')}
       onSubmit={handleSubmit}
       footer={
         <p>

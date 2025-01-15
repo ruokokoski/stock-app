@@ -7,9 +7,6 @@ import { getColor } from '../utils/helpers'
 // Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
 const TWELVEDATA_TICKERS = [
   { ticker: 'SPY', name: 'S&P 500 (SPY)', flag: '🇺🇸' },
-  { ticker: 'VFIAX ', name: 'Vanguard 500 Index Fund', flag: '🇺🇸' },
-  { ticker: 'IXIC', name: 'Nasdaq Composite', flag: '🇺🇸' },
-  { ticker: 'KNEBV:OMXH', name: 'Kone Oyj', flag: '🇫🇮' },
   //{ ticker: 'ADYEN:Euronext', name: 'Adyen N.V.', flag: '🇳🇱' },
   //{ ticker: '005930:KRX', name: 'Samsumg Electronics Co.', flag: '🇰🇷' },
 ]
