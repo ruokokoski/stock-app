@@ -33,7 +33,7 @@ const COMMON_STOCKS = [
   { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 
-const Stocks = () => {
+const Stocks = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState({})
 
   useEffect(() => {
@@ -47,6 +47,8 @@ const Stocks = () => {
           newStockData[ticker] = data
         } catch (error) {
           console.error('Error fetching data from Finnhub:', error)
+          setMessage('Error fetching data from Finnhub')
+          setMessageVariant('danger')
         }
       }
 

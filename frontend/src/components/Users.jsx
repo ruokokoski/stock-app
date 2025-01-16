@@ -3,9 +3,8 @@ import userService from '../services/users'
 import { Table, Button } from 'react-bootstrap'
 import '../styles/styles.css'
 
-const Users = () => {
+const Users = ({ setMessage, setMessageVariant }) => {
   const [users, setUsers] = useState([])
-  //const [message, setMessage] = useState('')
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -15,6 +14,8 @@ const Users = () => {
         //localStorage.setItem('users', JSON.stringify(fetchedUsers))
       } catch (error) {
         console.log('Failed to fetch users:', error)
+        setMessage('Failed to fetch users')
+        setMessageVariant('danger')
       }
     }
 
@@ -48,8 +49,12 @@ const Users = () => {
       await userService.deleteUser(id)
       setUsers(users.filter(user => user.id !== id))
       localStorage.setItem('users', JSON.stringify(users.filter(user => user.id !== id)))
+      setMessage('User deleted')
+      setMessageVariant('success')
     } catch (error) {
       console.log('Failed to delete user:', error)
+      setMessage('Failed to delete user')
+      setMessageVariant('danger')
     }
   }
 

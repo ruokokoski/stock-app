@@ -18,7 +18,7 @@ const POLYGON_TICKERS = [
   //{ ticker: 'I:NQJP', name: 'Nasdaq Japan Index', flag: '🇯🇵' },
 ]
 
-const Markets = () => {
+const Markets = ({ setMessage, setMessageVariant }) => {
   const [marketData, setMarketData] = useState({})
 
   useEffect(() => {
@@ -35,6 +35,8 @@ const Markets = () => {
               latest: { close: '-', datetime: '-' },
               previous: { close: '-', percentageChange: '-' },
             }
+            setMessage(`Error fetching ${ticker} data`)
+            setMessageVariant('danger')
           }
         }
       }

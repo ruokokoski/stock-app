@@ -119,11 +119,11 @@ const App = () => {
       <Message message={message} variant={messageVariant} onClose={() => setMessage('')} />
       <Container className="mt-10">
         <Routes>
-          <Route path="/" element={user ? <Markets /> : <Navigate replace to="/login" />} />
+          <Route path="/" element={user ? <Markets setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/index/:ticker" element={<IndexPage />} />
-          <Route path="/stocks" element={user ? <Stocks /> : <Navigate replace to="/login" />} />
+          <Route path="/stocks" element={user ? <Stocks setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
-          <Route path="/users" element={user ? (user.admin ? <Users /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
+          <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
