@@ -2,7 +2,7 @@ const axios = require('axios')
 const router = require('express').Router()
 const { FINNHUB_API_KEY } = require('../util/config')
 const { getStockByTicker } = require('../util/tickerHelper')
-//const { saveStockDataToDatabase } = require('../util/stockService')
+const { saveStockDataToDatabase } = require('../util/stockService')
 
 router.post('/', async (request, response) => {
   const { ticker, name } = request.body
@@ -20,12 +20,18 @@ router.post('/', async (request, response) => {
 
     let stockName = name || 'No name provided'
     let stockSector = 'Unknown'
+    let description = 'No description'
 
     console.log('Name: ', name)
     if (!name) {
       const stockInfo = getStockByTicker(ticker)
       stockName = stockInfo.name || 'No name provided'
       stockSector = stockInfo.sector || 'Unknown'
+      /*
+      const urlMetadata = `https://api.tiingo.com/tiingo/daily/${ticker}`
+      const metadata = await axios.get(urlMetadata, tiingoHeader)
+      description = metadata.data.description
+      */
     }
 
     const timestampUTC = new Date(data.t * 1000).toISOString()
@@ -37,19 +43,11 @@ router.post('/', async (request, response) => {
       latest: data.c,
       pchange: data.dp,
       sector: stockSector,
-      description: 'No description',
+      description: description,
     }
-    console.log('Finnhub stock data:', stockData)
-    
-    /*
-    const formattedData = {
-      ticker: ticker,
-      name: stockName,
-      datetime: timestampUTC,
-      latest: data.c,
-      percentageChange: `${data.dp.toFixed(2)}%`,
-    }
-    */
+    //console.log('Finnhub stock data:', stockData)
+
+    await saveStockDataToDatabase(stockData)
 
     response.status(200).json(stockData)
 

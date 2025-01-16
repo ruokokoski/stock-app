@@ -35,33 +35,6 @@ const COMMON_STOCKS = [
 
 const Stocks = () => {
   const [stockData, setStockData] = useState({})
-  //const [finnhubData, setFinnhubData] = useState({})
-
-  /*
-  useEffect(() => {
-    const fetchData = async () => {
-      const newStockData = {}
-
-      const fetchTickerData = async (ticker) => {
-        try {
-          const data = await tiingoService.getTicker(ticker)
-          newStockData[ticker] = data
-        } catch (error) {
-          console.error(`Error fetching ${ticker} data:`, error)
-          newStockData[ticker] = [{ latest: '-', percentageChange: '-', datetime: '-' }]
-        }
-      }
-
-      for (const { ticker } of COMMON_STOCKS) {
-        await fetchTickerData(ticker)
-      }
-
-      setStockData(newStockData)
-    }
-
-    fetchData()
-  }, [])
-  */
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +43,7 @@ const Stocks = () => {
       const fetchFinnhubData = async (ticker, name) => {
         try {
           const data = await finnhubService.getTicker(ticker, null, name)
-          console.log('Finnhub Test Data:', data)
+          //console.log('Finnhub data:', data)
           newStockData[ticker] = data
         } catch (error) {
           console.error('Error fetching data from Finnhub:', error)
