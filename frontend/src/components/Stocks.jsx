@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 //import { Link } from 'react-router-dom'
-import { tiingoService } from '../services/stockServices'
+import { tiingoService, finnhubService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 
@@ -214,11 +214,60 @@ const COMMON_STOCKS = [
   { ticker: 'ODFL', name: 'Old Dominion Freight Line Inc.' },
   { ticker: 'PNC', name: 'PNC Financial Services Group Inc.' },
   { ticker: 'WMB', name: 'Williams Companies Inc.' },
+  { ticker: 'ZION', name: 'Zions Bancorporation' },
+  { ticker: 'KEY', name: 'KeyCorp' },
+  { ticker: 'RF', name: 'Regions Financial Corp.' },
+  { ticker: 'HBAN', name: 'Huntington Bancshares Inc.' },
+  { ticker: 'CFG', name: 'Citizens Financial Group Inc.' },
+  { ticker: 'ALLY', name: 'Ally Financial Inc.' },
+  { ticker: 'PNW', name: 'Pinnacle West Capital Corp.' },
+  { ticker: 'CMS', name: 'CMS Energy Corp.' },
+  { ticker: 'WEC', name: 'WEC Energy Group Inc.' },
+  { ticker: 'HIG', name: 'Hartford Financial Services Group Inc.' },
+  { ticker: 'BRO', name: 'Brown & Brown Inc.' },
+  { ticker: 'RJF', name: 'Raymond James Financial Inc.' },
+  { ticker: 'TROW', name: 'T. Rowe Price Group Inc.' },
+  { ticker: 'AMP', name: 'Ameriprise Financial Inc.' },
+  { ticker: 'CBOE', name: 'Cboe Global Markets Inc.' },
+  { ticker: 'NTRS', name: 'Northern Trust Corp.' },
+  { ticker: 'SNV', name: 'Synovus Financial Corp.' },
+  { ticker: 'BXP', name: 'Boston Properties Inc.' },
+  { ticker: 'FRT', name: 'Federal Realty Investment Trust' },
+  { ticker: 'REG', name: 'Regency Centers Corp.' },
+  { ticker: 'KIM', name: 'Kimco Realty Corp.' },
+  { ticker: 'SLG', name: 'SL Green Realty Corp.' },
+  { ticker: 'HST', name: 'Host Hotels & Resorts Inc.' },
+  { ticker: 'AAL', name: 'American Airlines Group Inc.' },
+  { ticker: 'AEP', name: 'American Electric Power Co. Inc.' },
+  { ticker: 'AFL', name: 'Aflac Inc.' },
+  { ticker: 'ALB', name: 'Albemarle Corp.' },
+  { ticker: 'AMT', name: 'American Tower Corp.' },
+  { ticker: 'APH', name: 'Amphenol Corp.' },
+  { ticker: 'ATO', name: 'Atmos Energy Corp.' },
+  { ticker: 'BBY', name: 'Best Buy Co. Inc.' },
+  { ticker: 'BK', name: 'The Bank of New York Mellon Corp.' },
+  { ticker: 'BXP', name: 'Boston Properties Inc.' },
+  { ticker: 'CBOE', name: 'Cboe Global Markets Inc.' },
+  { ticker: 'CHRW', name: 'C.H. Robinson Worldwide Inc.' },
+  { ticker: 'CINF', name: 'Cincinnati Financial Corp.' },
+  { ticker: 'CL', name: 'Colgate-Palmolive Co.' },
+  { ticker: 'CMS', name: 'CMS Energy Corp.' },
+  { ticker: 'COO', name: 'The Cooper Companies Inc.' },
+  { ticker: 'CPB', name: 'Campbell Soup Co.' },
+  { ticker: 'DHR', name: 'Danaher Corp.' },
+  { ticker: 'DLTR', name: 'Dollar Tree Inc.' },
+  { ticker: 'ED', name: 'Consolidated Edison Inc.' },
+  { ticker: 'ES', name: 'Eversource Energy' },
+  { ticker: 'FITB', name: 'Fifth Third Bancorp' },
+  { ticker: 'GIS', name: 'General Mills Inc.' },
+  { ticker: 'HIG', name: 'The Hartford Financial Services Group Inc.' },
+  { ticker: 'HRL', name: 'Hormel Foods Corp.' },
   */
 ]
 
 const Stocks = () => {
   const [stockData, setStockData] = useState({})
+  const [finnhubData, setFinnhubData] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -244,6 +293,20 @@ const Stocks = () => {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const fetchFinnhubData = async () => {
+      try {
+        const response = await finnhubService.getTicker('MSFT')
+        console.log('Finnhub Test Data:', response)
+        setFinnhubData(response)
+      } catch (error) {
+        console.error('Error fetching data from Finnhub:', error)
+      }
+    }
+
+    fetchFinnhubData()
+  }, [])
+
   const renderTableRows = () => {
     return COMMON_STOCKS.map(({ ticker, name }) => {
       const percentageChange = stockData[ticker]?.percentageChange || '-'
@@ -263,8 +326,11 @@ const Stocks = () => {
 
   return (
     <div className='content-padding'>
+      <h4>Finnhub Test</h4>
+      {JSON.stringify(finnhubData, null, 2)}
+
       <h4>Common US stocks</h4>
-      <Table striped bordered hover style={{ width: '80%', maxWidth: '1500px' }}>
+      <Table striped bordered hover style={{ width: '80%' }}>
         <thead>
         <tr>
           <th style={{ width: '10%' }}>Ticker</th>

@@ -33,4 +33,5 @@
 | 09.01 | 3    | change session logic, fetch company descriptions from Tiingo API |
 | 10.01 | 2    | fix updating stock data logic, store descriptions |
 | 15.01 | 3    | improve messages and move Message component to App |
-| **Total** | **100** | |
+| 16.01 | 2    | implement Finnhub API |
+| **Total** | **102** | |
