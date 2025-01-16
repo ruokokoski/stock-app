@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const apiService = (baseUrl) => ({
-  getTicker: async (ticker, range) => {
-    const requestBody = range ? { ticker, range } : { ticker }
+  getTicker: async (ticker, range, name) => {
+    //const requestBody = range ? { ticker, range } : { ticker }
     /*
     const config = {
       headers: {
@@ -10,6 +10,15 @@ const apiService = (baseUrl) => ({
       },
     }
     */
+    const requestBody = { ticker }
+
+    if (range) {
+      requestBody.range = range
+    }
+
+    if (name) {
+      requestBody.name = name
+    }
     const response = await axios.post(baseUrl, requestBody)
     return response.data
   }

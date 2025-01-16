@@ -44,10 +44,10 @@ router.post('/', async (request, response) => {
       const changePercentage = previousClose
         ? ((latest - previousClose) / previousClose * 100).toFixed(2)
         : '-'
-
+      
       const { name, sector } = getStockByTicker(ticker)
-      //console.log('Stock Name:', name)
-      //console.log('Sector:', sector)
+      console.log('Stock Name:', name)
+      console.log('Sector:', sector)
 
       const stockData = {
         ticker: latestEntry.ticker,
@@ -75,6 +75,9 @@ router.post('/', async (request, response) => {
     }
 
   } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
     console.log('API call failed:', error)
     response.status(500).json({ error: 'Failed to fetch data from Tiingo API' })
   }

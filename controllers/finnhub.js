@@ -1,11 +1,11 @@
 const axios = require('axios')
 const router = require('express').Router()
 const { FINNHUB_API_KEY } = require('../util/config')
-//const { getStockByTicker } = require('../util/tickerHelper')
+const { getStockByTicker } = require('../util/tickerHelper')
 //const { saveStockDataToDatabase } = require('../util/stockService')
 
 router.post('/', async (request, response) => {
-  const { ticker } = request.body
+  const { ticker, name } = request.body
 
   const finnhubHeader = {
     headers: {
@@ -18,21 +18,45 @@ router.post('/', async (request, response) => {
     const url = `https://finnhub.io/api/v1/quote?symbol=${ticker}`
     const { data } = await axios.get(url, finnhubHeader)
 
-    console.log('Finnhub stock quote data:', data)
-    const formattedData = {
-      currentPrice: data.c,
-      change: data.d,
-      percentChange: data.dp,
-      highPrice: data.h,
-      lowPrice: data.l,
-      openPrice: data.o,
-      previousClose: data.pc,
-      timestamp: data.t,
+    let stockName = name || 'No name provided'
+    let stockSector = 'Unknown'
+
+    console.log('Name: ', name)
+    if (!name) {
+      const stockInfo = getStockByTicker(ticker)
+      stockName = stockInfo.name || 'No name provided'
+      stockSector = stockInfo.sector || 'Unknown'
     }
 
-    response.status(200).json(formattedData)
+    const timestampUTC = new Date(data.t * 1000).toISOString()
+
+    const stockData = {
+      ticker: ticker,
+      name: stockName,
+      timestamp: timestampUTC,
+      latest: data.c,
+      pchange: data.dp,
+      sector: stockSector,
+      description: 'No description',
+    }
+    console.log('Finnhub stock data:', stockData)
+    
+    /*
+    const formattedData = {
+      ticker: ticker,
+      name: stockName,
+      datetime: timestampUTC,
+      latest: data.c,
+      percentageChange: `${data.dp.toFixed(2)}%`,
+    }
+    */
+
+    response.status(200).json(stockData)
 
   } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
     console.log('API call failed:', error)
     response.status(500).json({ error: 'Failed to fetch data from FinnHub API' })
   }
