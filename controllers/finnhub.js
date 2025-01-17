@@ -24,7 +24,7 @@ router.post('/', async (request, response) => {
     let stockSector = 'Unknown'
     let description = 'No description'
 
-    console.log('Name: ', name)
+    //console.log('Name: ', name)
     if (!name) {
       const stockInfo = getStockByTicker(ticker)
       stockName = stockInfo.name || 'No name provided'
@@ -87,9 +87,44 @@ router.post('/search', async (request, response) => {
     const commonStocks = data.result
       .filter(item => item.type.toLowerCase() === 'common stock')
       .slice(0, TOP_RESULTS_LIMIT)
-    console.log('Common Stocks: ', commonStocks)
+    //console.log('Common Stocks: ', commonStocks)
 
-    response.status(200).json({ result: commonStocks })
+    if (commonStocks.length === 0) {
+      return response.status(404).json({ error: 'No common stocks found' })
+    }
+
+    const stockDataPromises = commonStocks.map(async (stock) => {
+      const { symbol } = stock
+      const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}`
+      const { data: quoteData } = await axios.get(quoteUrl, finnhubHeader)
+
+      if (!quoteData) {
+        throw new Error(`No quote data available for ${symbol}`)
+      }
+
+      const timestampUTC = new Date(quoteData.t * 1000).toISOString()
+      const stockName = stock.description || 'No name provided'
+      const stockSector = 'Unknown'
+
+      const stockData = {
+        ticker: symbol,
+        name: stockName,
+        timestamp: timestampUTC,
+        latest: quoteData.c,
+        pchange: quoteData.dp,
+        sector: stockSector,
+        description: 'No description',
+      }
+
+      await saveStockDataToDatabase(stockData)
+
+      return stockData
+    })
+
+    const stocksWithData = await Promise.all(stockDataPromises)
+
+    response.status(200).json({ result: stocksWithData })
+
   } catch (error) {
     if (error.response && error.response.status === 429) {
       return response.status(429).json({ error: 'Rate limit reached. Please try again later.' })

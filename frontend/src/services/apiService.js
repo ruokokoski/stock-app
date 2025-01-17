@@ -12,7 +12,7 @@ const apiService = (baseUrl) => ({
   },
   searchSymbol: async (query) => {
     const requestBody = { query }
-    console.log('Making search request to:', `${baseUrl}/search`, 'with body:', requestBody)
+    
     const response = await axios.post(`${baseUrl}/search`, requestBody)
     return response.data
   }

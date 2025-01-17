@@ -98,15 +98,20 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   }
 
   const renderSearchResults = () => {
-    const topResults = searchResults.slice(0, 3)
+    return searchResults.map((result) => {
+      const percentageChange = result.pchange ? `${result.pchange.toFixed(2)}%` : '-'
+      const color = getColor(percentageChange)
 
-    return topResults.map((result) => (
-      <tr key={result.symbol}>
-        <td>{result.symbol}</td>
-        <td>{result.description}</td>
-        <td>{result.type}</td>
-      </tr>
-    ))
+      return (
+        <tr key={result.ticker}>
+          <td>{result.ticker}</td>
+          <td>{result.name}</td>
+          <td>{result.latest}</td>
+          <td style={color}>{percentageChange}</td>
+          <td>{result.timestamp}</td>
+        </tr>
+      )
+    })
   }
 
   return (
@@ -133,9 +138,11 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>Ticker</th>
-                <th>Name</th>
-                <th>Type</th>
+                <th style={{ width: '10%' }}>Ticker</th>
+                <th style={{ width: '35%' }}>Name</th>
+                <th style={{ width: '15%' }}>Price</th>
+                <th style={{ width: '15%' }}>% Change</th>
+                <th style={{ width: '30%' }}>Date/Time</th>
               </tr>
             </thead>
             <tbody>

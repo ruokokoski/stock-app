@@ -76,7 +76,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
   return (
     <div className='content-padding'>
       <h2>Markets overview</h2>
-      <Table striped bordered hover style={{ width: '80%', maxWidth: '1200px' }}>
+      <Table striped bordered hover style={{ width: '100%' }}>
         <thead>
           <tr>
             <th style={{ width: '36%' }}>Index</th>
