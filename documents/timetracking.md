@@ -34,4 +34,5 @@
 | 10.01 | 2    | fix updating stock data logic, store descriptions |
 | 15.01 | 3    | improve messages and move Message component to App |
 | 16.01 | 5    | implement Finnhub API, modify Stocks component, save to database |
-| **Total** | **105** | |
+| 17.01 | 2    | add search functionality |
+| **Total** | **107** | |

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 //import { Link } from 'react-router-dom'
 import { finnhubService } from '../services/stockServices'
-import { Table } from 'react-bootstrap'
+import { Table, Form, Button } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 
 const COMMON_STOCKS = [
@@ -29,12 +29,14 @@ const COMMON_STOCKS = [
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
   { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
-  */
   { ticker: 'WMT', name: 'Walmart Inc.' },
+  */
 ]
 
 const Stocks = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState({})
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,8 +83,68 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     })
   }
 
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) return
+
+    try {
+      const response = await finnhubService.searchSymbol(searchTerm)
+      //console.log('Search response:', response)
+      setSearchResults(response.result)
+    } catch (error) {
+      console.error('Error searching for symbols:', error)
+      setMessage('Error searching for symbols')
+      setMessageVariant('danger')
+    }
+  }
+
+  const renderSearchResults = () => {
+    const topResults = searchResults.slice(0, 3)
+
+    return topResults.map((result) => (
+      <tr key={result.symbol}>
+        <td>{result.symbol}</td>
+        <td>{result.description}</td>
+        <td>{result.type}</td>
+      </tr>
+    ))
+  }
+
   return (
     <div className='content-padding'>
+      <Form className="mb-3 d-flex">
+        <Form.Control
+          type="text"
+          placeholder="Search for a stock..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              handleSearch()
+            }
+          }}
+        />
+        <Button onClick={handleSearch} variant="primary" className="ms-2">Search</Button>
+      </Form>
+
+      {searchResults.length > 0 && (
+        <>
+          <h4>Search Results</h4>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderSearchResults()}
+            </tbody>
+          </Table>
+        </>
+      )}
+
       <h4>Common US stocks</h4>
       <Table striped bordered hover style={{ width: '100%' }}>
         <thead>
