@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 //import { Link } from 'react-router-dom'
 import { finnhubService } from '../services/stockServices'
-import { Table, Form, Button } from 'react-bootstrap'
+import StockTable from './StockTable'
+import SearchForm from './SearchForm'
 import { getColor } from '../utils/helpers'
 
 const COMMON_STOCKS = [
@@ -29,8 +30,8 @@ const COMMON_STOCKS = [
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
   { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
-  { ticker: 'WMT', name: 'Walmart Inc.' },
   */
+  { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 
 const Stocks = ({ setMessage, setMessageVariant }) => {
@@ -64,7 +65,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [])
 
-  const renderTableRows = () => {
+  const renderCommonStocks = () => {
     return COMMON_STOCKS.map(({ ticker, name }) => {
       const percentageChange = stockData[ticker]?.pchange 
         ? `${stockData[ticker].pchange.toFixed(2)}%`
@@ -84,7 +85,11 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   }
 
   const handleSearch = async () => {
-    if (!searchTerm.trim()) return
+    if (!searchTerm.trim()) {
+      setMessage('Search query is required')
+      setMessageVariant('danger')
+      return
+    }
 
     try {
       const response = await finnhubService.searchSymbol(searchTerm)
@@ -92,81 +97,43 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       setSearchResults(response.result)
     } catch (error) {
       console.error('Error searching for symbols:', error)
-      setMessage('Error searching for symbols')
+      const errorMessage = error.response?.data?.error || 'Error searching for symbols'
+      setMessage(errorMessage)
       setMessageVariant('danger')
     }
   }
 
-  const renderSearchResults = () => {
-    return searchResults.map((result) => {
-      const percentageChange = result.pchange ? `${result.pchange.toFixed(2)}%` : '-'
-      const color = getColor(percentageChange)
+  const renderSearchResults = (result) => {
+    if (!result || !result.ticker) {
+      return null
+    }
+    const percentageChange = result?.pchange ? `${result.pchange.toFixed(2)}%` : '-'
+    const color = getColor(percentageChange)
 
-      return (
-        <tr key={result.ticker}>
-          <td>{result.ticker}</td>
-          <td>{result.name}</td>
-          <td>{result.latest}</td>
-          <td style={color}>{percentageChange}</td>
-          <td>{result.timestamp}</td>
-        </tr>
-      )
-    })
+    return (
+    <tr key={result.ticker}>
+        <td>{result.ticker}</td>
+        <td>{result.name}</td>
+        <td>{result.latest}</td>
+        <td style={color}>{percentageChange}</td>
+        <td>{result.timestamp}</td>
+    </tr>
+    )
   }
 
   return (
     <div className='content-padding'>
-      <Form className="mb-3 d-flex">
-        <Form.Control
-          type="text"
-          placeholder="Search for a stock..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              handleSearch()
-            }
-          }}
-        />
-        <Button onClick={handleSearch} variant="primary" className="ms-2">Search</Button>
-      </Form>
+      <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
 
       {searchResults.length > 0 && (
         <>
           <h4>Search Results</h4>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th style={{ width: '10%' }}>Ticker</th>
-                <th style={{ width: '35%' }}>Name</th>
-                <th style={{ width: '15%' }}>Price</th>
-                <th style={{ width: '15%' }}>% Change</th>
-                <th style={{ width: '30%' }}>Date/Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {renderSearchResults()}
-            </tbody>
-          </Table>
+          <StockTable data={searchResults} renderRow={renderSearchResults} />
         </>
       )}
 
       <h4>Common US stocks</h4>
-      <Table striped bordered hover style={{ width: '100%' }}>
-        <thead>
-        <tr>
-          <th style={{ width: '10%' }}>Ticker</th>
-          <th style={{ width: '35%' }}>Name</th>
-          <th style={{ width: '15%' }}>Price</th>
-          <th style={{ width: '15%' }}>% Change</th>
-          <th style={{ width: '30%' }}>Date/Time</th>
-        </tr>
-        </thead>
-        <tbody>
-          {renderTableRows()}
-        </tbody>
-      </Table>
+      <StockTable data={COMMON_STOCKS} renderRow={renderCommonStocks} />
     </div>
   )
 }

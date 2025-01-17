@@ -90,7 +90,7 @@ router.post('/search', async (request, response) => {
     //console.log('Common Stocks: ', commonStocks)
 
     if (commonStocks.length === 0) {
-      return response.status(404).json({ error: 'No common stocks found' })
+      return response.status(404).json({ error: 'No stocks found. Try searching something else.' })
     }
 
     const stockDataPromises = commonStocks.map(async (stock) => {
@@ -114,6 +114,10 @@ router.post('/search', async (request, response) => {
         pchange: quoteData.dp,
         sector: stockSector,
         description: 'No description',
+      }
+
+      if (stockData.latest === 0) {
+        return null
       }
 
       await saveStockDataToDatabase(stockData)
