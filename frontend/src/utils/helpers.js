@@ -7,6 +7,11 @@ export const getColor = (percentageChange) => {
   }
 }
 
+export const convertUTCToLocal = (utcTimestamp) => {
+  const date = new Date(utcTimestamp)
+  return date.toLocaleString()
+}
+
 export const formatDate = (latestTime) => {
   //console.log('latestTime:', latestTime)
   const date = new Date(latestTime.includes(' ') ? latestTime : `${latestTime}T00:00:00`)

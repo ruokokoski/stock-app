@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { twelvedataService, polygonService, finnhubService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
-import { getColor } from '../utils/helpers'
+import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 // Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
 const TWELVEDATA_TICKERS = [
@@ -48,7 +48,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
       setMarketData(newMarketData)
     }
     fetchData()
-  }, [])
+  }, [setMessage, setMessageVariant])
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -62,7 +62,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
       }
     }
     fetchNewsData()
-  }, [])
+  }, [setMessage, setMessageVariant])
 
   const renderTableRows = (tickers) => {
     return tickers.map(({ ticker, name, flag }) => (
@@ -83,7 +83,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
         <td style={getColor(marketData[ticker]?.previous?.percentageChange)}>
           {marketData[ticker]?.previous?.percentageChange || '-'}
         </td>
-        <td>{marketData[ticker]?.latest?.datetime || '-'}</td>
+        <td>{convertUTCToLocal(marketData[ticker]?.latest?.datetime.split('T')[0]).split(',')[0] || '-'}</td>
       </tr>
     ))
   }
@@ -92,7 +92,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     return newsData.map((article) => (
       <div key={article.id} className="news-article">
         <p><strong>
-          <span className="news-date">{new Date(article.datetime * 1000).toLocaleString()}</span>
+          <span className="news-date">{convertUTCToLocal(article.datetime)}</span>
           <span className="news-headline">
             <a href={article.url} target="_blank" rel="noopener noreferrer">{article.headline}</a>
           </span>
@@ -106,7 +106,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
 
   return (
     <div className='content-padding'>
-      <h2>Markets overview</h2>
+      <h3>Markets overview</h3>
       <Table striped bordered hover style={{ width: '100%' }}>
         <thead>
           <tr>
@@ -122,7 +122,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
         </tbody>
       </Table>
 
-      <h2>Latest News</h2>
+      <h3>Latest News</h3>
       <div className="news-section">
         {renderNewsArticles()}
       </div>

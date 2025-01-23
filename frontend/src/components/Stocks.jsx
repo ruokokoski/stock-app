@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import { finnhubService } from '../services/stockServices'
 import StockTable from './StockTable'
 import SearchForm from './SearchForm'
-import { getColor } from '../utils/helpers'
+import { getColor, convertUTCToLocal } from '../utils/helpers'
 
+//watchlist: 👁️ ⭐ ➕ 💼 📌
 const COMMON_STOCKS = [
   /*
   { ticker: 'AAPL', name: 'Apple Inc.' },
@@ -63,7 +64,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
 
     fetchData()
-  }, [])
+  }, [setMessage, setMessageVariant])
 
   const renderCommonStocks = () => {
     return COMMON_STOCKS.map(({ ticker, name }) => {
@@ -78,7 +79,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
           <td>{name}</td>
           <td>{stockData[ticker]?.latest || '-'}</td>
           <td style={color}>{percentageChange}</td>
-          <td>{stockData[ticker]?.timestamp || '-'}</td>
+          <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
         </tr>
       )
     })
@@ -116,7 +117,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
         <td>{result.name}</td>
         <td>{result.latest}</td>
         <td style={color}>{percentageChange}</td>
-        <td>{result.timestamp}</td>
+        <td>{result.timestamp ? convertUTCToLocal(result.timestamp) : '-'}</td>
     </tr>
     )
   }
@@ -127,12 +128,12 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
 
       {searchResults.length > 0 && (
         <>
-          <h4>Search Results</h4>
+          <h3>Search Results</h3>
           <StockTable data={searchResults} renderRow={renderSearchResults} />
         </>
       )}
 
-      <h4>Common US stocks</h4>
+      <h3>Common US stocks</h3>
       <StockTable data={COMMON_STOCKS} renderRow={renderCommonStocks} />
     </div>
   )

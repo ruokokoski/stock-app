@@ -2,7 +2,7 @@ const axios = require('axios')
 const router = require('express').Router()
 const { POLYGON_API_KEY } = require('../util/config')
 
-const formatDate = (date) => {
+const formatDateForURL = (date) => {
   const d = new Date(date)
   let month = '' + (d.getMonth() + 1)
   let day = '' + d.getDate()
@@ -21,8 +21,8 @@ router.post('/', async (request, response) => {
     const currentDate = new Date()
     const previousYear = new Date()
     previousYear.setFullYear(currentDate.getFullYear() - 1)
-    const currentFormatted = formatDate(currentDate)
-    const previousYearFormatted = formatDate(previousYear)
+    const currentFormatted = formatDateForURL(currentDate)
+    const previousYearFormatted = formatDateForURL(previousYear)
 
     const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${previousYearFormatted}/${currentFormatted}?sort=desc&apiKey=${POLYGON_API_KEY}`
     const { data } = await axios.get(url)
@@ -31,7 +31,8 @@ router.post('/', async (request, response) => {
       .map((entry) => ({
         time: new Date(entry.t).toISOString().split('T')[0],
         value: parseFloat(entry.c).toFixed(2),
-        //volume: parseInt(entry.volume)
+        high: parseFloat(entry.h).toFixed(2),
+        low: parseFloat(entry.l).toFixed(2),
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))
     //console.log('Chart data:', chartData)
@@ -45,11 +46,11 @@ router.post('/', async (request, response) => {
       const previousClose = parseFloat(previousDay.c)
       const percentageChange = ((latestClose - previousClose) / previousClose) * 100
 
-      console.log('LatestEntry.t polygon:', new Date(latestEntry.t).toISOString().split('T')[0])
+      //console.log('LatestEntry.t polygon:', new Date(latestEntry.t).toISOString().split('T')[0])
 
       latest = {
         close: latestClose.toFixed(2),
-        datetime: new Date(latestEntry.t).toISOString().split('T')[0],
+        datetime: new Date(latestEntry.t).toISOString(),//.split('T')[0],
       }
       previous = {
         close: previousClose.toFixed(2),

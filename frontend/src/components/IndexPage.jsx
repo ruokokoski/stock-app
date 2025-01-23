@@ -42,7 +42,7 @@ const IndexPage = () => {
     } else if (!ticker.startsWith('I:')) {
       fetchData(selectedInterval)
     }
-  }, [ticker, forwardedChartData, selectedInterval])
+  }, [ticker, forwardedChartData, selectedInterval, initialDataUsed])
 
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)

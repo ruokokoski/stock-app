@@ -20,7 +20,7 @@ const Users = ({ setMessage, setMessageVariant }) => {
     }
 
     fetchUsers()
-  }, [])
+  }, [setMessage, setMessageVariant])
 
   const handleToggleDisabled = async (id, disabled, admin) => {
     if (admin) {
@@ -60,7 +60,7 @@ const Users = ({ setMessage, setMessageVariant }) => {
 
   return (
     <div className='content-padding'>
-      <h2>All stock-app users</h2>
+      <h3>All stock-app users</h3>
       <Table striped bordered hover>
         <thead>
           <tr>

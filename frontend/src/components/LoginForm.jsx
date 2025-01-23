@@ -8,8 +8,6 @@ import '../styles/styles.css'
 const LoginForm = ({ onLogin, setMessage, setMessageVariant }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  //const [message, setMessage] = useState('')
-  //const [messageVariant, setMessageVariant] = useState('')
 
   const location = useLocation()
 
@@ -19,7 +17,7 @@ const LoginForm = ({ onLogin, setMessage, setMessageVariant }) => {
       setMessage(location.state.message)
       setMessageVariant(location.state.variant)
     }
-  }, [location.state])
+  }, [location.state, setMessage, setMessageVariant])
 
   const handleSubmit = async (event) => {
     event.preventDefault()

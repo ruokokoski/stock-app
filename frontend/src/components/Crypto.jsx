@@ -44,7 +44,7 @@ const Crypto = () => {
 
   return (
     <div className='content-padding'>
-      <h2>Top {LIMIT} Cryptocurrencies</h2>
+      <h3>Top {LIMIT} Cryptocurrencies</h3>
       <Table striped bordered hover>
         <thead>
           <tr>

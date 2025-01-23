@@ -77,7 +77,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       newChart.remove()
       container.removeChild(toolTipInstance)
     }
-  }, [selectedInterval])
+  }, [selectedInterval, name])
 
   useEffect(() => {
     if (areaSeries && chartData.length > 0) {
@@ -97,7 +97,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
         allowBoldLabels: true,
       })
     }
-  }, [areaSeries, chartData])
+  }, [areaSeries, chartData, chart, selectedInterval])
 
   const handleToolTipMove = (param, newAreaSeries, toolTipInstance) => {
     if (

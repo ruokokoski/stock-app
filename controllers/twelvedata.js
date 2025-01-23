@@ -42,7 +42,7 @@ router.post('/', async (request, response) => {
     //const url = `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=demo&outputsize=${outputsize}`
     const url = `https://api.twelvedata.com/time_series?apikey=${TWELVEDATA_API_KEY}&interval=${interval}&symbol=${ticker}&outputsize=${outputsize}`
     const data = await axios.get(url, twelvedataHeader)
-    console.log('Data:', data.data)
+    //console.log('Data:', data.data)
 
     const chartData = data.data.values
       .map((entry) => ({
@@ -63,7 +63,7 @@ router.post('/', async (request, response) => {
       const latestClose = parseFloat(latestEntry.close)
       const previousClose = parseFloat(previousEntry.close)
       const percentageChange = ((latestClose - previousClose) / previousClose) * 100
-      console.log('LatestEntry twelve:', latestEntry.datetime)
+      //console.log('LatestEntry twelve:', latestEntry.datetime)
 
       latest = {
         close: latestClose.toFixed(2),

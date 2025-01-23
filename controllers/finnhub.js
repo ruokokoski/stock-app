@@ -139,19 +139,17 @@ router.post('/market_news', async (request, response) => {
     const { data } = await axios.get(url, finnhubHeader)
 
     if (!data) {
-      return response.status(404).json({ error: 'No results found' })
+      return response.status(404).json({ error: 'No news found' })
     }
 
     const filteredData = data.map(article => ({
       id: article.id,
-      datetime: article.datetime,
+      datetime: new Date(article.datetime * 1000).toISOString(),
       headline: article.headline,
       summary: article.summary,
       source: article.source,
       url: article.url
     })).slice(0, ARTICLE_LIMIT)
-    
-    console.log('Data: ', filteredData)
 
     response.status(200).json(filteredData)
 
