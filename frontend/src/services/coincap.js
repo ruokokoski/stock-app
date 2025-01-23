@@ -1,15 +1,10 @@
 import axios from 'axios'
 const baseUrl = '/api/crypto'
 
-const getCoins = async () => {
-  /*
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-  */
-  const response = await axios.post(baseUrl)
+const getCoins = async (limit) => {
+  const requestBody = { limit }
+
+  const response = await axios.post(baseUrl, requestBody)
   return response.data
 }
 

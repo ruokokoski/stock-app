@@ -3,6 +3,8 @@ const router = require('express').Router()
 const { COINCAP_API_KEY } = require('../util/config')
 
 router.post('/', async (request, response) => {
+  const { limit } = request.body
+
   const coincapHeader = {
     headers: {
       'Content-Type': 'application/json',
@@ -11,9 +13,9 @@ router.post('/', async (request, response) => {
   }
 
   try {
-    const url = 'https://api.coincap.io/v2/assets?limit=10'
+    const url = `https://api.coincap.io/v2/assets?limit=${limit}`
     const data = await axios.get(url, coincapHeader)
-    console.log('Coincap data:', data.data)
+    //console.log('Coincap data:', data.data)
 
     response.status(200).json(data.data)
   } catch (error) {

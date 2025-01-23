@@ -12,8 +12,12 @@ const apiService = (baseUrl) => ({
   },
   searchSymbol: async (query) => {
     const requestBody = { query }
-    
+
     const response = await axios.post(`${baseUrl}/search`, requestBody)
+    return response.data
+  },
+  getMarketNews: async () => {
+    const response = await axios.post(`${baseUrl}/market_news`)
     return response.data
   }
 })

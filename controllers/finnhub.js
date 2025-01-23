@@ -4,17 +4,18 @@ const { FINNHUB_API_KEY } = require('../util/config')
 const { getStockByTicker } = require('../util/tickerHelper')
 const { saveStockDataToDatabase } = require('../util/stockService')
 
-const TOP_RESULTS_LIMIT = 3
+const SEARCH_RESULTS_LIMIT = 5
+const ARTICLE_LIMIT = 10
+
+const finnhubHeader = {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Finnhub-Token': `${FINNHUB_API_KEY}`,
+  },
+}
 
 router.post('/', async (request, response) => {
   const { ticker, name } = request.body
-
-  const finnhubHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Finnhub-Token': `${FINNHUB_API_KEY}`,
-    },
-  }
 
   try {
     const url = `https://finnhub.io/api/v1/quote?symbol=${ticker}`
@@ -69,13 +70,6 @@ router.post('/search', async (request, response) => {
     return response.status(400).json({ error: 'Search query is required' })
   }
 
-  const finnhubHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Finnhub-Token': `${FINNHUB_API_KEY}`,
-    },
-  }
-
   try {
     const url = `https://finnhub.io/api/v1/search?q=${encodeURIComponent(query)}&exchange=US`
     const { data } = await axios.get(url, finnhubHeader)
@@ -86,7 +80,7 @@ router.post('/search', async (request, response) => {
     
     const commonStocks = data.result
       .filter(item => item.type.toLowerCase() === 'common stock')
-      .slice(0, TOP_RESULTS_LIMIT)
+      .slice(0, SEARCH_RESULTS_LIMIT)
     //console.log('Common Stocks: ', commonStocks)
 
     if (commonStocks.length === 0) {
@@ -135,6 +129,38 @@ router.post('/search', async (request, response) => {
     }
     console.error('Search API call failed:', error)
     response.status(500).json({ error: 'Failed to fetch search results from Finnhub API' })
+  }
+})
+
+router.post('/market_news', async (request, response) => {
+
+  try {
+    const url = 'https://finnhub.io/api/v1/news?category=general'
+    const { data } = await axios.get(url, finnhubHeader)
+
+    if (!data) {
+      return response.status(404).json({ error: 'No results found' })
+    }
+
+    const filteredData = data.map(article => ({
+      id: article.id,
+      datetime: article.datetime,
+      headline: article.headline,
+      summary: article.summary,
+      source: article.source,
+      url: article.url
+    })).slice(0, ARTICLE_LIMIT)
+    
+    console.log('Data: ', filteredData)
+
+    response.status(200).json(filteredData)
+
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again later.' })
+    }
+    console.error('Market news API call failed:', error)
+    response.status(500).json({ error: 'Failed to fetch market news from Finnhub API' })
   }
 })
 

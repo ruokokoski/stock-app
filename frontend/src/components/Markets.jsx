@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { twelvedataService, polygonService } from '../services/stockServices'
+import { twelvedataService, polygonService, finnhubService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
 import { getColor } from '../utils/helpers'
 
@@ -20,6 +20,7 @@ const POLYGON_TICKERS = [
 
 const Markets = ({ setMessage, setMessageVariant }) => {
   const [marketData, setMarketData] = useState({})
+  const [newsData, setNewsData] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +50,20 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      try {
+        const data = await finnhubService.getMarketNews()
+        setNewsData(data)
+      } catch (error) {
+        console.error('Error fetching news from Finnhub:', error)
+        setMessage('Error fetching news from Finnhub')
+        setMessageVariant('danger')
+      }
+    }
+    fetchNewsData()
+  }, [])
+
   const renderTableRows = (tickers) => {
     return tickers.map(({ ticker, name, flag }) => (
       <tr key={ticker}>
@@ -73,6 +88,22 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     ))
   }
 
+  const renderNewsArticles = () => {
+    return newsData.map((article) => (
+      <div key={article.id} className="news-article">
+        <p><strong>
+          <span className="news-date">{new Date(article.datetime * 1000).toLocaleString()}</span>
+          <span className="news-headline">
+            <a href={article.url} target="_blank" rel="noopener noreferrer">{article.headline}</a>
+          </span>
+        </strong></p>
+        <p>Source: <em>{article.source}</em></p>
+        <p>{article.summary}</p>
+        <hr />
+      </div>
+    ))
+  }
+
   return (
     <div className='content-padding'>
       <h2>Markets overview</h2>
@@ -90,6 +121,11 @@ const Markets = ({ setMessage, setMessageVariant }) => {
           {renderTableRows(POLYGON_TICKERS)}
         </tbody>
       </Table>
+
+      <h2>Latest News</h2>
+      <div className="news-section">
+        {renderNewsArticles()}
+      </div>
     </div>
   )
 }

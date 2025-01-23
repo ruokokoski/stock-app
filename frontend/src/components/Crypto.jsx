@@ -3,6 +3,8 @@ import cryptoService from '../services/coincap'
 import { Table } from 'react-bootstrap'
 import { getColor, formatCurrency, formatMarketCap } from '../utils/helpers'
 
+const LIMIT = 15
+
 const CryptoRow = ({ coin }) => (
   <tr key={coin.id}>
     <td>{coin.rank}</td>
@@ -27,9 +29,9 @@ const Crypto = () => {
   const [cryptoData, setCryptoData] = useState([])
 
   useEffect(() => {
-    const fetchCryptoData = async () => {
+    const fetchCryptoData = async (limit) => {
       try {
-        const response = await cryptoService.getCoins()
+        const response = await cryptoService.getCoins(limit)
         const top20Coins = response.data
         setCryptoData(top20Coins)
       } catch (error) {
@@ -37,12 +39,12 @@ const Crypto = () => {
       }
     }
 
-    fetchCryptoData()
+    fetchCryptoData(LIMIT)
   }, [])
 
   return (
     <div className='content-padding'>
-      <h2>Top 10 Cryptocurrencies</h2>
+      <h2>Top {LIMIT} Cryptocurrencies</h2>
       <Table striped bordered hover>
         <thead>
           <tr>

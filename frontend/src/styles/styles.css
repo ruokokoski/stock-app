@@ -67,3 +67,17 @@
   margin: 0 auto;
   max-width: 1000px;
 }
+
+.news-article p {
+  margin: 5px 0;
+}
+
+.news-date {
+  margin-right: 20px;
+}
+
+.news-article hr {
+  border: 0;
+  border-top: 1px solid #666;
+  margin: 10px 0;
+}
