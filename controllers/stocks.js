@@ -15,6 +15,20 @@ router.get('/', async (req, res) => {
   res.status(200).json(stocks)
 })
 
+router.get('/:id', async (req, res) => {
+  const stock = await Stock.findByPk(req.params.id, {
+    attributes: {
+      exclude: ['createdAt', 'updatedAt']
+    }
+  })
+
+  if (!stock) {
+    return res.status(404).json({ error: 'Stock not found' })
+  }
+
+  res.status(200).json(stock)
+})
+
 router.post('/', async (req, res) => {
   const { ticker, name, timestamp, latest, pchange, sector, description } = req.body
 

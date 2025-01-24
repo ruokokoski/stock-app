@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 //import { Link } from 'react-router-dom'
 import { finnhubService } from '../services/stockServices'
+import { addToWatchlist } from '../services/watchlists'
 import StockTable from './StockTable'
 import SearchForm from './SearchForm'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
@@ -66,6 +67,21 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [setMessage, setMessageVariant])
 
+  const handleAddToWatchlist = async (ticker) => {
+    try {
+      const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+      const user = JSON.parse(loggedUserJSON)
+      await addToWatchlist(ticker, user.token)
+      setMessage(`Added ${ticker} to your watchlist`)
+      setMessageVariant('success')
+    } catch (error) {
+      console.error('Error adding to watchlist:', error)
+      const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
+      setMessage(errorMessage)
+      setMessageVariant('danger')
+    }
+  }
+
   const renderCommonStocks = () => {
     return COMMON_STOCKS.map(({ ticker, name }) => {
       const percentageChange = stockData[ticker]?.pchange 
@@ -80,6 +96,14 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
           <td>{stockData[ticker]?.latest || '-'}</td>
           <td style={color}>{percentageChange}</td>
           <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
+          <td>
+            <button
+              onClick={() => handleAddToWatchlist(ticker)}
+              style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+            >
+              👁️
+            </button>
+          </td>
         </tr>
       )
     })
@@ -118,6 +142,14 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
         <td>{result.latest}</td>
         <td style={color}>{percentageChange}</td>
         <td>{result.timestamp ? convertUTCToLocal(result.timestamp) : '-'}</td>
+        <td>
+          <button
+            onClick={() => handleAddToWatchlist(result.ticker, result.name)}
+            style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+          >
+            👁️
+          </button>
+        </td>
     </tr>
     )
   }

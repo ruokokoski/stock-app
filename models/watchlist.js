@@ -22,7 +22,13 @@ Watchlist.init({
 }, {
   sequelize,
   underscored: true,
-  modelName: 'watchlist'
+  modelName: 'watchlist',
+  indexes: [
+    {
+      unique: true,
+      fields: ['userId', 'stockId'],
+    },
+  ],
 })
 
 module.exports = Watchlist

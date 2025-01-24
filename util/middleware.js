@@ -3,6 +3,7 @@ const Session = require('../models/session')
   
 const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization')
+  console.log('Authorization header:', authorization)
   if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
     return res.status(401).json({ error: 'token missing' })
   }
@@ -23,14 +24,17 @@ const tokenExtractor = async (req, res, next) => {
 }
 
 const checkSession = async (token) => {
-  return await Session.findOne({
-    where: {
-      token
-    },
+  const session = await Session.findOne({
+    where: { token },
     include: {
-      model: User
-    }
+      model: User,
+    },
   })
+
+  if (session) {
+    console.log('Session user:', session.user)
+  }
+  return session
 }
 
 const isAdmin = async (req, res, next) => {

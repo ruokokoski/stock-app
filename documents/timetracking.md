@@ -36,5 +36,5 @@
 | 16.01 | 5    | implement Finnhub API, modify Stocks component, save to database |
 | 17.01 | 4    | add search functionality, refactor Stocks component |
 | 23.01 | 4    | add latest news, enhance webpage styling |
-| 24.01 | 1    | initialize Watchlists |
-| **Total** | **114** | |
+| 24.01 | 4    | initialize Watchlists and add control logic |
+| **Total** | **117** | |

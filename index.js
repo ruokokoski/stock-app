@@ -16,6 +16,7 @@ const eodhdRouter = require('./controllers/eodhd')
 const polygonRouter = require('./controllers/polygon')
 const cryptoRouter = require('./controllers/coincap')
 //const stocksRouter = require('./controllers/stocks')
+const watchlistsRouter = require('./controllers/watchlists')
 
 const { unknownEndpoint, errorHandler } = require('./util/middleware')
 
@@ -34,6 +35,7 @@ app.use('/api/eodhd', eodhdRouter)
 app.use('/api/polygon', polygonRouter)
 app.use('/api/crypto', cryptoRouter)
 //app.use('/api/stocks', stocksRouter)
+app.use('/api/watchlists', watchlistsRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
