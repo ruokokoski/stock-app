@@ -82,7 +82,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderCommonStocks = () => {
+  const renderStocks = () => {
     return COMMON_STOCKS.map(({ ticker, name }) => {
       const percentageChange = stockData[ticker]?.pchange 
         ? `${stockData[ticker].pchange.toFixed(2)}%`
@@ -166,7 +166,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       )}
 
       <h3>Common US stocks</h3>
-      <StockTable data={COMMON_STOCKS} renderRow={renderCommonStocks} />
+      <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
     </div>
   )
 }

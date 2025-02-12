@@ -17,6 +17,9 @@ const NavigationBar = ({ user, onLogout }) => {
                 <Link to="/stocks" style={{ textDecoration: 'none', color: 'inherit' }}>Stocks</Link>
               </Nav.Link>
               <Nav.Link as="span">
+                <Link to="/watchlists" style={{ textDecoration: 'none', color: 'inherit' }}>Watchlist</Link>
+              </Nav.Link>
+              <Nav.Link as="span">
                 <Link to="/crypto" style={{ textDecoration: 'none', color: 'inherit' }}>Crypto</Link>
               </Nav.Link>
             </>

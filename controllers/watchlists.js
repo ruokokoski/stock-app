@@ -48,4 +48,22 @@ router.delete('/:id', tokenExtractor, async (req, res) => {
   res.status(204).end()
 })
 
+router.get('/', tokenExtractor, async (req, res) => {
+  try {
+    const watchlistItems = await Watchlist.findAll({
+      where: { userId: req.user.id },
+      include: [{ model: Stock, attributes: ['ticker', 'name'] }],
+    })
+    const stocks = watchlistItems.map(item => ({
+      ticker: item.stock?.ticker,
+      name: item.stock?.name,
+    }))
+    console.log('Watchlist stocks:', stocks)
+    res.json(stocks)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
 module.exports = router
