@@ -123,7 +123,7 @@ const App = () => {
           <Route path="/" element={user ? <Markets setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/index/:ticker" element={<IndexPage />} />
           <Route path="/stocks" element={user ? <Stocks setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
-          <Route path="/watchlists" element={user ? <Watchlist setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
+          <Route path="/watchlist" element={user ? <Watchlist setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />

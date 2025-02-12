@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react'
 //import { Link } from 'react-router-dom'
-import { getWatchlist } from '../services/watchlists'
+import { getWatchlist, deleteWatchlistItem } from '../services/watchlists'
 import { finnhubService } from '../services/stockServices'
 import StockTable from './StockTable'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
-
-const STOCKS = [
-  { ticker: 'V', name: 'Visa Inc.' },
-]
+import { Modal, Button } from 'react-bootstrap'
 
 const Watchlist = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState({})
   const [watchlistItems, setWatchlistItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +48,41 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [setMessage, setMessageVariant])
 
-  const renderStocks = ({ ticker, name }) => {
+  const handleCheckboxChange = (id) => {
+    setSelectedItems(prevState =>
+      prevState.includes(id) ? prevState.filter(itemId => itemId !== id) : [...prevState, id]
+    )
+  }
+
+  const handleDelete = () => {
+    setShowModal(true)
+  }
+
+  const handleClose = () => {
+    setShowModal(false)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (selectedItems.length > 0) {
+        const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+        const user = JSON.parse(loggedUserJSON)
+
+        try {
+        await Promise.all(selectedItems.map(id => deleteWatchlistItem(id, user.token)))
+        setWatchlistItems(watchlistItems.filter(item => !selectedItems.includes(item.id)))
+        setSelectedItems([])
+        setMessage('Stock(s) removed from watchlist')
+        setMessageVariant('success')
+        } catch (error) {
+        console.error('Error deleting item:', error)
+        setMessage('Error removing stock from watchlist')
+        setMessageVariant('danger')
+        }
+    }
+    setShowModal(false)
+  }
+
+  const renderStocks = ({ id, ticker, name }) => {
       const percentageChange = stockData[ticker]?.pchange 
         ? `${stockData[ticker].pchange.toFixed(2)}%`
         : '-'
@@ -62,18 +95,44 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
           <td>{stockData[ticker]?.latest || '-'}</td>
           <td style={color}>{percentageChange}</td>
           <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
-          <td>-</td>
+          <td>
+            <input
+                type="checkbox"
+                checked={selectedItems.includes(id)}
+                onChange={() => handleCheckboxChange(id)}
+            />
+          </td>
         </tr>
       )
   }
 
-  if (loading) return <div>Loading watchlist...</div>
+  if (loading) return (
+    <div className="spinner" />
+  )
   if (watchlistItems.length === 0) return <div>Your watchlist is empty</div>
     
     return (
         <div className='content-padding'>
           <h3>Watchlist</h3>
           <StockTable data={watchlistItems} renderRow={renderStocks} />
+          <button
+            onClick={handleDelete}
+            className="gradient-button"
+            disabled={selectedItems.length === 0}
+          >
+            Remove stocks
+          </button>
+
+          <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to remove selected stocks from your watchlist?</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+            <Button variant="danger" onClick={handleConfirmDelete}>Yes</Button>
+            </Modal.Footer>
+          </Modal>
         </div>
     )
 }

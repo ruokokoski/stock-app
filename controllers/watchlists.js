@@ -55,6 +55,7 @@ router.get('/', tokenExtractor, async (req, res) => {
       include: [{ model: Stock, attributes: ['ticker', 'name'] }],
     })
     const stocks = watchlistItems.map(item => ({
+      id: item.id,
       ticker: item.stock?.ticker,
       name: item.stock?.name,
     }))

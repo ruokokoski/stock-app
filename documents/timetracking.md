@@ -37,5 +37,5 @@
 | 17.01 | 4    | add search functionality, refactor Stocks component |
 | 23.01 | 4    | add latest news, enhance webpage styling |
 | 24.01 | 4    | initialize Watchlists and add control logic |
-| 12.02 | 4    | Watchlist page |
-| **Total** | **121** | |
+| 12.02 | 6    | Watchlist page, removing stocks from list |
+| **Total** | **123** | |

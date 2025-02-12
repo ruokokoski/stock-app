@@ -35,7 +35,7 @@ app.use('/api/eodhd', eodhdRouter)
 app.use('/api/polygon', polygonRouter)
 app.use('/api/crypto', cryptoRouter)
 //app.use('/api/stocks', stocksRouter)
-app.use('/api/watchlists', watchlistsRouter)
+app.use('/api/watchlist', watchlistsRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
