@@ -6,7 +6,7 @@ import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 // Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
 const TWELVEDATA_TICKERS = [
-  { ticker: 'SPY', name: 'S&P 500 (SPY)', flag: '🇺🇸' },
+  { ticker: 'SPY', name: 'S&P 500 (SPY ETF)', flag: '🇺🇸' },
   //{ ticker: 'ADYEN:Euronext', name: 'Adyen N.V.', flag: '🇳🇱' },
   //{ ticker: '005930:KRX', name: 'Samsumg Electronics Co.', flag: '🇰🇷' },
 ]
@@ -14,7 +14,7 @@ const TWELVEDATA_TICKERS = [
 // Polygon tickers are not real-time
 const POLYGON_TICKERS = [
   { ticker: 'I:OMXHPI', name: 'OMX Helsinki PI', flag: '🇫🇮' },
-  //{ ticker: 'I:OMXS30', name: 'OMX Stockholm 30', flag: '🇸🇪' },
+  { ticker: 'I:OMXS30', name: 'OMX Stockholm 30', flag: '🇸🇪' },
   //{ ticker: 'I:NQJP', name: 'Nasdaq Japan Index', flag: '🇯🇵' },
 ]
 

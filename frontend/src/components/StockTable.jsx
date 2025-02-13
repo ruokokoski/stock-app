@@ -2,7 +2,7 @@ import { Table } from 'react-bootstrap'
 
 const StockTable = ({ data, renderRow }) => {
   return (
-    <Table striped bordered hover style={{ width: '100%' }}>
+    <Table striped bordered hover className="tight-table" style={{ width: '100%' }}>
       <thead>
         <tr>
           <th style={{ width: '10%' }}>Ticker</th>

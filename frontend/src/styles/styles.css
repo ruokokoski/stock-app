@@ -105,3 +105,13 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.tight-table th,
+.tight-table td {
+  padding: 6px !important;
+  font-size: 18px !important;
+}
+
+.tight-table {
+  margin-bottom: 0 !important;
+}

@@ -8,27 +8,26 @@ import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 //watchlist: 👁️ ⭐ ➕ 💼 📌
 const COMMON_STOCKS = [
-  
   { ticker: 'AAPL', name: 'Apple Inc.' },
-  { ticker: 'AMZN', name: 'Amazon.com Inc.' },
-  { ticker: 'AVGO', name: 'Broadcom Inc.' },
-  { ticker: 'BAC', name: 'Bank of America Corp.' },
-  { ticker: 'COST', name: 'Costco Wholesale Corp.' },
+  //{ ticker: 'AMZN', name: 'Amazon.com Inc.' },
+  //{ ticker: 'AVGO', name: 'Broadcom Inc.' },
+  //{ ticker: 'BAC', name: 'Bank of America Corp.' },
+  //{ ticker: 'COST', name: 'Costco Wholesale Corp.' },
   { ticker: 'CRM', name: 'Salesforce Inc.' },
   { ticker: 'CRWD', name: 'CrowdStrike Holdings Inc.' },
   { ticker: 'DIS', name: 'Walt Disney Co.' },
-  { ticker: 'F', name: 'Ford Motor Co.' },
+  //{ ticker: 'F', name: 'Ford Motor Co.' },
   { ticker: 'GOOGL', name: 'Alphabet Inc.' },
   { ticker: 'JPM', name: 'JPMorgan Chase & Co.' },
   { ticker: 'KO', name: 'Coca-Cola Co.' },
-  { ticker: 'MCD', name: 'McDonald\'s Corp.' },
-  { ticker: 'META', name: 'Meta Platforms Inc.' },
+  //{ ticker: 'MCD', name: 'McDonald\'s Corp.' },
+  //{ ticker: 'META', name: 'Meta Platforms Inc.' },
   { ticker: 'MSFT', name: 'Microsoft Corp.' },
   { ticker: 'NFLX', name: 'Netflix Inc.' },
   { ticker: 'NKE', name: 'Nike Inc.' },
   { ticker: 'NVDA', name: 'NVIDIA Corp.' },
   { ticker: 'PFE', name: 'Pfizer Inc.' },
-  { ticker: 'PG', name: 'Procter & Gamble Co.' },
+  //{ ticker: 'PG', name: 'Procter & Gamble Co.' },
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
   { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
@@ -83,40 +82,38 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderStocks = () => {
-    return COMMON_STOCKS.map(({ ticker, name }) => {
-      const percentageChange = stockData[ticker]?.pchange 
-        ? `${stockData[ticker].pchange.toFixed(2)}%`
-        : '-'
-      const color = getColor(percentageChange)
+  const renderStocks = ({ ticker, name }) => {
+    const percentageChange = stockData[ticker]?.pchange 
+      ? `${stockData[ticker].pchange.toFixed(2)}%`
+      : '-'
+    const color = getColor(percentageChange)
 
-      return (
-        <tr key={ticker}>
-          <td>{ticker}</td>
-          <td>
-            <Link
-              to={`/stock/${ticker}`}
-              state={{
-                name,
-                percentageChange
-              }}>
-              {name}
-            </Link>
-          </td>
-          <td>{stockData[ticker]?.latest || '-'}</td>
-          <td style={color}>{percentageChange}</td>
-          <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
-          <td>
-            <button
-              onClick={() => handleAddToWatchlist(ticker)}
-              style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
-            >
-              👁️
-            </button>
-          </td>
-        </tr>
-      )
-    })
+    return (
+      <tr key={ticker}>
+        <td>{ticker}</td>
+        <td>
+          <Link
+            to={`/stock/${ticker}`}
+            state={{
+              name,
+              percentageChange
+            }}>
+            {name}
+          </Link>
+        </td>
+        <td>{stockData[ticker]?.latest || '-'}</td>
+        <td style={color}>{percentageChange}</td>
+        <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
+        <td>
+          <button
+            onClick={() => handleAddToWatchlist(ticker)}
+            style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+          >
+            👁️
+          </button>
+        </td>
+      </tr>
+    )
   }
 
   const handleSearch = async () => {
