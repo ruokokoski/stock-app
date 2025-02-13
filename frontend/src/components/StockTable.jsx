@@ -9,7 +9,7 @@ const StockTable = ({ data, renderRow }) => {
           <th style={{ width: '35%' }}>Name</th>
           <th style={{ width: '15%' }}>Price</th>
           <th style={{ width: '15%' }}>% Change</th>
-          <th style={{ width: '30%' }}>Date/Time</th>
+          <th style={{ width: '25%' }}>Date/Time</th>
         </tr>
       </thead>
       <tbody>

@@ -31,7 +31,6 @@ const COMMON_STOCKS = [
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
   { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
-  
   { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 
@@ -40,6 +39,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [searchLoading, setSearchLoading] = useState(false)
+  const [stocksLoading, setStocksLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +62,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       }
 
       setStockData(newStockData)
+      setStocksLoading(false)
     }
 
     fetchData()
@@ -188,7 +189,13 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       )}
 
       <h3>Common US stocks</h3>
-      <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
+      {stocksLoading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <div className="spinner" />
+        </div>
+      ) : (
+        <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
+      )}
     </div>
   )
 }

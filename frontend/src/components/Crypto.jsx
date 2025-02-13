@@ -3,7 +3,7 @@ import cryptoService from '../services/coincap'
 import { Table } from 'react-bootstrap'
 import { getColor, formatCurrency, formatMarketCap } from '../utils/helpers'
 
-const LIMIT = 15
+const LIMIT = 20
 
 const CryptoRow = ({ coin }) => (
   <tr key={coin.id}>
@@ -52,7 +52,7 @@ const Crypto = () => {
   return (
     <div className='content-padding'>
       <h3>Top {LIMIT} Cryptocurrencies</h3>
-      <Table striped bordered hover>
+      <Table striped bordered hover className="tight-table">
         <thead>
           <tr>
             <th>Rank</th>
