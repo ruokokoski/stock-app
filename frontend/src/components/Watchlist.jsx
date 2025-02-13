@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-//import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getWatchlist, deleteWatchlistItem } from '../services/watchlists'
 import { finnhubService } from '../services/stockServices'
 import StockTable from './StockTable'
@@ -91,7 +91,16 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
       return (
         <tr key={ticker}>
           <td>{ticker}</td>
-          <td>{name}</td>
+          <td>
+            <Link
+                to={`/stock/${ticker}`}
+                state={{
+                name,
+                percentageChange
+                }}>
+                {name}
+            </Link>
+          </td>
           <td>{stockData[ticker]?.latest || '-'}</td>
           <td style={color}>{percentageChange}</td>
           <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
@@ -109,19 +118,24 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
   if (loading) return (
     <div className="spinner" />
   )
-  if (watchlistItems.length === 0) return <div>Your watchlist is empty</div>
     
     return (
         <div className='content-padding'>
           <h3>Watchlist</h3>
-          <StockTable data={watchlistItems} renderRow={renderStocks} />
-          <button
-            onClick={handleDelete}
-            className="gradient-button"
-            disabled={selectedItems.length === 0}
-          >
-            Remove stocks
-          </button>
+          {watchlistItems.length === 0 ? (
+            <div>Your watchlist is empty</div>
+            ) : (
+            <>
+                <StockTable data={watchlistItems} renderRow={renderStocks} />
+                <button
+                onClick={handleDelete}
+                className="gradient-button"
+                disabled={selectedItems.length === 0}
+                >
+                Remove stocks
+                </button>
+            </>
+            )}
 
           <Modal show={showModal} onHide={handleClose}>
             <Modal.Header closeButton>

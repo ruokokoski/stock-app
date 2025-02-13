@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-//import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
 import StockTable from './StockTable'
@@ -8,7 +8,7 @@ import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 //watchlist: 👁️ ⭐ ➕ 💼 📌
 const COMMON_STOCKS = [
-  /*
+  
   { ticker: 'AAPL', name: 'Apple Inc.' },
   { ticker: 'AMZN', name: 'Amazon.com Inc.' },
   { ticker: 'AVGO', name: 'Broadcom Inc.' },
@@ -32,7 +32,7 @@ const COMMON_STOCKS = [
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
   { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
-  */
+  
   { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
 
@@ -40,6 +40,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState({})
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  const [searchLoading, setSearchLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,7 +93,16 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       return (
         <tr key={ticker}>
           <td>{ticker}</td>
-          <td>{name}</td>
+          <td>
+            <Link
+              to={`/stock/${ticker}`}
+              state={{
+                name,
+                percentageChange
+              }}>
+              {name}
+            </Link>
+          </td>
           <td>{stockData[ticker]?.latest || '-'}</td>
           <td style={color}>{percentageChange}</td>
           <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
@@ -116,15 +126,19 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       return
     }
 
+    setSearchLoading(true)
+
     try {
       const response = await finnhubService.searchSymbol(searchTerm)
       //console.log('Search response:', response)
       setSearchResults(response.result)
+      setSearchLoading(false)
     } catch (error) {
       console.error('Error searching for symbols:', error)
       const errorMessage = error.response?.data?.error || 'Error searching for symbols'
       setMessage(errorMessage)
       setMessageVariant('danger')
+      setSearchLoading(false)
     }
   }
 
@@ -138,7 +152,16 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     return (
     <tr key={result.ticker}>
         <td>{result.ticker}</td>
-        <td>{result.name}</td>
+        <td>
+          <Link
+            to={`/stock/${result.ticker}`}
+            state={{
+              name: result.name,
+              percentageChange
+            }}>
+            {result.name}
+          </Link>
+        </td>
         <td>{result.latest}</td>
         <td style={color}>{percentageChange}</td>
         <td>{result.timestamp ? convertUTCToLocal(result.timestamp) : '-'}</td>
@@ -157,6 +180,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   return (
     <div className='content-padding'>
       <SearchForm searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} />
+
+      {searchLoading && <div className="spinner" />}
 
       {searchResults.length > 0 && (
         <>

@@ -5,6 +5,7 @@ import { Container } from 'react-bootstrap'
 import Markets from './components/Markets'
 import IndexPage from './components/IndexPage'
 import Stocks from './components/Stocks'
+import StockPage from './components/StockPage'
 import Watchlist from './components/Watchlist'
 import Crypto from './components/Crypto'
 import Users from './components/Users'
@@ -123,6 +124,7 @@ const App = () => {
           <Route path="/" element={user ? <Markets setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/index/:ticker" element={<IndexPage />} />
           <Route path="/stocks" element={user ? <Stocks setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
+          <Route path="/stock/:ticker" element={user ? <StockPage /> : <Navigate replace to="/login" />} />
           <Route path="/watchlist" element={user ? <Watchlist setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />

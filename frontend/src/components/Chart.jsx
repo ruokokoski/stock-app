@@ -4,14 +4,21 @@ import { formatChartData, createToolTip } from '../utils/helpers'
 
 const Chart = ({ chartData, name, selectedInterval }) => {
   const chartContainerRef = useRef(null)
-  const [chart, setChart] = useState(null)
-  const [areaSeries, setAreaSeries] = useState(null)
+  const chartRef = useRef(null)
+  const areaSeriesRef = useRef(null)
+  const toolTipRef = useRef(null)
+  //const [chart, setChart] = useState(null)
+  //const [areaSeries, setAreaSeries] = useState(null)
   /* eslint-disable no-unused-vars */
   const [toolTip, setToolTip] = useState(null)
   /* eslint-enable no-unused-vars */
 
   useEffect(() => {
     const container = chartContainerRef.current
+    if (chartRef.current) {
+      chartRef.current.remove()
+      chartRef.current = null
+    }
     const width = container.clientWidth
     const height = Math.round((width) / 3)
 
@@ -69,35 +76,44 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       handleToolTipMove(param, newAreaSeries, toolTipInstance)
     })
 
-    setChart(newChart)
-    setAreaSeries(newAreaSeries)
-    setToolTip(toolTipInstance)
+    chartRef.current = newChart
+    areaSeriesRef.current = newAreaSeries
+    toolTipRef.current = toolTipInstance
 
     return () => {
-      newChart.remove()
-      container.removeChild(toolTipInstance)
+      if (chartRef.current) {
+        chartRef.current.remove()
+        chartRef.current = null
+      }
+      if (toolTipRef.current) {
+        container.removeChild(toolTipRef.current)
+        toolTipRef.current = null
+      }
     }
   }, [selectedInterval, name])
 
   useEffect(() => {
-    if (areaSeries && chartData.length > 0) {
-      const formattedData = formatChartData(chartData)
-  
-      areaSeries.setData(formattedData)
-      chart.timeScale().fitContent()
+    const chart = chartRef.current
+    const areaSeries = areaSeriesRef.current
+    if (!chart || !areaSeries || chartData.length === 0) return
+    
+    const formattedData = formatChartData(chartData)
 
-      chart.timeScale().setVisibleRange({
-        from: formattedData[0].time,
-        to: formattedData[formattedData.length - 1].time,
-      })
-      chart.timeScale().applyOptions({
-        timeVisible: selectedInterval === '1d',
-        secondsVisible: false,
-        ticksVisible: true,
-        allowBoldLabels: true,
-      })
-    }
-  }, [areaSeries, chartData, chart, selectedInterval])
+    areaSeries.setData(formattedData)
+    chart.timeScale().fitContent()
+
+    chart.timeScale().setVisibleRange({
+      from: formattedData[0].time,
+      to: formattedData[formattedData.length - 1].time,
+    })
+    chart.timeScale().applyOptions({
+      timeVisible: selectedInterval === '1d',
+      secondsVisible: false,
+      ticksVisible: true,
+      allowBoldLabels: true,
+    })
+    
+  }, [chartData, selectedInterval])
 
   const handleToolTipMove = (param, newAreaSeries, toolTipInstance) => {
     if (

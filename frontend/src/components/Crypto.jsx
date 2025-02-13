@@ -27,6 +27,7 @@ const CryptoRow = ({ coin }) => (
 
 const Crypto = () => {
   const [cryptoData, setCryptoData] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchCryptoData = async (limit) => {
@@ -34,13 +35,19 @@ const Crypto = () => {
         const response = await cryptoService.getCoins(limit)
         const top20Coins = response.data
         setCryptoData(top20Coins)
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching crypto data:', error)
+        setLoading(false)
       }
     }
 
     fetchCryptoData(LIMIT)
   }, [])
+
+  if (loading) return (
+    <div className="spinner" />
+  )
 
   return (
     <div className='content-padding'>

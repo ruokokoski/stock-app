@@ -38,4 +38,5 @@
 | 23.01 | 4    | add latest news, enhance webpage styling |
 | 24.01 | 4    | initialize Watchlists and add control logic |
 | 12.02 | 6    | Watchlist page, removing stocks from list |
-| **Total** | **123** | |
+| 13.02 | 3    | start developing StockPage |
+| **Total** | **126** | |
