@@ -1,5 +1,5 @@
 import { useParams, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { twelvedataService, polygonService } from '../services/stockServices'
 import { getColor, formatDate } from '../utils/helpers'
 import Chart from './Chart'
@@ -26,20 +26,21 @@ const StockPage = () => {
     })
   }
 
-  useEffect(() => {
-    cleanExpiredData()
-    fetchHistoricalData(selectedInterval)
-  }, [ticker, selectedInterval])
-
-  const fetchHistoricalData = async (range) => {
+  const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
     const now = Date.now()
-    const expirationTime = 60 * 60 * 1000 // 1 hour
+    const shortExpirationTime = 60 * 1000 // 1 min
+    const longExpirationTime = 60 * 60 * 1000 // 1 hour
     const storedData = localStorage.getItem(storageKey)
     if (storedData) {
       const parsedData = JSON.parse(storedData)
         
-      if (now - parsedData.timestamp < expirationTime) {
+      if (now - parsedData.timestamp < shortExpirationTime) {
+        setChartData(parsedData.chartData || [])
+        setLastUpdated(parsedData.lastUpdated || '')
+        console.log(`Used cached data for ${ticker}, interval: ${range}`)
+        return
+      } else if (now - parsedData.timestamp < longExpirationTime) {
         setChartData(parsedData.chartData || [])
         setLastUpdated(parsedData.lastUpdated || '')
       } else {
@@ -63,7 +64,7 @@ const StockPage = () => {
             timestamp: now
         }))
       }
-      //console.log('Chart data was fetched from API')
+      console.log('Chart data was fetched from API')
     } catch (error) {
       console.error(`Error fetching data for ${ticker}:`, error)
       if (!storedData) {
@@ -71,13 +72,18 @@ const StockPage = () => {
         setLastUpdated('')
       }
     }
-}
+  }, [ticker])
+
+  useEffect(() => {
+    cleanExpiredData()
+    fetchHistoricalData(selectedInterval)
+  }, [ticker, selectedInterval, fetchHistoricalData])
 
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)
     console.log(`Ticker: ${ticker}`)
     setSelectedInterval(interval)
-    fetchHistoricalData(interval)
+    //fetchHistoricalData(interval)
   }
 
   const renderIntervalButtons = (intervals) => {

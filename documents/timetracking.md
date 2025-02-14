@@ -39,4 +39,5 @@
 | 24.01 | 4    | initialize Watchlists and add control logic |
 | 12.02 | 6    | Watchlist page, removing stocks from list |
 | 13.02 | 4    | start developing StockPage, bug fixes |
-| **Total** | **127** | |
+| 14.02 | 2    | improve stock data fetching from API |
+| **Total** | **129** | |

@@ -35,34 +35,53 @@ const COMMON_STOCKS = [
 ]
 
 const Stocks = ({ setMessage, setMessageVariant }) => {
-  const [stockData, setStockData] = useState({})
+  const [stockData, setStockData] = useState(() => {
+    const initialStockData = {}
+    COMMON_STOCKS.forEach(({ ticker }) => {
+      const storedData = localStorage.getItem(`stock-${ticker}`)
+      if (storedData) {
+        initialStockData[ticker] = JSON.parse(storedData).data
+      }
+    })
+    return initialStockData
+  })
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [searchLoading, setSearchLoading] = useState(false)
-  const [stocksLoading, setStocksLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      const newStockData = {}
+      const newStockData = { ...stockData }
+      const now = Date.now()
+      const expirationTime = 60 * 1000 // 1 min
+      for (const { ticker, name } of COMMON_STOCKS) {
+        const storageKey = `stock-${ticker}`;
+        const storedData = localStorage.getItem(storageKey);
 
-      const fetchFinnhubData = async (ticker, name) => {
-        try {
-          const data = await finnhubService.getTicker(ticker, null, name)
-          //console.log('Finnhub data:', data)
-          newStockData[ticker] = data
-        } catch (error) {
-          console.error('Error fetching data from Finnhub:', error)
-          setMessage('Error fetching data from Finnhub')
-          setMessageVariant('danger')
+        if (!storedData || (storedData && now - JSON.parse(storedData).timestamp > expirationTime)) {
+          try {
+            const data = await finnhubService.getTicker(ticker, null, name)
+            const dataWithTimestamp = {
+              ...data,
+              timestamp: now,
+            };
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                data: dataWithTimestamp,
+                timestamp: now,
+              })
+            )
+            newStockData[ticker] = dataWithTimestamp;
+          } catch (error) {
+            console.error('Error fetching data from Finnhub:', error)
+            setMessage('Error fetching data from Finnhub')
+            setMessageVariant('danger')
+          }
         }
       }
-
-      for (const { ticker, name } of COMMON_STOCKS) {
-        await fetchFinnhubData(ticker, name)
-      }
-
+      
       setStockData(newStockData)
-      setStocksLoading(false)
     }
 
     fetchData()
@@ -189,13 +208,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       )}
 
       <h3>Common US stocks</h3>
-      {stocksLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <div className="spinner" />
-        </div>
-      ) : (
-        <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
-      )}
+      <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
     </div>
   )
 }
