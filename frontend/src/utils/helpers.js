@@ -38,11 +38,24 @@ export const formatMarketCap = (marketCap) => {
   return `$${(parseFloat(marketCap) / 1e9).toFixed(2)}B`
 }
 
-export const formatChartData = (chartData) => {
-  return chartData.map(point => ({
-    time: Math.floor(new Date(point.time + 'Z').getTime() / 1000),
-    value: parseFloat(point.value),
-  }))
+export const formatChartData = (chartData, seriesType) => {
+  return chartData.map(point => {
+    const time = Math.floor(new Date(point.time + 'Z').getTime() / 1000)
+    
+    if (seriesType === 'candlestick') {
+      return {
+        time,
+        open: parseFloat(point.open),
+        high: parseFloat(point.high),
+        low: parseFloat(point.low),
+        close: parseFloat(point.close),
+      }
+    }
+    return {
+      time,
+      value: parseFloat(point.close),
+    }
+  })
 }
 
 export const createToolTip = (container) => {

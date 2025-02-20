@@ -44,13 +44,16 @@ router.post('/', async (request, response) => {
     const data = await axios.get(url, twelvedataHeader)
     //console.log('Data:', data.data)
 
+    const exchange = data.data.meta.exchange
+
     const chartData = data.data.values
       .map((entry) => ({
         time: entry.datetime,
-        value: parseFloat(entry.close).toFixed(2),
+        open: parseFloat(entry.open).toFixed(2),
+        close: parseFloat(entry.close).toFixed(2), //used to be value
         high: parseFloat(entry.high).toFixed(2),
         low: parseFloat(entry.low).toFixed(2),
-        //volume: parseInt(entry.volume)
+        volume: parseInt(entry.volume)
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))
     
@@ -77,6 +80,7 @@ router.post('/', async (request, response) => {
 
     response.status(200).json({
       ticker,
+      exchange, //here
       interval,
       range,
       chartData,

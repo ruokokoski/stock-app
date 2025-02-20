@@ -101,11 +101,11 @@ const StockPage = () => {
   return (
     <div className="content-padding">
       <h4>{name}</h4>
-      <span>ticker: {ticker}, change: </span>
+      <span>ticker: {ticker}, change 24h: </span>
       <span style={getColor(percentageChange)}>
         {percentageChange}
       </span>
-      <p>Last updated: {lastUpdated}</p>
+      <p>Last updated: {lastUpdated} EET</p>
       <Chart 
         chartData={chartData} 
         name={name} 

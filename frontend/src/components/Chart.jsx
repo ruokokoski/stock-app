@@ -5,10 +5,10 @@ import { formatChartData, createToolTip } from '../utils/helpers'
 const Chart = ({ chartData, name, selectedInterval }) => {
   const chartContainerRef = useRef(null)
   const chartRef = useRef(null)
-  const areaSeriesRef = useRef(null)
+  //const areaSeriesRef = useRef(null)
+  const currentSeriesRef = useRef(null)
   const toolTipRef = useRef(null)
-  //const [chart, setChart] = useState(null)
-  //const [areaSeries, setAreaSeries] = useState(null)
+  const [seriesType, setSeriesType] = useState('area')
   /* eslint-disable no-unused-vars */
   const [toolTip, setToolTip] = useState(null)
   /* eslint-enable no-unused-vars */
@@ -63,21 +63,31 @@ const Chart = ({ chartData, name, selectedInterval }) => {
     }
 
     const newChart = createChart(container, chartOptions)
-    const newAreaSeries = newChart.addAreaSeries({
-      topColor: 'rgba(41, 98, 255, 0.4)',
-      bottomColor: 'rgba(41, 98, 255, 0)',
-      lineColor: '#2962FF',
-      lineWidth: 2,
-    })
+    if (seriesType === 'area') {
+      currentSeriesRef.current = newChart.addAreaSeries({
+        topColor: 'rgba(41, 98, 255, 0.4)',
+        bottomColor: 'rgba(41, 98, 255, 0)',
+        lineColor: '#2962FF',
+        lineWidth: 2,
+      })
+    } else {
+      currentSeriesRef.current = newChart.addCandlestickSeries({
+        upColor: '#26a69a',
+        downColor: '#ef5350',
+        borderVisible: false,
+        wickUpColor: '#26a69a',
+        wickDownColor: '#ef5350',
+      })
+    }
 
     const toolTipInstance = createToolTip(container, name)
 
     newChart.subscribeCrosshairMove(param => {
-      handleToolTipMove(param, newAreaSeries, toolTipInstance)
+      handleToolTipMove(param, currentSeriesRef.current, toolTipInstance)
     })
 
     chartRef.current = newChart
-    areaSeriesRef.current = newAreaSeries
+    //areaSeriesRef.current = newAreaSeries
     toolTipRef.current = toolTipInstance
 
     return () => {
@@ -90,16 +100,16 @@ const Chart = ({ chartData, name, selectedInterval }) => {
         toolTipRef.current = null
       }
     }
-  }, [selectedInterval, name])
+  }, [selectedInterval, name, seriesType])
 
   useEffect(() => {
     const chart = chartRef.current
-    const areaSeries = areaSeriesRef.current
-    if (!chart || !areaSeries || chartData.length === 0) return
+    const currentSeries = currentSeriesRef.current
+    if (!chart || !currentSeries || chartData.length === 0) return
     
-    const formattedData = formatChartData(chartData)
+    const formattedData = formatChartData(chartData, seriesType)
 
-    areaSeries.setData(formattedData)
+    currentSeries.setData(formattedData)
     chart.timeScale().fitContent()
 
     chart.timeScale().setVisibleRange({
@@ -113,7 +123,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       allowBoldLabels: true,
     })
     
-  }, [chartData, selectedInterval])
+  }, [chartData, selectedInterval, seriesType])
 
   const handleToolTipMove = (param, newAreaSeries, toolTipInstance) => {
     if (
@@ -143,29 +153,8 @@ const Chart = ({ chartData, name, selectedInterval }) => {
           ${dateStr}
         </div>`
 
-      const padding = 10
+      const padding = 40
       const margin = 250
-      /*
-      const tooltipWidth = toolTipInstance.offsetWidth
-      const tooltipHeight = toolTipInstance.offsetHeight
-      const x = param.point.x
-      const y = param.point.y
-
-      let left = x + tooltipWidth + padding
-      if (left + tooltipWidth > chartContainerRef.current.clientWidth) {
-        left = x
-      }
-      left = Math.max(left, padding)
-
-      let top = y + padding + margin
-      if (top + tooltipHeight > chartContainerRef.current.clientHeight) {
-        top = y - tooltipHeight - padding + margin
-      }
-      top = Math.max(top, padding)
-
-      toolTipInstance.style.left = `${left}px`
-      toolTipInstance.style.top = `${top}px`
-      */
 
       toolTipInstance.style.left = `${padding}}px`
       toolTipInstance.style.top = `${margin + padding}px`
@@ -174,6 +163,15 @@ const Chart = ({ chartData, name, selectedInterval }) => {
 
   return (
     <div>
+      <div style={{ marginBottom: '1rem' }}>
+        <select 
+          value={seriesType} 
+          onChange={(e) => setSeriesType(e.target.value)}
+        >
+          <option value="area">Area Chart</option>
+          <option value="candlestick">Candlestick Chart</option>
+        </select>
+      </div>
       <div
         ref={chartContainerRef}
         id="chart"
