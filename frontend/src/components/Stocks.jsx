@@ -102,40 +102,6 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderStocks = ({ ticker, name }) => {
-    const percentageChange = stockData[ticker]?.pchange 
-      ? `${stockData[ticker].pchange.toFixed(2)}%`
-      : '-'
-    const color = getColor(percentageChange)
-
-    return (
-      <tr key={ticker}>
-        <td>{ticker}</td>
-        <td>
-          <Link
-            to={`/stock/${ticker}`}
-            state={{
-              name,
-              percentageChange
-            }}>
-            {name}
-          </Link>
-        </td>
-        <td>{stockData[ticker]?.latest || '-'}</td>
-        <td style={color}>{percentageChange}</td>
-        <td>{stockData[ticker]?.timestamp ? convertUTCToLocal(stockData[ticker].timestamp) : '-'}</td>
-        <td>
-          <button
-            onClick={() => handleAddToWatchlist(ticker)}
-            style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
-          >
-            👁️
-          </button>
-        </td>
-      </tr>
-    )
-  }
-
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
       setMessage('Search query is required')
@@ -159,40 +125,37 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderSearchResults = (result) => {
-    if (!result || !result.ticker) {
-      return null
-    }
-    const percentageChange = result?.pchange ? `${result.pchange.toFixed(2)}%` : '-'
+  const renderStockRow = ({ ticker, name, latest, pchange, timestamp }) => {
+    const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
-
+  
     return (
-    <tr key={result.ticker}>
-        <td>{result.ticker}</td>
+      <tr key={ticker}>
+        <td>{ticker}</td>
         <td>
           <Link
-            to={`/stock/${result.ticker}`}
+            to={`/stock/${ticker}`}
             state={{
-              name: result.name,
+              name,
               percentageChange
             }}>
-            {result.name}
+            {name}
           </Link>
         </td>
-        <td>{result.latest}</td>
+        <td>{latest || '-'}</td>
         <td style={color}>{percentageChange}</td>
-        <td>{result.timestamp ? convertUTCToLocal(result.timestamp) : '-'}</td>
+        <td>{timestamp ? convertUTCToLocal(timestamp) : '-'}</td>
         <td>
           <button
-            onClick={() => handleAddToWatchlist(result.ticker, result.name)}
+            onClick={() => handleAddToWatchlist(ticker)}
             style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
           >
             👁️
           </button>
         </td>
-    </tr>
+      </tr>
     )
-  }
+  }  
 
   return (
     <div className='content-padding'>
@@ -203,12 +166,21 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       {searchResults.length > 0 && (
         <>
           <h3>Search Results</h3>
-          <StockTable data={searchResults} renderRow={renderSearchResults} />
+          <StockTable data={searchResults} renderRow={renderStockRow} />
         </>
       )}
 
       <h3>Common US stocks</h3>
-      <StockTable data={COMMON_STOCKS} renderRow={renderStocks} />
+      <StockTable 
+        data={COMMON_STOCKS.map(({ ticker, name }) => ({
+          ticker,
+          name,
+          latest: stockData[ticker]?.latest,
+          pchange: stockData[ticker]?.pchange,
+          timestamp: stockData[ticker]?.timestamp
+        }))} 
+        renderRow={renderStockRow} 
+      />
     </div>
   )
 }

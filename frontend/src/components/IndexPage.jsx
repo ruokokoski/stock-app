@@ -17,7 +17,7 @@ const IndexPage = () => {
   const fetchData = async (range) => {
     try {
       const response = ticker.startsWith('I:') 
-        ? await polygonService.getTicker(ticker) // turha?
+        ? await polygonService.getTicker(ticker)
         : await twelvedataService.getTicker(ticker, range)
       setChartData(response.chartData || [])
       if (response.chartData && response.chartData.length > 0) {
@@ -69,8 +69,9 @@ const IndexPage = () => {
     return intervals.map(interval => (
       <button
         key={interval}
-        className="gradient-button gradient-button-small"
+        className={`gradient-button gradient-button-small ${selectedInterval === interval ? 'selected' : ''}`}
         onClick={() => setChartInterval(interval)}
+        disabled={selectedInterval === interval}
       >
         {interval}
       </button>

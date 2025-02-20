@@ -40,5 +40,5 @@
 | 12.02 | 6    | Watchlist page, removing stocks from list |
 | 13.02 | 4    | start developing StockPage, bug fixes |
 | 14.02 | 2    | improve stock data fetching from API |
-| 20.02 | 2    | add candlestick chart |
-| **Total** | **131** | |
+| 20.02 | 4    | add candlestick chart, refactoring, enhancing visuals |
+| **Total** | **133** | |

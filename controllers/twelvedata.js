@@ -30,27 +30,26 @@ router.post('/', async (request, response) => {
     interval = '1day'
     outputsize = 255 // Approx. 1 year of trading days
     break
-  case 'max':
+  case '5y':
     interval = '1week'
-    outputsize = 100 // Max data (check API limits)
+    outputsize = 100 // (check API limits)
     break
   default:
     return response.status(400).json({ error: 'Invalid range specified' })
   }
 
   try {
-    //const url = `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=demo&outputsize=${outputsize}`
     const url = `https://api.twelvedata.com/time_series?apikey=${TWELVEDATA_API_KEY}&interval=${interval}&symbol=${ticker}&outputsize=${outputsize}`
-    const data = await axios.get(url, twelvedataHeader)
-    //console.log('Data:', data.data)
+    const { data } = await axios.get(url, twelvedataHeader)
+    //console.log('Data:', data)
 
-    const exchange = data.data.meta.exchange
+    const exchange = data.meta.exchange
 
-    const chartData = data.data.values
+    const chartData = data.values
       .map((entry) => ({
         time: entry.datetime,
         open: parseFloat(entry.open).toFixed(2),
-        close: parseFloat(entry.close).toFixed(2), //used to be value
+        close: parseFloat(entry.close).toFixed(2),
         high: parseFloat(entry.high).toFixed(2),
         low: parseFloat(entry.low).toFixed(2),
         volume: parseInt(entry.volume)
@@ -61,8 +60,8 @@ router.post('/', async (request, response) => {
 
     // Handle percentage change only in case interval = 1day:
     if (interval === '1day') {
-      const latestEntry = data.data.values[0]
-      const previousEntry = data.data.values[1]
+      const latestEntry = data.values[0]
+      const previousEntry = data.values[1]
       const latestClose = parseFloat(latestEntry.close)
       const previousClose = parseFloat(previousEntry.close)
       const percentageChange = ((latestClose - previousClose) / previousClose) * 100

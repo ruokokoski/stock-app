@@ -1,7 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { twelvedataService, polygonService } from '../services/stockServices'
-import { getColor, formatDate } from '../utils/helpers'
+import { getColor, formatDate, cleanExpiredData } from '../utils/helpers'
 import Chart from './Chart'
 
 const StockPage = () => {
@@ -11,20 +11,6 @@ const StockPage = () => {
   const [chartData, setChartData] = useState([])
   const [lastUpdated, setLastUpdated] = useState('')
   const [selectedInterval, setSelectedInterval] = useState('1m')
-
-  const cleanExpiredData = () => {
-    const now = Date.now()
-    const expirationTime = 60 * 60 * 1000
-  
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith("historicalData-")) {
-        const storedData = JSON.parse(localStorage.getItem(key))
-        if (!storedData || now - storedData.timestamp >= expirationTime) {
-          localStorage.removeItem(key)
-        }
-      }
-    })
-  }
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -83,15 +69,15 @@ const StockPage = () => {
     console.log(`Interval set to: ${interval}`)
     console.log(`Ticker: ${ticker}`)
     setSelectedInterval(interval)
-    //fetchHistoricalData(interval)
   }
 
   const renderIntervalButtons = (intervals) => {
     return intervals.map(interval => (
       <button
         key={interval}
-        className="gradient-button gradient-button-small"
+        className={`gradient-button gradient-button-small ${selectedInterval === interval ? 'selected' : ''}`}
         onClick={() => setChartInterval(interval)}
+        disabled={selectedInterval === interval}
       >
         {interval}
       </button>

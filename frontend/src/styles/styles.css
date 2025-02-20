@@ -15,6 +15,11 @@
   margin-bottom: 5px;
 }
 
+.gradient-button.selected {
+  background: linear-gradient(to right, #5aaef0, #74d1ff) !important;
+  cursor: default;
+}
+
 .gradient-button:disabled {
   background: linear-gradient(to right, #a5c8e7, #c8e4f5);
   cursor: not-allowed;

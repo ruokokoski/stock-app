@@ -68,3 +68,17 @@ export const createToolTip = (container) => {
 
   return toolTip
 }
+
+export const cleanExpiredData = () => {
+  const now = Date.now()
+  const expirationTime = 60 * 60 * 1000
+
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith("historicalData-")) {
+      const storedData = JSON.parse(localStorage.getItem(key))
+      if (!storedData || now - storedData.timestamp >= expirationTime) {
+        localStorage.removeItem(key)
+      }
+    }
+  })
+}

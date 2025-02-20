@@ -30,7 +30,8 @@ router.post('/', async (request, response) => {
     const chartData = data.results
       .map((entry) => ({
         time: new Date(entry.t).toISOString().split('T')[0],
-        value: parseFloat(entry.c).toFixed(2),
+        open: parseFloat(entry.o).toFixed(2),
+        close: parseFloat(entry.c).toFixed(2),
         high: parseFloat(entry.h).toFixed(2),
         low: parseFloat(entry.l).toFixed(2),
       }))
