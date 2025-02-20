@@ -19,20 +19,24 @@ router.post('/', async (request, response) => {
     outputsize = 390 // Approx. 1 trading day of minute data
     break
   case '1w':
-    interval = '1h'
-    outputsize = 40 // 5 trading days
+    interval = '15min'
+    outputsize = 120 // Approx. 5 trading days
     break
   case '1m':
-    interval = '1day'
-    outputsize = 23 // Approx. 1 month of trading days
+    interval = '1h'
+    outputsize = 155 // Approx. 1 month of trading days
     break
   case '1y':
     interval = '1day'
-    outputsize = 255 // Approx. 1 year of trading days
+    outputsize = 253 // Approx. 1 year of trading days
     break
   case '5y':
     interval = '1week'
-    outputsize = 100 // (check API limits)
+    outputsize = 262
+    break
+  case '10y':
+    interval = '1month'
+    outputsize = 120 // (check API limits)
     break
   default:
     return response.status(400).json({ error: 'Invalid range specified' })

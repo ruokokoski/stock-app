@@ -92,7 +92,7 @@ const IndexPage = () => {
         selectedInterval={selectedInterval} 
       />
       <div className="buttons-container">
-        {renderIntervalButtons(ticker.startsWith('I:') ? ['1w', '1m', '1y'] : ['1d', '1w', '1m', '1y'])}
+        {renderIntervalButtons(ticker.startsWith('I:') ? ['1w', '1m', '1y'] : ['1d', '1w', '1m', '1y', '5y', '10y'])}
       </div>
     </div>
   )

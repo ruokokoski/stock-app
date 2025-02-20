@@ -64,7 +64,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
             const dataWithTimestamp = {
               ...data,
               timestamp: now,
-            };
+            }
             localStorage.setItem(
               storageKey,
               JSON.stringify({
