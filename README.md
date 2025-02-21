@@ -52,6 +52,9 @@ The application is a web application designed for monitoring stock markets. It f
    SECRET=<your own secret>
    TIINGO_API_KEY=<your own API key>
    TWELVEDATA_API_KEY=<your own API key>
+   FINNHUB_API_KEY=<your own API key>
+   POLYGON_API_KEY=<your own API key>
+   COINCAP_API_KEY=<your own API key>
    ```
 5. **Install frontend dependencies**:
    ```bash

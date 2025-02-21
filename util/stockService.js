@@ -13,6 +13,8 @@ const saveStockDataToDatabase = async (stockData) => {
       if (stockData.sector === 'Unknown') {
         delete updatedData.sector
       }
+      delete updatedData.exchange // use this also later
+
       await existingStock.update(updatedData)
       console.log('Stock data updated in the database')
     } else {

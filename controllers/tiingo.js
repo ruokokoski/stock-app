@@ -4,15 +4,15 @@ const { TIINGO_API_KEY } = require('../util/config')
 const { getStockByTicker } = require('../util/tickerHelper')
 const { saveStockDataToDatabase } = require('../util/stockService')
 
+const tiingoHeader = {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Token ${TIINGO_API_KEY}`,
+  },
+}
+
 router.post('/', async (request, response) => {
   const { ticker } = request.body
-
-  const tiingoHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token ${TIINGO_API_KEY}`,
-    },
-  }
 
   try {
     //const url = `https://api.tiingo.com/tiingo/daily/${ticker}/prices` // historical prices
@@ -73,6 +73,39 @@ router.post('/', async (request, response) => {
     } else {
       response.status(404).json({ error: 'No data found for the ticker' })
     }
+
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
+    console.log('API call failed:', error)
+    response.status(500).json({ error: 'Failed to fetch data from Tiingo API' })
+  }
+})
+
+router.post('/description', async (request, response) => {
+  const { ticker } = request.body
+
+  try {
+    const url = `https://api.tiingo.com/tiingo/daily/${ticker}`
+    const metadata = await axios.get(url, tiingoHeader)
+    stockname = metadata.data.name
+    description = metadata.data.description
+    exchange = metadata.data.exchangeCode
+    
+    //console.log('Stock description:', description)
+    console.log('Exchange code:', exchange)
+
+    const stockData = {
+      ticker,
+      sector: 'Unknown',
+      description,
+      exchange
+    }
+
+    await saveStockDataToDatabase(stockData)
+
+    response.status(200).json(stockData)
 
   } catch (error) {
     if (error.response && error.response.status === 429) {

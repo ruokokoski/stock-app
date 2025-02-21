@@ -1,6 +1,6 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
-import { twelvedataService, polygonService } from '../services/stockServices'
+import { twelvedataService, polygonService, tiingoService } from '../services/stockServices'
 import { getColor, formatDate, cleanExpiredData } from '../utils/helpers'
 import Chart from './Chart'
 
@@ -11,6 +11,7 @@ const StockPage = () => {
   const [chartData, setChartData] = useState([])
   const [lastUpdated, setLastUpdated] = useState('')
   const [selectedInterval, setSelectedInterval] = useState('1m')
+  const [metadata, setMetadata] = useState([])
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -65,6 +66,20 @@ const StockPage = () => {
     fetchHistoricalData(selectedInterval)
   }, [ticker, selectedInterval, fetchHistoricalData])
 
+  useEffect(() => {
+    const fetchDescription = async (ticker) => {
+      try {
+        const data = await tiingoService.getDescription(ticker)
+        setMetadata(data)
+      } catch (error) {
+        console.error('Error fetching meta data from Tiingo:', error)
+        //setMessage('Error fetching meta data from Tiingo')
+        //setMessageVariant('danger')
+      }
+    }
+    fetchDescription(ticker)
+  }, [])
+
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)
     console.log(`Ticker: ${ticker}`)
@@ -87,18 +102,27 @@ const StockPage = () => {
   return (
     <div className="content-padding">
       <h4>{name}</h4>
-      <span>ticker: {ticker}, change 24h: </span>
+      <span>{metadata.exchange}: {ticker}, </span>
       <span style={getColor(percentageChange)}>
         {percentageChange}
-      </span>
+      </span> today
       <p>Last updated: {lastUpdated} EET</p>
-      <Chart 
-        chartData={chartData} 
-        name={name} 
-        selectedInterval={selectedInterval} 
-      />
-      <div className="buttons-container">
-        {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
+      
+      <div className="chart-description-container">
+        <div className="chart-section">
+          <Chart 
+            chartData={chartData} 
+            name={name} 
+            selectedInterval={selectedInterval} 
+          />
+          <div className="buttons-container">
+            {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
+          </div>
+        </div>
+        <div className="description-section">
+          <h6>About</h6>
+          {metadata.description}
+        </div>
       </div>
     </div>
   )

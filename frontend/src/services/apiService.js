@@ -20,6 +20,11 @@ const apiService = (baseUrl) => ({
     const response = await axios.post(`${baseUrl}/market_news`)
     return response.data
   },
+  getDescription: async (ticker) => {
+    const requestBody = { ticker }
+    const response = await axios.post(`${baseUrl}/description`, requestBody)
+    return response.data
+  }
 })
 
 export default apiService

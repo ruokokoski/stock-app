@@ -120,3 +120,18 @@
 .tight-table {
   margin-bottom: 0 !important;
 }
+
+.chart-description-container {
+  display: flex;
+  gap: 15px;
+}
+
+.chart-section {
+  width: 65%;
+}
+
+.description-section {
+  width: 35%;
+  font-size: 15px;
+  word-wrap: break-word;
+}

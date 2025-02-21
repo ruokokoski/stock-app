@@ -87,7 +87,6 @@ const Chart = ({ chartData, name, selectedInterval }) => {
     })
 
     chartRef.current = newChart
-    //areaSeriesRef.current = newAreaSeries
     toolTipRef.current = toolTipInstance
 
     return () => {
@@ -163,10 +162,12 @@ const Chart = ({ chartData, name, selectedInterval }) => {
 
   return (
     <div>
-      <div style={{ marginBottom: '1rem' }}>
+      <div className="mb-3 d-inline-block">
         <select 
+          className="form-select w-auto d-inline-block"
           value={seriesType} 
           onChange={(e) => setSeriesType(e.target.value)}
+          style={{ minWidth: '120px', fontSize: '16px', padding: '4px 8px' }}
         >
           <option value="area">Area Chart</option>
           <option value="candlestick">Candlestick Chart</option>
@@ -175,6 +176,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       <div
         ref={chartContainerRef}
         id="chart"
+        style={{ width: '100%', height: '100%' }}
       >
       </div>
     </div>
