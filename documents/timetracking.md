@@ -41,5 +41,6 @@
 | 13.02 | 4    | start developing StockPage, bug fixes |
 | 14.02 | 2    | improve stock data fetching from API |
 | 20.02 | 5    | add candlestick chart, refactoring, enhancing chart |
-| 21.02 | 3    | fetch metadata from Tiingo |
-| **Total** | **137** | |
+| 21.02 | 3    | fetch metadata from Tiingo and show on StockPage |
+| 22.02 | 3    | fetch and show company news on StockPage |
+| **Total** | **140** | |

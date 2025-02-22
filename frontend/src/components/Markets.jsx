@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { twelvedataService, polygonService, finnhubService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
+import NewsArticles from './NewsArticles'
 
 // Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
 const TWELVEDATA_TICKERS = [
@@ -31,6 +32,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     return initialMarketData
   })
   const [newsData, setNewsData] = useState([])
+  const [newsLoading, setNewsLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,9 +86,11 @@ const Markets = ({ setMessage, setMessageVariant }) => {
 
   useEffect(() => {
     const fetchNewsData = async () => {
+      setNewsLoading(true)
       try {
         const data = await finnhubService.getMarketNews()
         setNewsData(data)
+        setNewsLoading(false)
       } catch (error) {
         console.error('Error fetching news from Finnhub:', error)
         setMessage('Error fetching news from Finnhub')
@@ -120,22 +124,6 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     ))
   }
 
-  const renderNewsArticles = () => {
-    return newsData.map((article) => (
-      <div key={article.id} className="news-article">
-        <p><strong>
-          <span className="news-date">{convertUTCToLocal(article.datetime)}</span>
-          <span className="news-headline">
-            <a href={article.url} target="_blank" rel="noopener noreferrer">{article.headline}</a>
-          </span>
-        </strong></p>
-        <p>Source: <em>{article.source}</em></p>
-        <p>{article.summary}</p>
-        <hr />
-      </div>
-    ))
-  }
-
   return (
     <div className='content-padding'>
       <h3>Markets overview</h3>
@@ -155,9 +143,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
       </Table>
 
       <h3>Latest News</h3>
-      <div className="news-section">
-        {renderNewsArticles()}
-      </div>
+      <NewsArticles newsData={newsData} newsLoading={newsLoading} />
     </div>
   )
 }

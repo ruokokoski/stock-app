@@ -89,9 +89,9 @@ router.post('/description', async (request, response) => {
   try {
     const url = `https://api.tiingo.com/tiingo/daily/${ticker}`
     const metadata = await axios.get(url, tiingoHeader)
-    stockname = metadata.data.name
-    description = metadata.data.description
-    exchange = metadata.data.exchangeCode
+    //const stockname = metadata.data.name
+    const description = metadata.data.description
+    const exchange = metadata.data.exchangeCode
     
     //console.log('Stock description:', description)
     console.log('Exchange code:', exchange)

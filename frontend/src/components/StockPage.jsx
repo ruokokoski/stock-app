@@ -1,8 +1,10 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
-import { twelvedataService, polygonService, tiingoService } from '../services/stockServices'
+import { twelvedataService, polygonService, tiingoService, finnhubService } from '../services/stockServices'
 import { getColor, formatDate, cleanExpiredData } from '../utils/helpers'
 import Chart from './Chart'
+import StockNavigation from './StockNavigation'
+import NewsArticles from './NewsArticles'
 
 const StockPage = () => {
   const { ticker } = useParams()
@@ -12,6 +14,9 @@ const StockPage = () => {
   const [lastUpdated, setLastUpdated] = useState('')
   const [selectedInterval, setSelectedInterval] = useState('1m')
   const [metadata, setMetadata] = useState([])
+  const [activeTab, setActiveTab] = useState('overview')
+  const [newsData, setNewsData] = useState([])
+  const [newsLoading, setNewsLoading] = useState(false)
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -80,6 +85,24 @@ const StockPage = () => {
     fetchDescription(ticker)
   }, [])
 
+  useEffect(() => {
+    const fetchNews = async (ticker) => {
+      setNewsLoading(true)
+      try {
+        const data = await finnhubService.getCompanyNews(ticker)
+        setNewsData(data)
+      } catch (error) {
+        console.error('Error fetching news:', error)
+      } finally {
+        setNewsLoading(false)
+      }
+    }
+    
+    if (activeTab === 'news') {
+      fetchNews(ticker)
+    }
+  }, [ticker, activeTab])
+
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)
     console.log(`Ticker: ${ticker}`)
@@ -104,26 +127,32 @@ const StockPage = () => {
       <h4>{name}</h4>
       <span>{metadata.exchange}: {ticker}, </span>
       <span style={getColor(percentageChange)}>
-        {percentageChange}
+        {`${percentageChange} ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
       </span> today
       <p>Last updated: {lastUpdated} EET</p>
       
-      <div className="chart-description-container">
-        <div className="chart-section">
-          <Chart 
-            chartData={chartData} 
-            name={name} 
-            selectedInterval={selectedInterval} 
-          />
-          <div className="buttons-container">
-            {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
+      <StockNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      {activeTab === 'overview' ? (
+        <div className="chart-description-container">
+          <div className="chart-section">
+            <Chart 
+              chartData={chartData} 
+              name={name} 
+              selectedInterval={selectedInterval} 
+            />
+            <div className="buttons-container">
+              {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
+            </div>
+          </div>
+          <div className="description-section">
+            <h6>About</h6>
+            {metadata.description}
           </div>
         </div>
-        <div className="description-section">
-          <h6>About</h6>
-          {metadata.description}
-        </div>
-      </div>
+      ) : (
+        <NewsArticles newsData={newsData} newsLoading={newsLoading} />
+      )}
     </div>
   )
 }

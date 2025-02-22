@@ -146,6 +146,7 @@ router.post('/market_news', async (request, response) => {
       id: article.id,
       datetime: new Date(article.datetime * 1000).toISOString(),
       headline: article.headline,
+      image: article.image,
       summary: article.summary,
       source: article.source,
       url: article.url
@@ -159,6 +160,45 @@ router.post('/market_news', async (request, response) => {
     }
     console.error('Market news API call failed:', error)
     response.status(500).json({ error: 'Failed to fetch market news from Finnhub API' })
+  }
+})
+
+router.post('/company_news', async (request, response) => {
+  const { ticker } = request.body
+
+  try {
+    const today = new Date()
+    const past = new Date()
+    past.setDate(today.getDate() - 7) // 1wk of news
+
+    const formatDate = (date) => date.toISOString().split('T')[0]
+    const fromDate = formatDate(past)
+    const toDate = formatDate(today)
+    const url = `https://finnhub.io/api/v1/company-news?symbol=${ticker}&from=${fromDate}&to=${toDate}`
+    const { data } = await axios.get(url, finnhubHeader)
+
+    if (!data) {
+      return response.status(404).json({ error: 'No news found' })
+    }
+
+    const filteredData = data.map(article => ({
+      id: article.id,
+      datetime: new Date(article.datetime * 1000).toISOString(),
+      headline: article.headline,
+      image: article.image,
+      summary: article.summary,
+      source: article.source,
+      url: article.url
+    }))
+    //console.log('Company news: ', data)
+
+    response.status(200).json(filteredData)
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
+    console.log('API call failed:', error)
+    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
   }
 })
 
