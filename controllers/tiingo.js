@@ -93,8 +93,8 @@ router.post('/description', async (request, response) => {
     const description = metadata.data.description
     const exchange = metadata.data.exchangeCode
     
-    //console.log('Stock description:', description)
-    console.log('Exchange code:', exchange)
+    //console.log('Exchange code:', exchange)
+    //console.log('Description: ', description)
 
     const stockData = {
       ticker,

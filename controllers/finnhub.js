@@ -115,7 +115,10 @@ router.post('/search', async (request, response) => {
 
       await saveStockDataToDatabase(stockData)
 
-      return stockData
+      return {
+        ...stockData,
+        change: quoteData.d
+      }
     })
 
     const stocksWithData = await Promise.all(stockDataPromises)

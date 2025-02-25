@@ -96,7 +96,9 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
               to={`/stock/${ticker}`}
               state={{
               name,
-              percentageChange
+              percentageChange,
+              latest: stockData[ticker]?.latest.toFixed(2),
+              change: stockData[ticker]?.change.toFixed(2)
               }}>
               {name}
           </Link>

@@ -6,7 +6,6 @@ import StockTable from './StockTable'
 import SearchForm from './SearchForm'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 
-//watchlist: 👁️ ⭐ ➕ 💼 📌
 const COMMON_STOCKS = [
   { ticker: 'AAPL', name: 'Apple Inc.' },
   //{ ticker: 'AMZN', name: 'Amazon.com Inc.' },
@@ -29,7 +28,7 @@ const COMMON_STOCKS = [
   { ticker: 'PFE', name: 'Pfizer Inc.' },
   //{ ticker: 'PG', name: 'Procter & Gamble Co.' },
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
-  { ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
+  //{ ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
   { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
@@ -125,9 +124,11 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderStockRow = ({ ticker, name, latest, pchange, timestamp }) => {
+  const renderStockRow = ({ ticker, name, latest, change, pchange, timestamp }) => {
     const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
+    const stockChange = change.toFixed(2)
+    //console.log(`change for ${ticker}: `, stockChange)
   
     return (
       <tr key={ticker}>
@@ -138,8 +139,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
             state={{
               name,
               percentageChange,
-              latest: stockData[ticker]?.latest.toFixed(2),
-              change: stockData[ticker]?.change.toFixed(2)
+              latest: latest.toFixed(2) || 0,
+              change: stockChange || 0
             }}>
             {name}
           </Link>
@@ -179,6 +180,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
           name,
           latest: stockData[ticker]?.latest,
           pchange: stockData[ticker]?.pchange,
+          change: stockData[ticker]?.change,
           timestamp: stockData[ticker]?.timestamp
         }))} 
         renderRow={renderStockRow} 
