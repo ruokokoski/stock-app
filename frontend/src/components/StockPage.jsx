@@ -1,15 +1,16 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
 import { twelvedataService, polygonService, tiingoService, finnhubService } from '../services/stockServices'
-import { getColor, formatDate, cleanExpiredData } from '../utils/helpers'
+import { formatDate, cleanExpiredData } from '../utils/helpers'
 import Chart from './Chart'
+import StockHeader from './StockHeader'
 import StockNavigation from './StockNavigation'
 import NewsArticles from './NewsArticles'
 
 const StockPage = () => {
   const { ticker } = useParams()
   const location = useLocation()
-  const { name, percentageChange } = location.state || {}
+  const { name, percentageChange, latest, change } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [lastUpdated, setLastUpdated] = useState('')
   const [selectedInterval, setSelectedInterval] = useState('1m')
@@ -137,22 +138,16 @@ const StockPage = () => {
 
   return (
     <div className="content-padding">
-      <h4>
-        {name}
-        {profileData.logo && (
-          <img 
-            src={profileData.logo} 
-            alt={'logo'} 
-            style={{ width: '30px', height: '30px', marginLeft: '20px' }} 
-          />
-        )}
-      </h4>
-      <span>{metadata.exchange}: {ticker}, sector: {profileData.sector}</span>
-      <br></br>
-      <span style={getColor(percentageChange)}>
-        {`${percentageChange} ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
-      </span> today
-      <p>Last updated: {lastUpdated} EET</p>
+      <StockHeader 
+        name={name}
+        profileData={profileData}
+        metadata={metadata}
+        ticker={ticker}
+        percentageChange={percentageChange}
+        latest={latest}
+        change={change}
+        lastUpdated={lastUpdated}
+      />
       
       <StockNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -170,16 +165,6 @@ const StockPage = () => {
           </div>
           <div className="description-section">
             <h6>About</h6>
-            <p>
-              <a 
-                href={profileData.weburl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="weburl-link"
-              >
-                {profileData.weburl}
-              </a>
-            </p>
             <p>Ipo date: {profileData.ipo}</p>
             {metadata.description}
           </div>

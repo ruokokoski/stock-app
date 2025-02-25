@@ -162,3 +162,45 @@
 .description-section p {
   margin: 5px 0;
 }
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.weburl-link {
+  margin-left: auto;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.weburl-link:hover {
+  color: #0056b3;
+}
+
+h4 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.percentage-container {
+  display: flex;
+  align-items: center;
+}
+
+.price-change {
+  margin-right: 10px;
+}
+
+.percentage-change {
+  margin-right: 10px;
+}
+
+.latest-price {
+  font-weight: bold;
+  margin-right: 10px;
+}

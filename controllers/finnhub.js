@@ -30,11 +30,6 @@ router.post('/', async (request, response) => {
       const stockInfo = getStockByTicker(ticker)
       stockName = stockInfo.name || 'No name provided'
       stockSector = stockInfo.sector || 'Unknown'
-      /*
-      const urlMetadata = `https://api.tiingo.com/tiingo/daily/${ticker}`
-      const metadata = await axios.get(urlMetadata, tiingoHeader)
-      description = metadata.data.description
-      */
     }
 
     const timestampUTC = new Date(data.t * 1000).toISOString()
@@ -52,7 +47,10 @@ router.post('/', async (request, response) => {
 
     await saveStockDataToDatabase(stockData)
 
-    response.status(200).json(stockData)
+    response.status(200).json({
+      ...stockData,
+      change: data.d
+    })
 
   } catch (error) {
     if (error.response && error.response.status === 429) {
