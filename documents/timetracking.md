@@ -43,4 +43,5 @@
 | 20.02 | 5    | add candlestick chart, refactoring, enhancing chart |
 | 21.02 | 3    | fetch metadata from Tiingo and show on StockPage |
 | 22.02 | 3    | fetch and show company news on StockPage |
-| **Total** | **140** | |
+| 25.02 | 2    | improve StockPage by showing more details |
+| **Total** | **142** | |

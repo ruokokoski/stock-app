@@ -9,10 +9,15 @@ const NewsArticles = ({ newsData, newsLoading }) => {
     <div className="news-section">
       {newsData.map((article) => (
         <div key={article.id} className="news-article">
-          <img 
-            src={article.image} 
-            alt={article.source} 
-          />
+          <div className="news-image-container">
+            {article.image && (
+              <img 
+                className="news-image"
+                src={article.image} 
+                alt={article.source} 
+              />
+            )}
+          </div>
           <div className="news-article-content">
             <p>
               <strong>

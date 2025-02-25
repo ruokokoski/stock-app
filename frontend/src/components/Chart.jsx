@@ -152,7 +152,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
           ${dateStr}
         </div>`
 
-      const padding = 40
+      const padding = 120
       const margin = 250
 
       toolTipInstance.style.left = `${padding}}px`
@@ -167,10 +167,10 @@ const Chart = ({ chartData, name, selectedInterval }) => {
           className="form-select w-auto d-inline-block"
           value={seriesType} 
           onChange={(e) => setSeriesType(e.target.value)}
-          style={{ minWidth: '120px', fontSize: '16px', padding: '4px 8px' }}
+          style={{ minWidth: '150px', fontSize: '16px', padding: '4px 8px' }}
         >
           <option value="area">Area Chart</option>
-          <option value="candlestick">Candlestick Chart</option>
+          <option value="candlestick">Candlestick</option>
         </select>
       </div>
       <div

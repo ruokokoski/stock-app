@@ -17,6 +17,7 @@ const StockPage = () => {
   const [activeTab, setActiveTab] = useState('overview')
   const [newsData, setNewsData] = useState([])
   const [newsLoading, setNewsLoading] = useState(false)
+  const [profileData, setProfileData] = useState([])
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -103,6 +104,18 @@ const StockPage = () => {
     }
   }, [ticker, activeTab])
 
+  useEffect(() => {
+    const fetchProfile = async (ticker) => {
+      try {
+        const data = await finnhubService.getCompanyProfile(ticker)
+        setProfileData(data)
+      } catch (error) {
+        console.error('Error fetching cmpany profile:', error)
+      }
+    }
+    fetchProfile(ticker)
+  }, [ticker])
+
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)
     console.log(`Ticker: ${ticker}`)
@@ -124,8 +137,18 @@ const StockPage = () => {
 
   return (
     <div className="content-padding">
-      <h4>{name}</h4>
-      <span>{metadata.exchange}: {ticker}, </span>
+      <h4>
+        {name}
+        {profileData.logo && (
+          <img 
+            src={profileData.logo} 
+            alt={'logo'} 
+            style={{ width: '30px', height: '30px', marginLeft: '20px' }} 
+          />
+        )}
+      </h4>
+      <span>{metadata.exchange}: {ticker}, sector: {profileData.sector}</span>
+      <br></br>
       <span style={getColor(percentageChange)}>
         {`${percentageChange} ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
       </span> today
@@ -147,6 +170,17 @@ const StockPage = () => {
           </div>
           <div className="description-section">
             <h6>About</h6>
+            <p>
+              <a 
+                href={profileData.weburl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="weburl-link"
+              >
+                {profileData.weburl}
+              </a>
+            </p>
+            <p>Ipo date: {profileData.ipo}</p>
             {metadata.description}
           </div>
         </div>

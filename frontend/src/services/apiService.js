@@ -25,6 +25,11 @@ const apiService = (baseUrl) => ({
     const response = await axios.post(`${baseUrl}/company_news`, requestBody)
     return response.data
   },
+  getCompanyProfile: async (ticker) => { // Finnhub API
+    const requestBody = { ticker }
+    const response = await axios.post(`${baseUrl}/company_profile`, requestBody)
+    return response.data
+  },
   getDescription: async (ticker) => { // Tiingo API
     const requestBody = { ticker }
     const response = await axios.post(`${baseUrl}/description`, requestBody)

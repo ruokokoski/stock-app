@@ -99,6 +99,7 @@ router.post('/search', async (request, response) => {
       const timestampUTC = new Date(quoteData.t * 1000).toISOString()
       const stockName = stock.description || 'No name provided'
       const stockSector = 'Unknown'
+      //console.log('stockName: ', stockName)
 
       const stockData = {
         ticker: symbol,
@@ -190,9 +191,44 @@ router.post('/company_news', async (request, response) => {
       source: article.source,
       url: article.url
     }))
-    //console.log('Company news: ', data)
+    console.log('Company news: ', data)
 
     response.status(200).json(filteredData)
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
+    console.log('API call failed:', error)
+    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+  }
+})
+
+router.post('/company_profile', async (request, response) => {
+  const { ticker } = request.body
+
+  try {
+    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}`
+    const { data } = await axios.get(url, finnhubHeader)
+
+    const stockData = {
+      ticker,
+      name: data.name,
+      sector: data.finnhubIndustry || 'Unknown',
+    }
+
+    await saveStockDataToDatabase(stockData)
+
+    const fullStockData = {
+      ...stockData,
+      currency: data.currency,
+      ipo: data.ipo,
+      marketCap: data.marketCapitalization,
+      weburl: data.weburl,
+      logo: data.logo
+    }
+    //console.log('Stock data:', fullStockData)
+
+    response.status(200).json(fullStockData)
   } catch (error) {
     if (error.response && error.response.status === 429) {
       return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
