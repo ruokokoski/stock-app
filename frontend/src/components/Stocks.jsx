@@ -54,8 +54,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
       const now = Date.now()
       const expirationTime = 60 * 1000 // 1 min
       for (const { ticker, name } of COMMON_STOCKS) {
-        const storageKey = `stock-${ticker}`;
-        const storedData = localStorage.getItem(storageKey);
+        const storageKey = `stock-${ticker}`
+        const storedData = localStorage.getItem(storageKey)
 
         if (!storedData || (storedData && now - JSON.parse(storedData).timestamp > expirationTime)) {
           try {
@@ -68,7 +68,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
               storageKey,
               JSON.stringify({
                 data: dataWithTimestamp,
-                //timestamp: now,
+                timestamp: now,
               })
             )
             newStockData[ticker] = dataWithTimestamp;
@@ -127,8 +127,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   const renderStockRow = ({ ticker, name, latest, change, pchange, timestamp }) => {
     const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
-    const stockChange = change.toFixed(2)
-    //console.log(`change for ${ticker}: `, stockChange)
+    //const stockChange = change.toFixed(2)
+    console.log(`change for ${ticker}: `, change)
   
     return (
       <tr key={ticker}>
@@ -140,7 +140,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
               name,
               percentageChange,
               latest: latest.toFixed(2) || 0,
-              change: stockChange || 0,
+              //change: stockChange || 0,
               timestamp
             }}>
             {name}

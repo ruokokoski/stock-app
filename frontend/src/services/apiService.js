@@ -12,7 +12,6 @@ const apiService = (baseUrl) => ({
   },
   searchSymbol: async (query) => { // Finnhub API
     const requestBody = { query }
-
     const response = await axios.post(`${baseUrl}/search`, requestBody)
     return response.data
   },
@@ -28,6 +27,11 @@ const apiService = (baseUrl) => ({
   getCompanyProfile: async (ticker) => { // Finnhub API
     const requestBody = { ticker }
     const response = await axios.post(`${baseUrl}/company_profile`, requestBody)
+    return response.data
+  },
+  getMetrics: async (ticker) => { // Finnhub API
+    const requestBody = { ticker }
+    const response = await axios.post(`${baseUrl}/metrics`, requestBody)
     return response.data
   },
   getDescription: async (ticker) => { // Tiingo API

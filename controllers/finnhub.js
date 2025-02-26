@@ -192,7 +192,7 @@ router.post('/company_news', async (request, response) => {
       source: article.source,
       url: article.url
     }))
-    console.log('Company news: ', data)
+    //console.log('Company news: ', data)
 
     response.status(200).json(filteredData)
   } catch (error) {
@@ -230,6 +230,52 @@ router.post('/company_profile', async (request, response) => {
     //console.log('Stock data:', fullStockData)
 
     response.status(200).json(fullStockData)
+  } catch (error) {
+    if (error.response && error.response.status === 429) {
+      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
+    }
+    console.log('API call failed:', error)
+    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+  }
+})
+
+router.post('/metrics', async (request, response) => {
+  const { ticker } = request.body
+
+  try {
+    const url = `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all`
+    const { data } = await axios.get(url, finnhubHeader)
+
+    console.log('Metrics: ', data.metric)
+    //console.log('PE: ', data.metric.peAnnual)
+    //console.log('PB: ', data.metric.pbAnnual)
+
+    const filteredData = {
+      marketCap: (data.metric.marketCapitalization/1000).toFixed(0),
+      pe: data.metric.peAnnual.toFixed(2),
+      pb: data.metric.pbAnnual.toFixed(2),
+      ps: data.metric.psAnnual.toFixed(2),
+      eps: data.metric.epsAnnual.toFixed(2),
+      epsGrowth5y: data.metric.epsGrowth5Y,
+
+      divYield: data.metric.dividendYieldIndicatedAnnual.toFixed(2),
+      divGrowth5y: data.metric.dividendGrowthRate5Y,
+      high52: data.metric["52WeekHigh"],
+      low52: data.metric["52WeekLow"],
+      revGrowthTTM: data.metric.revenueGrowthTTMYoy,
+      revGrowth5y: data.metric.revenueGrowth5Y,
+      
+      roe: data.metric.roeTTM,
+      roa: data.metric.roaTTM,
+      netProfitMargin: data.metric.netProfitMarginTTM,
+      operatingMargin: data.metric.operatingMarginTTM,
+      ebitdaCagr5y: data.metric.ebitdaCagr5Y,
+      currentRatio: data.metric.currentRatioAnnual,
+
+      ytdPriceReturn: data.metric.yearToDatePriceReturnDaily,
+    }
+
+    response.status(200).json(filteredData)
   } catch (error) {
     if (error.response && error.response.status === 429) {
       return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
