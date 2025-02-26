@@ -175,7 +175,7 @@ const StockPage = () => {
             <div className="buttons-container">
               {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
             </div>
-            <br></br>
+            
             <div className="metrics-section">
               <table className="metrics-table">
                 <tbody>

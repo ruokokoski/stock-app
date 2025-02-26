@@ -246,9 +246,7 @@ router.post('/metrics', async (request, response) => {
     const url = `https://finnhub.io/api/v1/stock/metric?symbol=${ticker}&metric=all`
     const { data } = await axios.get(url, finnhubHeader)
 
-    console.log('Metrics: ', data.metric)
-    //console.log('PE: ', data.metric.peAnnual)
-    //console.log('PB: ', data.metric.pbAnnual)
+    //console.log('Metrics: ', data.metric)
 
     const filteredData = {
       marketCap: (data.metric.marketCapitalization/1000).toFixed(0),
@@ -259,14 +257,14 @@ router.post('/metrics', async (request, response) => {
       epsGrowth5y: data.metric.epsGrowth5Y,
 
       divYield: data.metric.dividendYieldIndicatedAnnual.toFixed(2),
-      divGrowth5y: data.metric.dividendGrowthRate5Y,
+      divGrowth5y: data.metric.dividendGrowthRate5Y.toFixed(2),
       high52: data.metric['52WeekHigh'],
       low52: data.metric['52WeekLow'],
       revGrowthTTM: data.metric.revenueGrowthTTMYoy,
       revGrowth5y: data.metric.revenueGrowth5Y,
       
-      roe: data.metric.roeTTM,
-      roa: data.metric.roaTTM,
+      roe: data.metric.roeTTM.toFixed(2),
+      roa: data.metric.roaTTM.toFixed(2),
       netProfitMargin: data.metric.netProfitMarginTTM,
       operatingMargin: data.metric.operatingMarginTTM,
       ebitdaCagr5y: data.metric.ebitdaCagr5Y,
