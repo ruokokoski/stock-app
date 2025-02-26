@@ -44,4 +44,5 @@
 | 21.02 | 3    | fetch metadata from Tiingo and show on StockPage |
 | 22.02 | 3    | fetch and show company news on StockPage |
 | 25.02 | 5    | improve StockPage by showing more details, refactoring, fix bugs |
-| **Total** | **145** | |
+| 26.02 | 1    | fix timezone bug |
+| **Total** | **146** | |

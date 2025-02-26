@@ -62,13 +62,13 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
             const data = await finnhubService.getTicker(ticker, null, name)
             const dataWithTimestamp = {
               ...data,
-              timestamp: now,
+              //timestamp: now,
             }
             localStorage.setItem(
               storageKey,
               JSON.stringify({
                 data: dataWithTimestamp,
-                timestamp: now,
+                //timestamp: now,
               })
             )
             newStockData[ticker] = dataWithTimestamp;
@@ -140,7 +140,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
               name,
               percentageChange,
               latest: latest.toFixed(2) || 0,
-              change: stockChange || 0
+              change: stockChange || 0,
+              timestamp
             }}>
             {name}
           </Link>

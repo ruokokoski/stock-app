@@ -10,10 +10,10 @@ import NewsArticles from './NewsArticles'
 const StockPage = () => {
   const { ticker } = useParams()
   const location = useLocation()
-  const { name, percentageChange, latest, change } = location.state || {}
+  const { name, percentageChange, latest, change, timestamp } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [lastUpdated, setLastUpdated] = useState('')
-  const [selectedInterval, setSelectedInterval] = useState('1m')
+  const [selectedInterval, setSelectedInterval] = useState('1y')
   const [metadata, setMetadata] = useState([])
   const [activeTab, setActiveTab] = useState('overview')
   const [newsData, setNewsData] = useState([])
@@ -58,7 +58,7 @@ const StockPage = () => {
             timestamp: now
         }))
       }
-      console.log('Chart data was fetched from API')
+      console.log(`Chart data was fetched from API, last updated: ${lastUpdated}`)
     } catch (error) {
       console.error(`Error fetching data for ${ticker}:`, error)
       if (!storedData) {
@@ -146,7 +146,7 @@ const StockPage = () => {
         percentageChange={percentageChange}
         latest={latest}
         change={change}
-        lastUpdated={lastUpdated}
+        lastUpdated={timestamp} //{lastUpdated}
       />
       
       <StockNavigation activeTab={activeTab} setActiveTab={setActiveTab} />

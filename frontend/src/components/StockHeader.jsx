@@ -1,4 +1,4 @@
-import { getColor } from '../utils/helpers'
+import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 const StockHeader = ({ name, profileData, metadata, ticker, percentageChange, latest, change, lastUpdated }) => {
   return (
@@ -32,7 +32,7 @@ const StockHeader = ({ name, profileData, metadata, ticker, percentageChange, la
           {`(${percentageChange}) ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
         </span> today
       </div>
-      <p>Last updated: {lastUpdated} EET</p>
+      <p>Last updated: {convertUTCToLocal(lastUpdated)} EET</p>
     </>
   )
 }
