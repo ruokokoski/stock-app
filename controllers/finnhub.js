@@ -260,8 +260,8 @@ router.post('/metrics', async (request, response) => {
 
       divYield: data.metric.dividendYieldIndicatedAnnual.toFixed(2),
       divGrowth5y: data.metric.dividendGrowthRate5Y,
-      high52: data.metric["52WeekHigh"],
-      low52: data.metric["52WeekLow"],
+      high52: data.metric['52WeekHigh'],
+      low52: data.metric['52WeekLow'],
       revGrowthTTM: data.metric.revenueGrowthTTMYoy,
       revGrowth5y: data.metric.revenueGrowth5Y,
       
