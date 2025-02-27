@@ -125,9 +125,16 @@ const StockOverview = ({
       </div>
 
       <div className="description-section">
-        <h6>About</h6>
-        <p>Ipo date: {profileData.ipo}</p>
-        {metadata.description}
+        <h2 className="about-title">About</h2>
+        <div className="about-content">
+            <div className="about-detail">
+            <span className="detail-label">IPO Date:</span>
+            <span className="detail-value">{profileData.ipo || 'N/A'}</span>
+            </div>
+            <p className="about-description">
+            {metadata.description || 'No description available.'}
+            </p>
+        </div>
       </div>
     </div>
   )

@@ -153,7 +153,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
         </div>`
 
       const padding = 120
-      const margin = 250
+      const margin = 280
 
       toolTipInstance.style.left = `${padding}}px`
       toolTipInstance.style.top = `${margin + padding}px`

@@ -2,45 +2,52 @@ import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 const StockHeader = ({ name, profileData, ytdPriceReturn, metadata, ticker, percentageChange, latest, change, lastUpdated }) => {
   return (
-    <>
-      <h4 className="header-container">
-        {name}
-        {profileData.logo && (
-          <img
-            src={profileData.logo}
-            alt={'logo'}
-            style={{ width: '30px', height: '30px', marginLeft: '20px' }}
-          />
-        )}
+    <div className="stock-header">
+      <div className="header-top">
+        <h1 className="stock-name">
+          {name}
+          {profileData.logo && (
+            <img
+              src={profileData.logo}
+              alt={'logo'}
+              className="stock-logo"
+            />
+          )}
+        </h1>
         <a
           href={profileData.weburl}
           target="_blank"
           rel="noopener noreferrer"
           className="weburl-link"
         >
-          {profileData.weburl}
+          Visit Website
         </a>
-      </h4>
-      <span>{metadata.exchange}: {ticker}, sector: {profileData.sector}</span>
-      <br />
-      <div className="percentage-container">
-        <span className="latest-price">{latest} </span>
+      </div>
+      <div className="stock-meta">
+        <span className="exchange">{metadata.exchange}: {ticker}</span>
+        <span className="sector">{profileData.sector}</span>
+      </div>
+      <div className="stock-price">
+        <span className="latest-price">{latest}</span>
         <span className="price-change" style={getColor(change)}>
           {change > 0 ? `+${change}` : change}
         </span>
         <span className="percentage-change" style={getColor(percentageChange)}>
           {`(${percentageChange}) ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
-        </span> (updated: {convertUTCToLocal(lastUpdated)} EET)
-      </div>
-      <p>
-        YTD price return:{' '}
-        <span style={getColor(ytdPriceReturn)}>
-            {ytdPriceReturn !== undefined && ytdPriceReturn !== null 
-            ? `${ytdPriceReturn}%`
-            : 'Loading...'}
         </span>
-      </p>
-    </>
+      </div>
+      <div className="stock-details">
+        <span className="last-updated">Updated: {convertUTCToLocal(lastUpdated)} EET</span>
+        <span className="ytd-return">
+          YTD Return: {' '}
+          <span style={getColor(ytdPriceReturn)}>
+            {ytdPriceReturn !== undefined && ytdPriceReturn !== null 
+              ? `${ytdPriceReturn}%`
+              : '-'}
+          </span>
+        </span>
+      </div>
+    </div>
   )
 }
 

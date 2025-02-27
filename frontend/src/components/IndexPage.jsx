@@ -1,7 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { twelvedataService, polygonService } from '../services/stockServices'
-import { getColor, formatDate } from '../utils/helpers'
+import { getColor, formatDate, convertUTCToLocal } from '../utils/helpers'
 import Chart from './Chart'
 
 const IndexPage = () => {
@@ -79,13 +79,22 @@ const IndexPage = () => {
   }
 
   return (
-    <div className="content-padding">
-      <h4>{name} Index</h4>
-      <span>ticker: {ticker}, change: </span>
-      <span style={getColor(percentageChange)}>
-        {percentageChange}
-      </span>
-      <p>Last updated: {lastUpdated}</p>
+    <>
+    <div className="stock-header">
+      <h4 className="stock-name">{name} Index</h4>
+      <div className="stock-meta">
+        <span>{ticker}</span>
+      </div>
+      <div className="stock-price">
+        <span className="price-change" style={getColor(percentageChange)}>
+          {percentageChange}
+        </span>
+      </div>
+      <div className="stock-details">
+        <span className="last-updated">Updated: {convertUTCToLocal(lastUpdated)} EET</span>
+      </div>
+    </div>
+    <div>
       <Chart 
         chartData={chartData} 
         name={name} 
@@ -95,6 +104,7 @@ const IndexPage = () => {
         {renderIntervalButtons(ticker.startsWith('I:') ? ['1w', '1m', '1y'] : ['1d', '1w', '1m', '1y', '5y', '10y'])}
       </div>
     </div>
+    </>
   )
 }
 

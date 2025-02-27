@@ -244,13 +244,49 @@
 }
 
 .description-section {
-  width: 35%;
-  font-size: 15px;
-  word-wrap: break-word;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
-.description-section p {
-  margin: 5px 0;
+.about-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+}
+
+.about-content {
+  font-size: 14px;
+  color: #636e72;
+  line-height: 1.6;
+}
+
+.about-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #2d3436;
+  margin-right: 8px;
+}
+
+.detail-value {
+  font-weight: 400;
+  color: #0984e3;
+}
+
+.about-description {
+  margin: 0;
+  color: #2d3436;
+  text-align: justify;
 }
 
 .header-container {
@@ -293,4 +329,109 @@ h4 {
 .latest-price {
   font-weight: bold;
   margin-right: 10px;
+}
+
+.stock-header {
+  background: linear-gradient(135deg, #f5f7fa, #e6e9ef);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.stock-name {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #2d3436;
+  margin: 0;
+}
+
+.stock-logo {
+  width: 40px;
+  height: 40px;
+  margin-left: 15px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.weburl-link {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border: 1px solid #007bff;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.weburl-link:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.stock-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 16px;
+  color: #636e72;
+  margin-bottom: 10px;
+}
+
+.stock-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.latest-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3436;
+}
+
+.price-change,
+.percentage-change {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 4px 2px;
+  border-radius: 4px;
+}
+
+.stock-details {
+  display: flex;
+  gap: 15px;
+  font-size: 16px;
+  color: #636e72;
+}
+
+.last-updated,
+.ytd-return {
+  display: flex;
+  align-items: center;
+}
+
+.ytd-return span {
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.nav-tabs .nav-link {
+  font-size: 16px;
+  padding: 8px 12px;
+}
+
+.nav-tabs .nav-link.active {
+  font-weight: bold;
+  color: #007bff;
 }
