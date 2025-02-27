@@ -247,7 +247,9 @@ router.post('/metrics', async (request, response) => {
     //console.log('Metrics: ', data.metric)
 
     const filteredData = {
-      marketCap: (data.metric.marketCapitalization?.toFixed(0) ?? '-'),
+      marketCap: data.metric.marketCapitalization != null 
+        ? (data.metric.marketCapitalization / 1000).toFixed(0) 
+        : '-',
       pe: data.metric.peAnnual?.toFixed(2) ?? '-',
       pb: data.metric.pbAnnual?.toFixed(2) ?? '-',
       ps: data.metric.psAnnual?.toFixed(2) ?? '-',

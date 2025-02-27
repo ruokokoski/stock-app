@@ -93,14 +93,15 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
         <td>{ticker}</td>
         <td>
           <Link
-              to={`/stock/${ticker}`}
-              state={{
+            to={`/stock/${ticker}`}
+            state={{
               name,
               percentageChange,
               latest: stockData[ticker]?.latest.toFixed(2),
-              change: stockData[ticker]?.change.toFixed(2)
-              }}>
-              {name}
+              change: stockData[ticker]?.change.toFixed(2),
+              timestamp: stockData[ticker]?.timestamp
+            }}>
+            {name}
           </Link>
         </td>
         <td>{stockData[ticker]?.latest || '-'}</td>
@@ -130,11 +131,11 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
         <>
           <StockTable data={watchlistItems} renderRow={renderStocks} />
           <button
-          onClick={handleDelete}
-          className="gradient-button"
-          disabled={selectedItems.length === 0}
-          >
-          Remove stocks
+            onClick={handleDelete}
+            className="gradient-button"
+            disabled={selectedItems.length === 0}
+            >
+            Remove stocks
           </button>
         </>
         )}

@@ -127,8 +127,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
   const renderStockRow = ({ ticker, name, latest, change, pchange, timestamp }) => {
     const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
-    //const stockChange = change.toFixed(2)
-    console.log(`change for ${ticker}: `, change)
+    //console.log(`change for ${ticker}: `, change)
   
     return (
       <tr key={ticker}>
@@ -140,7 +139,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
               name,
               percentageChange,
               latest: latest.toFixed(2) || 0,
-              //change: stockChange || 0,
+              change: change.toFixed(2) || 0,
               timestamp
             }}>
             {name}
