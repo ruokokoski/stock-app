@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiService = (baseUrl) => ({
-  getTicker: async (ticker, range, name) => { // Twelvedata, Polygon, Tiingo
+  getTicker: async (ticker, range, name) => { // Twelvedata, Polygon, Finnhub
     const requestBody = { ticker }
 
     if (range) requestBody.range = range
@@ -37,6 +37,11 @@ const apiService = (baseUrl) => ({
   getDescription: async (ticker) => { // Tiingo API
     const requestBody = { ticker }
     const response = await axios.post(`${baseUrl}/description`, requestBody)
+    return response.data
+  },
+  getHistorical: async (ticker, start, end) => { // Tiingo API
+    const requestBody = { ticker, start, end }
+    const response = await axios.post(`${baseUrl}/historical`, requestBody)
     return response.data
   },
 })

@@ -14,7 +14,7 @@ const StockOverview = ({
     return intervals.map(interval => (
       <button
         key={interval}
-        className={`gradient-button gradient-button-small ${selectedInterval === interval ? 'selected' : ''}`}
+        className={`gradient-button gradient-button-xsmall ${selectedInterval === interval ? 'selected' : ''}`}
         onClick={() => setChartInterval(interval)}
         disabled={selectedInterval === interval}
       >
@@ -28,7 +28,7 @@ const StockOverview = ({
       <div className="chart-section">
         <Chart chartData={chartData} name={name} selectedInterval={selectedInterval} />
         <div className="buttons-container">
-          {renderIntervalButtons(['1d', '1w', '1m', '1y', '5y', '10y'])}
+          {renderIntervalButtons(['1d', '1w', '1m', 'YTD', '1y', '5y', '10y'])}
         </div>
 
         <div className="metrics-section">

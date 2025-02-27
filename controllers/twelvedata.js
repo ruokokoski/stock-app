@@ -59,6 +59,7 @@ router.post('/', async (request, response) => {
         volume: parseInt(entry.volume)
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))
+    console.log('Chart data:', chartData)
     
     let latest = '-', previous = '-'
 
@@ -69,7 +70,7 @@ router.post('/', async (request, response) => {
       const latestClose = parseFloat(latestEntry.close)
       const previousClose = parseFloat(previousEntry.close)
       const percentageChange = ((latestClose - previousClose) / previousClose) * 100
-      console.log('LatestEntry twelve:', latestEntry.datetime)
+      //console.log('LatestEntry twelve:', latestEntry.datetime)
 
       latest = {
         close: latestClose.toFixed(2),

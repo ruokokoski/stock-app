@@ -44,9 +44,18 @@ const StockPage = () => {
       }
     }
     try {
-      const response = ticker.startsWith('I:') 
-        ? await polygonService.getTicker(ticker)
-        : await twelvedataService.getTicker(ticker, range)
+      let response
+      if (range === 'YTD') {
+        const today = new Date()
+        const currentYear = today.getFullYear()
+        const startDate = `${currentYear}-01-01`
+        const month = String(today.getMonth() + 1).padStart(2, '0')
+        const day = String(today.getDate()).padStart(2, '0')
+        const endDate = `${currentYear}-${month}-${day}`
+        response = await tiingoService.getHistorical(ticker, startDate, endDate)
+      } else {
+        response = await twelvedataService.getTicker(ticker, range)
+      }
       
       if (response.chartData && response.chartData.length > 0) {
         //const latestTime = response.chartData[response.chartData.length - 1].time
