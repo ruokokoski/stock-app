@@ -25,6 +25,9 @@ Stock.init({
   latest: {
     type: DataTypes.FLOAT,
   },
+  change: {
+    type: DataTypes.FLOAT,
+  },
   pchange: {
     type: DataTypes.FLOAT,
   },

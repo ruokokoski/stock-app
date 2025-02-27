@@ -39,6 +39,7 @@ router.post('/', async (request, response) => {
       name: stockName,
       timestamp: timestampUTC,
       latest: data.c,
+      change: data.d,
       pchange: data.dp,
       sector: stockSector,
       description: description,
@@ -47,10 +48,7 @@ router.post('/', async (request, response) => {
 
     await saveStockDataToDatabase(stockData)
 
-    response.status(200).json({
-      ...stockData,
-      change: data.d
-    })
+    response.status(200).json(stockData)
 
   } catch (error) {
     if (error.response && error.response.status === 429) {
@@ -104,21 +102,21 @@ router.post('/search', async (request, response) => {
         name: stockName,
         timestamp: timestampUTC,
         latest: quoteData.c,
+        change: quoteData.d,
         pchange: quoteData.dp,
         sector: stockSector,
         description: 'No description',
       }
 
+      /*
       if (stockData.latest === 0) {
         return null
       }
+      */
 
       await saveStockDataToDatabase(stockData)
 
-      return {
-        ...stockData,
-        change: quoteData.d
-      }
+      return stockData
     })
 
     const stocksWithData = await Promise.all(stockDataPromises)
@@ -249,28 +247,28 @@ router.post('/metrics', async (request, response) => {
     //console.log('Metrics: ', data.metric)
 
     const filteredData = {
-      marketCap: (data.metric.marketCapitalization/1000).toFixed(0),
-      pe: data.metric.peAnnual.toFixed(2),
-      pb: data.metric.pbAnnual.toFixed(2),
-      ps: data.metric.psAnnual.toFixed(2),
-      eps: data.metric.epsAnnual.toFixed(2),
-      epsGrowth5y: data.metric.epsGrowth5Y,
-
-      divYield: data.metric.dividendYieldIndicatedAnnual.toFixed(2),
-      divGrowth5y: data.metric.dividendGrowthRate5Y.toFixed(2),
-      high52: data.metric['52WeekHigh'],
-      low52: data.metric['52WeekLow'],
-      revGrowthTTM: data.metric.revenueGrowthTTMYoy,
-      revGrowth5y: data.metric.revenueGrowth5Y,
-      
-      roe: data.metric.roeTTM.toFixed(2),
-      roa: data.metric.roaTTM.toFixed(2),
-      netProfitMargin: data.metric.netProfitMarginTTM,
-      operatingMargin: data.metric.operatingMarginTTM,
-      ebitdaCagr5y: data.metric.ebitdaCagr5Y,
-      currentRatio: data.metric.currentRatioAnnual,
-
-      ytdPriceReturn: data.metric.yearToDatePriceReturnDaily,
+      marketCap: (data.metric.marketCapitalization?.toFixed(0) ?? '-'),
+      pe: data.metric.peAnnual?.toFixed(2) ?? '-',
+      pb: data.metric.pbAnnual?.toFixed(2) ?? '-',
+      ps: data.metric.psAnnual?.toFixed(2) ?? '-',
+      eps: data.metric.epsAnnual?.toFixed(2) ?? '-',
+      epsGrowth5y: data.metric.epsGrowth5Y ?? '-',
+    
+      divYield: data.metric.dividendYieldIndicatedAnnual?.toFixed(2) ?? '-',
+      divGrowth5y: data.metric.dividendGrowthRate5Y?.toFixed(2) ?? '-',
+      high52: data.metric['52WeekHigh'] ?? '-',
+      low52: data.metric['52WeekLow'] ?? '-',
+      revGrowthTTM: data.metric.revenueGrowthTTMYoy ?? '-',
+      revGrowth5y: data.metric.revenueGrowth5Y ?? '-',
+    
+      roe: data.metric.roeTTM?.toFixed(2) ?? '-',
+      roa: data.metric.roaTTM?.toFixed(2) ?? '-',
+      netProfitMargin: data.metric.netProfitMarginTTM ?? '-',
+      operatingMargin: data.metric.operatingMarginTTM ?? '-',
+      ebitdaCagr5y: data.metric.ebitdaCagr5Y ?? '-',
+      currentRatio: data.metric.currentRatioAnnual ?? '-',
+    
+      ytdPriceReturn: data.metric.yearToDatePriceReturnDaily ?? '-',
     }
 
     response.status(200).json(filteredData)
