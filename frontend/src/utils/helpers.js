@@ -1,10 +1,15 @@
-export const getColor = (percentageChange) => {
-  if (!percentageChange || percentageChange === '-') return { color: 'black' }
-  if (percentageChange.startsWith('-')) {
-    return { color: 'red' }
-  } else {
-    return { color: 'green' }
+export const getColor = (value) => {
+  if (value === null || value === undefined || value === 'Loading...') {
+    return { color: 'black' }
   }
+
+  const valueString = String(value)
+  
+  if (valueString.startsWith('-')) {
+    return { color: 'red' }
+  }
+  
+  return { color: 'green' }
 }
 
 export const convertUTCToLocal = (utcTimestamp) => {

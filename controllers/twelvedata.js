@@ -59,7 +59,7 @@ router.post('/', async (request, response) => {
         volume: parseInt(entry.volume)
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))
-    console.log('Chart data:', chartData)
+    //console.log('Chart data:', chartData)
     
     let latest = '-', previous = '-'
 

@@ -7,7 +7,11 @@ const StockOverview = ({
   setChartInterval,
   metricsData,
   profileData,
-  metadata
+  metadata,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate
 }) => {
   
   const renderIntervalButtons = (intervals) => {
@@ -23,14 +27,47 @@ const StockOverview = ({
     ))
   }
 
+  const handleDateChange = (type, value) => {
+    const newDate = value
+    if (type === 'start') {
+      setStartDate(newDate)
+    } else {
+      setEndDate(newDate)
+    }
+    setChartInterval('custom')
+  }
+
   return (
     <div className="chart-description-container">
       <div className="chart-section">
         <Chart chartData={chartData} name={name} selectedInterval={selectedInterval} />
         <div className="buttons-container">
           {renderIntervalButtons(['1d', '1w', '1m', 'YTD', '1y', '5y', '10y'])}
+          <div className="custom-date-range mt-2">
+            <div className="d-flex align-items-center gap-2">
+                <input
+                type="date"
+                className="form-control form-control-sm border-secondary"
+                value={startDate}
+                onChange={(e) => handleDateChange('start', e.target.value)}
+                max={endDate || new Date().toISOString().split('T')[0]}
+                placeholder="Start date"
+                aria-label="Start date"
+                />
+                <span className="text-muted">–</span>
+                <input
+                type="date"
+                className="form-control form-control-sm border-secondary"
+                value={endDate}
+                onChange={(e) => handleDateChange('end', e.target.value)}
+                min={startDate}
+                max={new Date().toISOString().split('T')[0]}
+                placeholder="End date"
+                aria-label="End date"
+                />
+            </div>
+          </div>
         </div>
-
         <div className="metrics-section">
           <table className="metrics-table">
             <tbody>

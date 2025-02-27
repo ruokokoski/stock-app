@@ -45,5 +45,5 @@
 | 22.02 | 3    | fetch and show company news on StockPage |
 | 25.02 | 5    | improve StockPage by showing more details, refactoring, fix bugs |
 | 26.02 | 5    | fix timezone bug, fetch and show key metrics |
-| 27.02 | 3    | add change to stock model, YTD to chart, fix more bugs, refactoring |
-| **Total** | **153** | |
+| 27.02 | 5    | add change to stock model, YTD and custom ranges to chart, fix more bugs, refactoring |
+| **Total** | **155** | |

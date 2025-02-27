@@ -1,6 +1,6 @@
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 
-const StockHeader = ({ name, profileData, metadata, ticker, percentageChange, latest, change, lastUpdated }) => {
+const StockHeader = ({ name, profileData, ytdPriceReturn, metadata, ticker, percentageChange, latest, change, lastUpdated }) => {
   return (
     <>
       <h4 className="header-container">
@@ -30,9 +30,16 @@ const StockHeader = ({ name, profileData, metadata, ticker, percentageChange, la
         </span>
         <span className="percentage-change" style={getColor(percentageChange)}>
           {`(${percentageChange}) ${parseFloat(percentageChange) < 0 ? '🡇' : '🡅'}`}
-        </span> today
+        </span> (updated: {convertUTCToLocal(lastUpdated)} EET)
       </div>
-      <p>Last updated: {convertUTCToLocal(lastUpdated)} EET</p>
+      <p>
+        YTD price return:{' '}
+        <span style={getColor(ytdPriceReturn)}>
+            {ytdPriceReturn !== undefined && ytdPriceReturn !== null 
+            ? `${ytdPriceReturn}%`
+            : 'Loading...'}
+        </span>
+      </p>
     </>
   )
 }

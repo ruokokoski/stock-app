@@ -1,8 +1,7 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
-import { twelvedataService, polygonService, tiingoService, finnhubService } from '../services/stockServices'
+import { twelvedataService, tiingoService, finnhubService } from '../services/stockServices'
 import { cleanExpiredData } from '../utils/helpers'
-//import Chart from './Chart'
 import StockHeader from './StockHeader'
 import StockOverview from './StockOverview'
 import StockNavigation from './StockNavigation'
@@ -13,7 +12,6 @@ const StockPage = () => {
   const location = useLocation()
   const { name, percentageChange, latest, change, timestamp } = location.state || {}
   const [chartData, setChartData] = useState([])
-  //const [lastUpdated, setLastUpdated] = useState('')
   const [selectedInterval, setSelectedInterval] = useState('1y')
   const [metadata, setMetadata] = useState([])
   const [activeTab, setActiveTab] = useState('overview')
@@ -21,6 +19,8 @@ const StockPage = () => {
   const [newsLoading, setNewsLoading] = useState(false)
   const [profileData, setProfileData] = useState([])
   const [metricsData, setMetricsData] = useState([])
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -33,19 +33,22 @@ const StockPage = () => {
         
       if (now - parsedData.timestamp < shortExpirationTime) {
         setChartData(parsedData.chartData || [])
-        //setLastUpdated(parsedData.lastUpdated || '')
         console.log(`Used cached data for ${ticker}, interval: ${range}`)
         return
       } else if (now - parsedData.timestamp < longExpirationTime) {
         setChartData(parsedData.chartData || [])
-        //setLastUpdated(parsedData.lastUpdated || '')
       } else {
         localStorage.removeItem(storageKey)
       }
     }
     try {
       let response
-      if (range === 'YTD') {
+      if (range === 'custom') {
+        if (startDate && endDate) {
+          response = await tiingoService.getHistorical(ticker, startDate, endDate);
+        } else return
+      }
+      else if (range === 'YTD') {
         const today = new Date()
         const currentYear = today.getFullYear()
         const startDate = `${currentYear}-01-01`
@@ -58,14 +61,10 @@ const StockPage = () => {
       }
       
       if (response.chartData && response.chartData.length > 0) {
-        //const latestTime = response.chartData[response.chartData.length - 1].time
-        //const formattedTime = formatDate(latestTime)
-        //setLastUpdated(formattedTime)
         setChartData(response.chartData)
 
         localStorage.setItem(storageKey, JSON.stringify({
             chartData: response.chartData,
-            //lastUpdated: formattedTime,
             timestamp: now
         }))
       }
@@ -74,15 +73,18 @@ const StockPage = () => {
       console.error(`Error fetching data for ${ticker}:`, error)
       if (!storedData) {
         setChartData([])
-        //setLastUpdated('')
       }
     }
-  }, [ticker])
+  }, [ticker, startDate, endDate])
 
   useEffect(() => {
     cleanExpiredData()
+    if (selectedInterval === 'custom' && (!startDate || !endDate)) {
+      //console.log('Skipping fetch: startDate or endDate is missing')
+      return
+    }
     fetchHistoricalData(selectedInterval)
-  }, [ticker, selectedInterval, fetchHistoricalData])
+  }, [ticker, selectedInterval, fetchHistoricalData, startDate, endDate])
 
   useEffect(() => {
     const fetchDescription = async (ticker) => {
@@ -140,8 +142,11 @@ const StockPage = () => {
 
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)
-    //console.log(`Ticker: ${ticker}`)
     setSelectedInterval(interval)
+    if (interval !== 'custom') {
+      setStartDate('')
+      setEndDate('')
+    }
   }
 
   return (
@@ -149,6 +154,7 @@ const StockPage = () => {
       <StockHeader 
         name={name}
         profileData={profileData}
+        ytdPriceReturn={metricsData.ytdPriceReturn}
         metadata={metadata}
         ticker={ticker}
         percentageChange={percentageChange}
@@ -168,6 +174,10 @@ const StockPage = () => {
           metricsData={metricsData}
           profileData={profileData}
           metadata={metadata}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
         />
       ) : (
         <NewsArticles newsData={newsData} newsLoading={newsLoading} />

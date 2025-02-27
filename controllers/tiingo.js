@@ -21,10 +21,6 @@ router.post('/historical', async (request, response) => {
 
     //console.log('Data:', data)
 
-    const latestEntry = data[0]
-    const datePart = latestEntry.date.split('T')[0]
-    console.log('Date: ', datePart)
-
     const chartData = data
       .map((entry) => ({
         time: entry.date.split('T')[0],

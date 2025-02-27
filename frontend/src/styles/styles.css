@@ -1,9 +1,38 @@
 .form-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 50px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 50px;
+}
+
+.custom-date-range .form-control {
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-date-range .form-control:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 0.25rem rgba(100, 108, 255, 0.25);
+  background-color: #fff;
+  color: #000;
+}
+
+.custom-date-range input[type="date"]:not(:valid):before {
+  content: attr(placeholder);
+  color: #6c757d;
+  margin-right: 0.5em;
+}
+
+.custom-date-range input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  color: #000;
+}
+
+.buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
 
 .gradient-button {
   background: linear-gradient(to right, #1389ea, #42c3ff);
