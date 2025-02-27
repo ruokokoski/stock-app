@@ -14,6 +14,14 @@ const finnhubHeader = {
   },
 }
 
+const handleApiError = (error, response) => {
+  if (error.response && error.response.status === 429) {
+    return response.status(429).json({ error: 'Rate limit reached. Please try again later.' })
+  }
+  console.error('API call failed:', error)
+  response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+}
+
 router.post('/', async (request, response) => {
   const { ticker, name } = request.body
 
@@ -51,11 +59,7 @@ router.post('/', async (request, response) => {
     response.status(200).json(stockData)
 
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
-    }
-    console.log('API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch data from FinnHub API' })
+    handleApiError(error, response)
   }
 })
 
@@ -124,11 +128,7 @@ router.post('/search', async (request, response) => {
     response.status(200).json({ result: stocksWithData })
 
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again later.' })
-    }
-    console.error('Search API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch search results from Finnhub API' })
+    handleApiError(error, response)
   }
 })
 
@@ -155,11 +155,7 @@ router.post('/market_news', async (request, response) => {
     response.status(200).json(filteredData)
 
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again later.' })
-    }
-    console.error('Market news API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch market news from Finnhub API' })
+    handleApiError(error, response)
   }
 })
 
@@ -194,11 +190,7 @@ router.post('/company_news', async (request, response) => {
 
     response.status(200).json(filteredData)
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
-    }
-    console.log('API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+    handleApiError(error, response)
   }
 })
 
@@ -229,11 +221,7 @@ router.post('/company_profile', async (request, response) => {
 
     response.status(200).json(fullStockData)
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
-    }
-    console.log('API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+    handleApiError(error, response)
   }
 })
 
@@ -275,11 +263,7 @@ router.post('/metrics', async (request, response) => {
 
     response.status(200).json(filteredData)
   } catch (error) {
-    if (error.response && error.response.status === 429) {
-      return response.status(429).json({ error: 'Rate limit reached. Please try again after some time.' })
-    }
-    console.log('API call failed:', error)
-    response.status(500).json({ error: 'Failed to fetch data from Finnhub API' })
+    handleApiError(error, response)
   }
 })
 
