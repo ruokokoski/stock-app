@@ -4,6 +4,7 @@ import { twelvedataService, tiingoService, finnhubService } from '../services/st
 import { cleanExpiredData } from '../utils/helpers'
 import StockHeader from './StockHeader'
 import StockOverview from './StockOverview'
+import StockHistory from './StockHistory'
 import StockNavigation from './StockNavigation'
 import NewsArticles from './NewsArticles'
 
@@ -178,6 +179,16 @@ const StockPage = () => {
           setStartDate={setStartDate}
           endDate={endDate}
           setEndDate={setEndDate}
+        />
+      ) : activeTab === 'history' ? (
+        <StockHistory 
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          setChartInterval={setChartInterval}
+          chartData={chartData}
+          selectedInterval={selectedInterval}
         />
       ) : (
         <NewsArticles newsData={newsData} newsLoading={newsLoading} />

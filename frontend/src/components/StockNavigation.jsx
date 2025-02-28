@@ -8,6 +8,11 @@ const StockNavigation = ({ activeTab, setActiveTab }) => (
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
+        <Nav.Link eventKey="history" active={activeTab === 'history'}>
+          History
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
         <Nav.Link eventKey="news" active={activeTab === 'news'}>
           News
         </Nav.Link>

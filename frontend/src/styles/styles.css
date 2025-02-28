@@ -435,3 +435,9 @@ h4 {
   font-weight: bold;
   color: #007bff;
 }
+
+.no-data-message {
+  margin-top: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}

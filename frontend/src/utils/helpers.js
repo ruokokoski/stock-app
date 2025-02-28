@@ -87,3 +87,13 @@ export const cleanExpiredData = () => {
     }
   })
 }
+
+export const handleDateChange = (type, value, setStartDate, setEndDate, setChartInterval) => {
+  const newDate = value
+  if (type === 'start') {
+    setStartDate(newDate)
+  } else {
+    setEndDate(newDate)
+  }
+  setChartInterval('custom')
+}
