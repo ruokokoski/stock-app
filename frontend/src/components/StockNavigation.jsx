@@ -9,12 +9,17 @@ const StockNavigation = ({ activeTab, setActiveTab }) => (
       </Nav.Item>
       <Nav.Item>
         <Nav.Link eventKey="history" active={activeTab === 'history'}>
-          History
+          Historical prices
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link eventKey="metrics" active={activeTab === 'metrics'}>
+          Quarterly metrics
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
         <Nav.Link eventKey="news" active={activeTab === 'news'}>
-          News
+          Company news
         </Nav.Link>
       </Nav.Item>
     </Nav>

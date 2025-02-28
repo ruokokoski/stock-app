@@ -1,4 +1,3 @@
-// Not used currently!
 const router = require('express').Router()
 
 const { Stock } = require('../models')
@@ -15,8 +14,9 @@ router.get('/', async (req, res) => {
   res.status(200).json(stocks)
 })
 
-router.get('/:id', async (req, res) => {
-  const stock = await Stock.findByPk(req.params.id, {
+router.get('/:ticker', async (req, res) => {
+  const stock = await Stock.findOne({
+    where: { ticker: req.params.ticker },
     attributes: {
       exclude: ['createdAt', 'updatedAt']
     }
@@ -27,62 +27,6 @@ router.get('/:id', async (req, res) => {
   }
 
   res.status(200).json(stock)
-})
-
-router.post('/', async (req, res) => {
-  const { ticker, name, timestamp, latest, pchange, sector, description } = req.body
-
-  if (!ticker || !name) {
-    return res.status(400).json({ error: 'Ticker and name are required' })
-  }
-
-  const existingStock = await Stock.findOne({ where: { ticker } })
-
-  if (existingStock) {
-    console.log('Updating stock info')
-    await existingStock.update({
-      name,
-      timestamp,
-      latest,
-      pchange,
-      sector,
-      description
-    })
-
-    res.status(200).json({
-      message: 'Stock updated successfully',
-      id: existingStock.id,
-      ticker: existingStock.ticker,
-      name: existingStock.name,
-      timestamp: existingStock.timestamp,
-      latest: existingStock.latest,
-      pchange: existingStock.pchange,
-      sector: existingStock.sector,
-      description: existingStock.description
-    })
-  } else {
-    console.log('Storing stock to database')
-    const stock = await Stock.create({
-      ticker,
-      name,
-      timestamp,
-      latest,
-      pchange,
-      sector,
-      description
-    })
-
-    res.status(201).json({
-      id: stock.id,
-      ticker: stock.ticker,
-      name: stock.name,
-      timestamp: stock.timestamp,
-      latest: stock.latest,
-      pchange: stock.pchange,
-      sector: stock.sector,
-      description: stock.description
-    })
-  }
 })
 
 module.exports = router

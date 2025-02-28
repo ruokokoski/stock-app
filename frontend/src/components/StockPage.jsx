@@ -1,10 +1,11 @@
 import { useParams, useLocation } from 'react-router-dom'
 import { useState, useEffect, useCallback } from 'react'
-import { twelvedataService, tiingoService, finnhubService } from '../services/stockServices'
+import { twelvedataService, tiingoService, finnhubService, stockService } from '../services/stockServices'
 import { cleanExpiredData } from '../utils/helpers'
 import StockHeader from './StockHeader'
 import StockOverview from './StockOverview'
 import StockHistory from './StockHistory'
+import StockMetrics from './StockMetrics'
 import StockNavigation from './StockNavigation'
 import NewsArticles from './NewsArticles'
 
@@ -90,10 +91,27 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
   useEffect(() => {
     const fetchDescription = async (ticker) => {
       try {
-        const data = await tiingoService.getDescription(ticker)
-        setMetadata(data)
-      } catch (error) {
-        console.error('Error fetching meta data from Tiingo:', error)
+        const stockMetadata = await stockService.getFromDB(ticker)
+        
+        if (stockMetadata?.description && stockMetadata?.exchange) {
+          console.log('Using metadata from own db', stockMetadata)
+          setMetadata(stockMetadata)
+        } else {
+          throw new Error('Incomplete data in database')
+        }
+      } catch (dbError) {
+        console.log('Falling back to Tiingo:', dbError)
+        try {
+          const tiingoData = await tiingoService.getDescription(ticker)
+          if (tiingoData?.description) {
+            console.log('Using Tiingo metadata:', tiingoData)
+            setMetadata(tiingoData)
+          }
+        } catch (tiingoError) {
+          console.error('Both sources failed:', tiingoError)
+          setMessage('Failed to load stock details')
+          setMessageVariant('danger')
+        }
       }
     }
     fetchDescription(ticker)
@@ -190,6 +208,13 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
           setChartInterval={setChartInterval}
           chartData={chartData}
           selectedInterval={selectedInterval}
+          setMessage={setMessage}
+          setMessageVariant={setMessageVariant}
+        />
+      ) : activeTab === 'metrics' ? (
+        <StockMetrics 
+          ticker={ticker}
+          quarterlyMetrics={metricsData.quarterlyMetrics}
           setMessage={setMessage}
           setMessageVariant={setMessageVariant}
         />

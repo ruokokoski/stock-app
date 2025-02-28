@@ -4,7 +4,7 @@
 
 This stock market app is a 10-credit project developed for the Fullstack Open course at the University of Helsinki.
 
-The application is a web application designed for monitoring stock markets. It fetches real-time stock data from a stock API, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own stock portfolios within the application, which are saved in a database. Additionally, users can create watchlists and screen stocks based on selected metrics.
+The application is a web application designed for monitoring stock markets. It fetches real-time stock data from a stock API, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own watchlists within the application, which are saved in a database. Additionally, users can screen stocks based on selected metrics.
 
 ## Tech Stack
 - **Backend:** The backend of the application is built using **Node.js**, which is used to handle server-side logic, manage API requests, and interact with the database. Node.js provides an efficient environment for processing real-time data and handling asynchronous operations.
@@ -71,6 +71,11 @@ The application is a web application designed for monitoring stock markets. It f
    Run the following command and leave it running while database is being used:
    ```bash
    flyctl proxy 5432 -a <fly.io-app-name>-db
+   ```
+
+   Alternatively, use available script:
+   ```bash
+   npm run proxy
    ```
   
 2. **Start the development server**:

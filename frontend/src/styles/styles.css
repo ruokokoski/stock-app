@@ -184,7 +184,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 2px;
-  margin: 1rem 0;
+  margin: 0 0;
   background: white;
   border-radius: 8px;
   overflow: hidden;
@@ -333,7 +333,7 @@ h4 {
 
 .stock-header {
   background: linear-gradient(135deg, #f5f7fa, #e6e9ef);
-  padding: 15px;
+  padding: 12px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;

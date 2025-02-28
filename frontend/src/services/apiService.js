@@ -44,6 +44,10 @@ const apiService = (baseUrl) => ({
     const response = await axios.post(`${baseUrl}/historical`, requestBody)
     return response.data
   },
+  getFromDB: async (ticker) => { // own database
+    const response = await axios.get(`${baseUrl}/${ticker}`)
+    return response.data
+  },
 })
 
 export default apiService

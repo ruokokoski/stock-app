@@ -233,6 +233,27 @@ router.post('/metrics', async (request, response) => {
     const { data } = await axios.get(url, finnhubHeader)
 
     //console.log('Metrics: ', data.metric)
+    const quarterlyData = data.series?.quarterly || {}
+    const periods = quarterlyData.pb?.map((entry) => entry.period) || []
+    //console.log('Periods: ', periods)
+
+    const quarterlyMetrics = periods.map((period) => ({
+      time: period,
+      cRatio: quarterlyData.currentRatio?.find((m) => m.period === period)?.v ?? null,
+      ebitPS: quarterlyData.ebitPerShare?.find((m) => m.period === period)?.v ?? null,
+      eps: quarterlyData.eps?.find((m) => m.period === period)?.v ?? null,
+      ev: quarterlyData.ev?.find((m) => m.period === period)?.v ?? null,
+      gMargin: quarterlyData.grossMargin?.find((m) => m.period === period)?.v ?? null,
+      nMargin: quarterlyData.netMargin?.find((m) => m.period === period)?.v ?? null,
+      oMargin: quarterlyData.operatingMargin?.find((m) => m.period === period)?.v ?? null,
+      pb: quarterlyData.pb?.find((m) => m.period === period)?.v ?? null,
+      pe: quarterlyData.peTTM?.find((m) => m.period === period)?.v ?? null,
+      roa: quarterlyData.roaTTM?.find((m) => m.period === period)?.v ?? null,
+      roe: quarterlyData.roeTTM?.find((m) => m.period === period)?.v ?? null,
+      roic: quarterlyData.roicTTM?.find((m) => m.period === period)?.v ?? null,
+    })).sort((a, b) => new Date(a.time) - new Date(b.time))
+
+    console.log('quarterlyMetrics: ', quarterlyMetrics)
 
     const filteredData = {
       marketCap: data.metric.marketCapitalization != null 
@@ -259,6 +280,7 @@ router.post('/metrics', async (request, response) => {
       currentRatio: data.metric.currentRatioAnnual ?? '-',
     
       ytdPriceReturn: data.metric.yearToDatePriceReturnDaily ?? '-',
+      quarterlyMetrics,
     }
 
     response.status(200).json(filteredData)
