@@ -46,5 +46,5 @@
 | 25.02 | 5    | improve StockPage by showing more details, refactoring, fix bugs |
 | 26.02 | 5    | fix timezone bug, fetch and show key metrics |
 | 27.02 | 6    | add change to stock model, YTD and custom ranges to chart, fix more bugs, refactoring |
-| 28.02 | 2    | add History tab |
-| **Total** | **158** | |
+| 28.02 | 3    | add History tab, allow saving data to file |
+| **Total** | **159** | |

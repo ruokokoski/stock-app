@@ -8,7 +8,7 @@ import StockHistory from './StockHistory'
 import StockNavigation from './StockNavigation'
 import NewsArticles from './NewsArticles'
 
-const StockPage = () => {
+const StockPage = ({ setMessage, setMessageVariant }) => {
   const { ticker } = useParams()
   const location = useLocation()
   const { name, percentageChange, latest, change, timestamp } = location.state || {}
@@ -182,6 +182,7 @@ const StockPage = () => {
         />
       ) : activeTab === 'history' ? (
         <StockHistory 
+          ticker={ticker}
           startDate={startDate}
           setStartDate={setStartDate}
           endDate={endDate}
@@ -189,6 +190,8 @@ const StockPage = () => {
           setChartInterval={setChartInterval}
           chartData={chartData}
           selectedInterval={selectedInterval}
+          setMessage={setMessage}
+          setMessageVariant={setMessageVariant}
         />
       ) : (
         <NewsArticles newsData={newsData} newsLoading={newsLoading} />
