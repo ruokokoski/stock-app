@@ -25,4 +25,4 @@ The application requires user login to access personalized features such as port
 
 ### User Interface
 
-![User Interface](./documents/stock_app.jpg)
+![User Interface](./stock_app.jpg)
