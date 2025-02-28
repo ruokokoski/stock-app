@@ -36,6 +36,9 @@ Stock.init({
   },
   description: {
     type: DataTypes.TEXT,
+  },
+  exchange: {
+    type: DataTypes.STRING,
   }
 }, {
   sequelize,
