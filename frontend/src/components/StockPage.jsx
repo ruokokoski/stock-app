@@ -12,7 +12,16 @@ import NewsArticles from './NewsArticles'
 const StockPage = ({ setMessage, setMessageVariant }) => {
   const { ticker } = useParams()
   const location = useLocation()
-  const { name, percentageChange, latest, change, timestamp } = location.state || {}
+  const { state } = location
+
+  const [stockData, setStockData] = useState({
+    name: state?.name || '',
+    percentageChange: state?.percentageChange || 0,
+    latest: state?.latest || 0,
+    change: state?.change || 0,
+    timestamp: state?.timestamp || null,
+  })
+  //const { name, percentageChange, latest, change, timestamp } = location.state || {}
   const [chartData, setChartData] = useState([])
   const [selectedInterval, setSelectedInterval] = useState('1y')
   const [metadata, setMetadata] = useState([])
@@ -23,6 +32,45 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
   const [metricsData, setMetricsData] = useState([])
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let newData
+        if (state?.timestamp) {
+          const now = Date.now()
+          const dataTime = new Date(state.timestamp).getTime()
+          if (now - dataTime > 60000) { // older than 1 min
+            console.log('Data was old, fetch new data')
+            //newData = await finnhubService.getTicker(ticker, null, state.name)
+            const apiData = await finnhubService.getTicker(ticker, null, state.name)
+            newData = {
+              ...apiData,
+              percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+            }
+          } else {
+            console.log('Data was fresh')
+            const apiData = await finnhubService.getTicker(ticker, null, null)
+            newData = {
+              ...apiData,
+              percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+            }
+          }
+        } else {
+          console.log('No existing data, fetch new')
+          newData = await finnhubService.getTicker(ticker, null, null)
+        }
+        setStockData(newData)
+      } catch (error) {
+        console.error('Error fetching stock data:', error)
+        setMessage('Failed to fetch stock data')
+        setMessageVariant('danger')
+        if (state) setStockData(state)
+      }
+    }
+
+    fetchData()
+  }, [ticker, state, setMessage, setMessageVariant])
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
@@ -171,15 +219,15 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
   return (
     <div className="content-padding">
       <StockHeader 
-        name={name}
+        name={stockData.name}
         profileData={profileData}
         ytdPriceReturn={metricsData.ytdPriceReturn}
         metadata={metadata}
         ticker={ticker}
-        percentageChange={percentageChange}
-        latest={latest}
-        change={change}
-        lastUpdated={timestamp}
+        percentageChange={stockData.percentageChange}
+        latest={stockData.latest}
+        change={stockData.change}
+        lastUpdated={stockData.timestamp}
       />
       
       <StockNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
