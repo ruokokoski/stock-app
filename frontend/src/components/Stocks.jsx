@@ -125,7 +125,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
 
     try {
       const response = await finnhubService.searchSymbol(searchTerm)
-      //console.log('Search response:', response)
+      console.log('Search response:', response.result)
+
       setSearchResults(response.result)
       setSearchLoading(false)
     } catch (error) {

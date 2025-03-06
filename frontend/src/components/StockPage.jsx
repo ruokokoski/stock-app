@@ -21,7 +21,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     change: state?.change || 0,
     timestamp: state?.timestamp || null,
   })
-  //const { name, percentageChange, latest, change, timestamp } = location.state || {}
+
   const [chartData, setChartData] = useState([])
   const [selectedInterval, setSelectedInterval] = useState('1y')
   const [metadata, setMetadata] = useState([])
@@ -37,29 +37,36 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     const fetchData = async () => {
       try {
         let newData
+        const now = Date.now()
+        
         if (state?.timestamp) {
-          const now = Date.now()
           const dataTime = new Date(state.timestamp).getTime()
-          if (now - dataTime > 60000) { // older than 1 min
-            console.log('Data was old, fetch new data')
-            //newData = await finnhubService.getTicker(ticker, null, state.name)
+          if (now - dataTime > 60000) {
+            console.log('Data is old, fetching fresh')
             const apiData = await finnhubService.getTicker(ticker, null, state.name)
             newData = {
               ...apiData,
               percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
             }
           } else {
-            console.log('Data was fresh')
-            const apiData = await finnhubService.getTicker(ticker, null, null)
+            console.log('Using fresh data from state')
             newData = {
-              ...apiData,
-              percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+              name: state.name,
+              percentageChange: state.percentageChange,
+              latest: state.latest,
+              change: state.change,
+              timestamp: state.timestamp
             }
           }
         } else {
-          console.log('No existing data, fetch new')
-          newData = await finnhubService.getTicker(ticker, null, null)
+          console.log('No initial data, fetching fresh')
+          const apiData = await finnhubService.getTicker(ticker, null, null)
+          newData = {
+            ...apiData,
+            percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+          }
         }
+        
         setStockData(newData)
       } catch (error) {
         console.error('Error fetching stock data:', error)
@@ -70,13 +77,13 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     }
 
     fetchData()
-  }, [ticker, state, setMessage, setMessageVariant])
+  }, [])
 
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
     const now = Date.now()
-    const shortExpirationTime = 60 * 1000 // 1 min
-    const longExpirationTime = 60 * 60 * 1000 // 1 hour
+    //const shortExpirationTime = 60 * 1000 // 1 min
+    //const longExpirationTime = 60 * 60 * 1000 // 1 hour
     const storedData = localStorage.getItem(storageKey)
     
     if (storedData) {
@@ -87,7 +94,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
       if (dataAge < 60 * 1000) { // 1 minute
         setChartData(parsedData.chartData || []);
         console.log(`Used cached data for ${ticker}, interval: ${range}`)
-        shouldFetchFresh = false
+        return
       } else if (dataAge < 60 * 60 * 1000) { // 1 hour
         setChartData(parsedData.chartData || [])
       } else {
