@@ -78,14 +78,17 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     const shortExpirationTime = 60 * 1000 // 1 min
     const longExpirationTime = 60 * 60 * 1000 // 1 hour
     const storedData = localStorage.getItem(storageKey)
+    
     if (storedData) {
       const parsedData = JSON.parse(storedData)
         
-      if (now - parsedData.timestamp < shortExpirationTime) {
-        setChartData(parsedData.chartData || [])
+      const dataAge = now - parsedData.timestamp
+    
+      if (dataAge < 60 * 1000) { // 1 minute
+        setChartData(parsedData.chartData || []);
         console.log(`Used cached data for ${ticker}, interval: ${range}`)
-        return
-      } else if (now - parsedData.timestamp < longExpirationTime) {
+        shouldFetchFresh = false
+      } else if (dataAge < 60 * 60 * 1000) { // 1 hour
         setChartData(parsedData.chartData || [])
       } else {
         localStorage.removeItem(storageKey)
@@ -107,6 +110,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
         const endDate = `${currentYear}-${month}-${day}`
         response = await tiingoService.getHistorical(ticker, startDate, endDate)
       } else {
+        console.log('Range: ', range)
         response = await twelvedataService.getTicker(ticker, range)
       }
       
@@ -114,8 +118,8 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
         setChartData(response.chartData)
 
         localStorage.setItem(storageKey, JSON.stringify({
-            chartData: response.chartData,
-            timestamp: now
+          chartData: response.chartData,
+          timestamp: now
         }))
       }
       console.log('Chart data was fetched from API')
