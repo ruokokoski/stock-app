@@ -253,7 +253,7 @@ router.post('/metrics', async (request, response) => {
       roic: quarterlyData.roicTTM?.find((m) => m.period === period)?.v ?? null,
     })).sort((a, b) => new Date(a.time) - new Date(b.time))
 
-    console.log('quarterlyMetrics: ', quarterlyMetrics)
+    //console.log('quarterlyMetrics: ', quarterlyMetrics)
 
     const filteredData = {
       marketCap: data.metric.marketCapitalization != null 

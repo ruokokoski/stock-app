@@ -6,10 +6,14 @@ router.get('/', async (req, res) => {
   const stocks = await Stock.findAll({
     attributes: {
       exclude: [
+        'sector',
+        'description',
+        'exchange',
         'createdAt',
         'updatedAt'
       ]
-    }
+    },
+    order: [['ticker', 'ASC']]
   })
   res.status(200).json(stocks)
 })

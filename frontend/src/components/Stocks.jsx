@@ -71,7 +71,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
                 timestamp: now,
               })
             )
-            newStockData[ticker] = dataWithTimestamp;
+            newStockData[ticker] = dataWithTimestamp
           } catch (error) {
             console.error('Error fetching data from Finnhub:', error)
             setMessage('Error fetching data from Finnhub')

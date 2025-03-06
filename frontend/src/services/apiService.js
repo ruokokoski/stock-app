@@ -48,6 +48,10 @@ const apiService = (baseUrl) => ({
     const response = await axios.get(`${baseUrl}/${ticker}`)
     return response.data
   },
+  getAllFromDB: async () => { // own database
+    const response = await axios.get(baseUrl)
+    return response.data
+  }
 })
 
 export default apiService
