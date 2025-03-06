@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
+import { addToWatchlist } from '../services/watchlists'
 import StockTable from './StockTable'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 
@@ -59,6 +60,21 @@ const Database = ({ setMessage, setMessageVariant }) => {
     return () => clearInterval(interval)
   }, [fetchData, updateOldestStocks])
 
+  const handleAddToWatchlist = async (ticker) => {
+    try {
+        const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+        const user = JSON.parse(loggedUserJSON)
+        await addToWatchlist(ticker, user.token)
+        setMessage(`Added ${ticker} to your watchlist`)
+        setMessageVariant('success')
+    } catch (error) {
+        console.error('Error adding to watchlist:', error)
+        const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
+        setMessage(errorMessage)
+        setMessageVariant('danger')
+    }
+  }
+
   const renderStocks = (stock) => {
     const percentageChange = stock.pchange !== null ? `${stock.pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
@@ -82,6 +98,14 @@ const Database = ({ setMessage, setMessageVariant }) => {
         <td>{stock.latest || '-'}</td>
         <td style={color}>{percentageChange}</td>
         <td>{stock.timestamp ? convertUTCToLocal(stock.timestamp) : '-'}</td>
+        <td>
+          <button
+            onClick={() => handleAddToWatchlist(stock.ticker)}
+            style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+          >
+            👁️
+          </button>
+        </td>
       </tr>
     )
   }
