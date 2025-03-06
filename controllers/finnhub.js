@@ -29,6 +29,17 @@ router.post('/', async (request, response) => {
     const url = `https://finnhub.io/api/v1/quote?symbol=${ticker}`
     const { data } = await axios.get(url, finnhubHeader)
 
+    if (data.c == null) {
+      return response.status(400).json({ error: 'Stock data is missing closing price' })
+    }
+
+    const timestampUTC = new Date(data.t * 1000).toISOString()
+    const stockYear = new Date(timestampUTC).getFullYear()
+
+    if (stockYear < 2020) {
+      return response.status(400).json({ error: 'Stock data is outdated (before 2020)' })
+    }
+
     let stockName = name || 'No name provided'
     let stockSector = 'Unknown'
     let description = 'No description'
@@ -39,8 +50,6 @@ router.post('/', async (request, response) => {
       stockName = stockInfo.name || 'No name provided'
       stockSector = stockInfo.sector || 'Unknown'
     }
-
-    const timestampUTC = new Date(data.t * 1000).toISOString()
 
     const stockData = {
       ticker: ticker,
@@ -93,10 +102,18 @@ router.post('/search', async (request, response) => {
       const { data: quoteData } = await axios.get(quoteUrl, finnhubHeader)
 
       if (!quoteData) {
-        throw new Error(`No quote data available for ${symbol}`)
+        console.log(`Skipping ${symbol} - no quote data`)
+        return null
       }
 
       const timestampUTC = new Date(quoteData.t * 1000).toISOString()
+      const cutoffDate = new Date('2020-01-01T00:00:00Z').toISOString()
+      
+      if (timestampUTC < cutoffDate) {
+        console.log(`Skipping ${symbol} - too recent (${timestampUTC})`)
+        return null
+      }
+
       const stockName = stock.description || 'No name provided'
       const stockSector = 'Unknown'
       //console.log('stockName: ', stockName)
@@ -123,7 +140,7 @@ router.post('/search', async (request, response) => {
       return stockData
     })
 
-    const stocksWithData = await Promise.all(stockDataPromises)
+    const stocksWithData = (await Promise.all(stockDataPromises)).filter(Boolean)
 
     response.status(200).json({ result: stocksWithData })
 

@@ -124,7 +124,10 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     }
   }
 
-  const renderStockRow = ({ ticker, name, latest, change, pchange, timestamp }) => {
+  const renderStockRow = (stock) => {
+    if (!stock) return null
+    
+    const { ticker, name, latest, change, pchange, timestamp } = stock
     const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
     //console.log(`change for ${ticker}: `, change)
@@ -138,8 +141,8 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
             state={{
               name,
               percentageChange,
-              latest: latest.toFixed(2) || 0,
-              change: change.toFixed(2) || 0,
+              latest: latest != null ? latest.toFixed(2) : '0.00',
+              change: change != null ? change.toFixed(2) : '0.00',
               timestamp
             }}>
             {name}

@@ -235,7 +235,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
       {activeTab === 'overview' ? (
         <StockOverview 
           chartData={chartData}
-          name={name}
+          name={stockData.name}
           selectedInterval={selectedInterval}
           setChartInterval={setChartInterval}
           metricsData={metricsData}

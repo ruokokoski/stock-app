@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
 import StockTable from './StockTable'
@@ -8,24 +8,56 @@ const Database = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const items = await stockService.getAllFromDB()
-        //console.log('Items: ', items)
-
-        setStockData(items)
-        setLoading(false)
-      } catch (error) {
-        console.error('Error:', error)
-        setMessage('Error fetching stocks from database')
-        setMessageVariant('danger')
-        setLoading(false)
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const items = await stockService.getAllFromDB()
+      setStockData(items)
+      setLoading(false)
+    } catch (error) {
+      console.error('Error:', error)
+      setMessage('Error fetching stocks from database')
+      setMessageVariant('danger')
+      setLoading(false)
     }
-
-    fetchData()
   }, [setMessage, setMessageVariant])
+
+  const updateOldestStocks = useCallback(async () => {
+    try {
+      const currentStocks = await stockService.getAllFromDB()
+      
+      const oldestStocks = [...currentStocks]
+        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+        .slice(0, 25)
+
+      console.log('Stocks to update (25 oldest timestamps):', oldestStocks.map(stock => stock.ticker))
+
+      const updateResults = await Promise.allSettled(
+        oldestStocks.map(stock => 
+          finnhubService.getTicker(stock.ticker, null, stock.name)
+        )
+      )
+
+      updateResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.error('Failed to update:', oldestStocks[index].ticker, result.reason)
+        }
+      })
+
+      await fetchData()
+    } catch (error) {
+      console.error('Update failed:', error)
+      setMessage('Error during stock updates')
+      setMessageVariant('danger')
+    }
+  }, [fetchData, setMessage, setMessageVariant])
+
+  useEffect(() => {
+    fetchData()
+
+    const interval = setInterval(updateOldestStocks, 60000) // interval 1 min
+    
+    return () => clearInterval(interval)
+  }, [fetchData, updateOldestStocks])
 
   const renderStocks = (stock) => {
     const percentageChange = stock.pchange !== null ? `${stock.pchange.toFixed(2)}%` : '-'
@@ -60,7 +92,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
     
   return (
     <div className='content-padding'>
-      <h3>Stocks in own database</h3>
+      <h3>Stocks in own database ({stockData.length})</h3>
       {stockData.length === 0 ? (
         <div>Database is empty</div>
         ) : (
