@@ -47,5 +47,5 @@
 | 26.02 | 5    | fix timezone bug, fetch and show key metrics |
 | 27.02 | 6    | add change to stock model, YTD and custom ranges to chart, fix more bugs, refactoring |
 | 28.02 | 6    | add History and Quarterly tabs, allow saving data to file, fetch metadata from own db |
-| 06.03 | 4    | create page for own db, add timed update to db, update StockPage |
-| **Total** | **166** | |
+| 06.03 | 5    | create page for own db, add timed update to db, update StockPage |
+| **Total** | **167** | |

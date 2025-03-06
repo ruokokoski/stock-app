@@ -2,6 +2,8 @@ const router = require('express').Router()
 const { Stock, Watchlist } = require('../models')
 const { tokenExtractor } = require('../util/middleware')
 
+const WATCHLIST_COUNT = 30
+
 router.post('/', tokenExtractor, async (req, res) => {
   const { ticker } = req.body
 
@@ -9,6 +11,17 @@ router.post('/', tokenExtractor, async (req, res) => {
     return res.status(400).json({ error: 'Ticker is required' })
   }
   //console.log('Ticker: ', ticker)
+
+  const currentCount = await Watchlist.count({
+    where: { userId: req.user.id }
+  })
+
+  if (currentCount >= WATCHLIST_COUNT) {
+    return res.status(400).json({ 
+      error: `Watchlist limit reached (${WATCHLIST_COUNT} stocks). Remove some stocks before adding new ones.`
+    })
+  }
+
   const stock = await Stock.findOne({ where: { ticker } })
   if (!stock) {
     return res.status(404).json({ error: 'Stock not found' })

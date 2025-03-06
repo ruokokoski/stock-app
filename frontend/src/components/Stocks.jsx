@@ -6,6 +6,8 @@ import StockTable from './StockTable'
 import SearchForm from './SearchForm'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 
+const WATCHLIST_COUNT = 30
+
 const COMMON_STOCKS = [
   { ticker: 'AAPL', name: 'Apple Inc.' },
   //{ ticker: 'AMZN', name: 'Amazon.com Inc.' },
@@ -90,9 +92,20 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     try {
       const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
       const user = JSON.parse(loggedUserJSON)
+
+      const currentWatchlist = JSON.parse(localStorage.getItem('watchlist') || '[]')
+      if (currentWatchlist.length >= WATCHLIST_COUNT) {
+        setMessage(`Watchlist limit reached (${WATCHLIST_COUNT} stocks). Remove some stocks first.`)
+        setMessageVariant('danger')
+        return
+      }
+
       await addToWatchlist(ticker, user.token)
       setMessage(`Added ${ticker} to your watchlist`)
       setMessageVariant('success')
+
+      const newWatchlist = [...currentWatchlist, { ticker }]
+      localStorage.setItem('watchlist', JSON.stringify(newWatchlist))
     } catch (error) {
       console.error('Error adding to watchlist:', error)
       const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
@@ -126,7 +139,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
 
   const renderStockRow = (stock) => {
     if (!stock) return null
-    
+
     const { ticker, name, latest, change, pchange, timestamp } = stock
     const percentageChange = pchange ? `${pchange.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)

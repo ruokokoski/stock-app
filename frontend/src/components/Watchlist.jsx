@@ -20,7 +20,12 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
         const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
         const user = JSON.parse(loggedUserJSON)
         const items = await getWatchlist(user.token)
-        //console.log('Items: ', items)
+
+        const cachedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || []
+        if (JSON.stringify(items) !== JSON.stringify(cachedWatchlist)) {
+          localStorage.setItem('watchlist', JSON.stringify(items))
+        }
+
         setWatchlistItems(items)
 
         // Fetch Finnhub data for each stock
@@ -69,7 +74,11 @@ const Watchlist = ({ setMessage, setMessageVariant }) => {
 
       try {
       await Promise.all(selectedItems.map(id => deleteWatchlistItem(id, user.token)))
-      setWatchlistItems(watchlistItems.filter(item => !selectedItems.includes(item.id)))
+      const updatedWatchlist = watchlistItems.filter(item => !selectedItems.includes(item.id))
+      setWatchlistItems(updatedWatchlist)
+
+      localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist))
+
       setSelectedItems([])
       setMessage('Stock(s) removed from watchlist')
       setMessageVariant('success')
