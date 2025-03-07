@@ -11,7 +11,7 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
     <Table striped bordered hover className="tight-table" style={{ width: '100%' }}>
       <thead>
         <tr>
-        <th 
+          <th 
             style={{ width: '3%', cursor: 'pointer' }}
             onClick={() => onSort('ticker')}
           >
@@ -25,12 +25,37 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
           </th>
           <th style={{ width: '7%' }}>Price</th>
           <th style={{ width: '7%' }}>24h</th>
-          <th style={{ width: '8%' }}>YTD</th>
+          <th 
+            style={{ width: '8%', cursor: 'pointer' }}
+            onClick={() => onSort('ytdpricereturn')}
+          >
+            YTD {getSortIndicator('ytdpricereturn')}
+          </th>
           <th style={{ width: '8%' }}>MCap</th>
-          <th style={{ width: '7%' }}>P/E</th>
-          <th style={{ width: '7%' }}>P/B</th>
-          <th style={{ width: '8%' }}>ROE</th>
-          <th style={{ width: '8%' }}>Div</th>
+          <th 
+            style={{ width: '7%', cursor: 'pointer' }}
+            onClick={() => onSort('pe')}
+          >
+            P/E {getSortIndicator('pe')}
+          </th>
+          <th 
+            style={{ width: '7%', cursor: 'pointer' }}
+            onClick={() => onSort('pb')}
+          >
+            P/B {getSortIndicator('pb')}
+          </th>
+          <th 
+            style={{ width: '8%', cursor: 'pointer' }}
+            onClick={() => onSort('roe')}
+          >
+            ROE {getSortIndicator('roe')}
+          </th>
+          <th 
+            style={{ width: '8%', cursor: 'pointer' }}
+            onClick={() => onSort('divyield')}
+          >
+            Div {getSortIndicator('divyield')}
+          </th>
           <th style={{ width: '8%' }}>Updated</th>
           <th style={{ width: '3%' }}></th>
         </tr>

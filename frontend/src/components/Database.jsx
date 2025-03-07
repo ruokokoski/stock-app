@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
 import DatabaseTable from './DatabaseTable'
-import { getColor, convertUTCToLocal } from '../utils/helpers'
+import { getColor } from '../utils/helpers'
 
 const WATCHLIST_COUNT = 30
 
@@ -41,25 +41,16 @@ const Database = ({ setMessage, setMessageVariant }) => {
       
       const oldestStocks = [...currentStocks]
         .sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt))
-        .slice(0, 25)
+        .slice(0, 20)
 
-      console.log('Stocks to update (20 oldest timestamps):', oldestStocks.map(stock => stock.ticker))
+      console.log('Stocks to update (20 oldest):', oldestStocks.map(stock => stock.ticker))
 
       const updateResults = await Promise.allSettled(
         oldestStocks.map(async (stock) => {
-          const tickerData = await finnhubService.getTicker(stock.ticker, null, stock.name)
-          const metricsData = await finnhubService.getMetrics(stock.ticker)
-          
-          //return { ticker: stock.ticker, tickerData, metricsData }
+          await finnhubService.getTicker(stock.ticker, null, stock.name)
+          await finnhubService.getMetrics(stock.ticker)
         })
       )
-      /*
-      const updateResults = await Promise.allSettled(
-        oldestStocks.map(stock => 
-          finnhubService.getTicker(stock.ticker, null, stock.name)
-        )
-      )
-      */
 
       updateResults.forEach((result) => {
         if (result.status === 'rejected') {
