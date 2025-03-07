@@ -106,7 +106,13 @@ const Database = ({ setMessage, setMessageVariant }) => {
 
   const renderStocks = (stock) => {
     const percentageChange = stock.pchange !== null ? `${stock.pchange.toFixed(2)}%` : '-'
+    const ytdChange = stock.ytdpricereturn !== null ? `${stock.ytdpricereturn.toFixed(2)}%` : '-'
     const color = getColor(percentageChange)
+    const ytdcolor = getColor(ytdChange)
+
+    const marketCap = stock.marketcap 
+      ? `${stock.marketcap >= 1000 ? `${(stock.marketcap / 1000).toFixed(1)}T` : `${stock.marketcap.toFixed(1)}B`}`
+      : '-'
 
     return (
       <tr key={stock.ticker}>
@@ -126,7 +132,15 @@ const Database = ({ setMessage, setMessageVariant }) => {
         </td>
         <td>{stock.latest || '-'}</td>
         <td style={color}>{percentageChange}</td>
-        <td>{stock.timestamp ? convertUTCToLocal(stock.timestamp) : '-'}</td>
+
+        <td style={ytdcolor}>{ytdChange}</td>
+        <td>{marketCap}</td>
+        <td>{stock.pe || '-'}</td>
+        <td>{stock.pb || '-'}</td>
+        <td>{stock.roe ? `${stock.roe.toFixed(2)}%` : '-'}</td>
+        <td>{stock.divyield ? `${stock.divyield.toFixed(2)}%` : '-'}</td>
+
+        <td>{stock.timestamp ? new Date(stock.timestamp).toLocaleDateString() : '-'}</td>
         <td>
           <button
             onClick={() => handleAddToWatchlist(stock.ticker)}

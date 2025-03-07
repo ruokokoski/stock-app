@@ -2,7 +2,7 @@ const axios = require('axios')
 const router = require('express').Router()
 const { FINNHUB_API_KEY } = require('../util/config')
 const { getStockByTicker } = require('../util/tickerHelper')
-const { saveStockDataToDatabase } = require('../util/stockService')
+const { saveStockDataToDatabase, saveMetricsToDatabase } = require('../util/stockService')
 
 const SEARCH_RESULTS_LIMIT = 5
 const ARTICLE_LIMIT = 10
@@ -293,6 +293,8 @@ router.post('/metrics', async (request, response) => {
       ytdPriceReturn: data.metric.yearToDatePriceReturnDaily ?? '-',
       quarterlyMetrics,
     }
+
+    await saveMetricsToDatabase(ticker, filteredData)
 
     response.status(200).json(filteredData)
   } catch (error) {
