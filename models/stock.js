@@ -39,7 +39,31 @@ Stock.init({
   },
   exchange: {
     type: DataTypes.STRING,
-  }
+  },
+  marketcap: {
+    type: DataTypes.FLOAT,
+  },
+  pe: {
+    type: DataTypes.FLOAT,
+  },
+  pb: {
+    type: DataTypes.FLOAT,
+  },
+  roe: {
+    type: DataTypes.FLOAT,
+  },
+  divyield: {
+    type: DataTypes.FLOAT,
+  },
+  ytdpricereturn: {
+    type: DataTypes.FLOAT,
+  },
+  revgrowth: {
+    type: DataTypes.FLOAT,
+  },
+  ebitdacagr5y: {
+    type: DataTypes.FLOAT,
+  },
 }, {
   sequelize,
   underscored: true,
