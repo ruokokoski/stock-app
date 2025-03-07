@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import cryptoService from '../services/coincap'
 import { Table } from 'react-bootstrap'
-import { getColor, formatCurrency, formatMarketCap } from '../utils/helpers'
+import { getColor, formatCurrency, formatCryptoMarketCap } from '../utils/helpers'
 
 const LIMIT = 20
 
@@ -18,7 +18,7 @@ const CryptoRow = ({ coin }) => (
     </td>
     <td>{coin.symbol}</td>
     <td>{formatCurrency(coin.priceUsd)}</td>
-    <td>{formatMarketCap(coin.marketCapUsd)}</td>
+    <td>{formatCryptoMarketCap(coin.marketCapUsd)}</td>
     <td style={getColor(coin.changePercent24Hr)}>
       {parseFloat(coin.changePercent24Hr).toFixed(2)}%
     </td>

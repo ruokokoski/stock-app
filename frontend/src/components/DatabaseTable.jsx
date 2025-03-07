@@ -18,12 +18,17 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
             Tick {getSortIndicator('ticker')}
           </th>
           <th 
-            style={{ width: '31%', cursor: 'pointer' }}
+            style={{ width: '29%', cursor: 'pointer' }}
             onClick={() => onSort('name')}
           >
             Name {getSortIndicator('name')}
           </th>
-          <th style={{ width: '7%' }}>Price</th>
+          <th 
+            style={{ width: '8%', cursor: 'pointer' }}
+            onClick={() => onSort('latest')}
+          >
+            Price {getSortIndicator('latest')}
+          </th>
           <th style={{ width: '7%' }}>24h</th>
           <th 
             style={{ width: '8%', cursor: 'pointer' }}
@@ -31,7 +36,12 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
           >
             YTD {getSortIndicator('ytdpricereturn')}
           </th>
-          <th style={{ width: '8%' }}>MCap</th>
+          <th 
+            style={{ width: '9%', cursor: 'pointer' }}
+            onClick={() => onSort('marketcap')}
+          >
+            MCap {getSortIndicator('marketcap')}
+          </th>
           <th 
             style={{ width: '7%', cursor: 'pointer' }}
             onClick={() => onSort('pe')}

@@ -5,13 +5,13 @@ const { Stock } = require('../models')
 router.get('/', async (req, res) => {
   const { sortBy = 'ticker', sortOrder = 'ASC' } = req.query
   
-  const validSortFields = ['ticker', 'name', 'pe', 'pb', 'roe', 'divyield', 'ytdpricereturn']
+  const validSortFields = ['ticker', 'name', 'latest', 'marketcap', 'pe', 'pb', 'roe', 'divyield', 'ytdpricereturn']
   const validOrders = ['ASC', 'DESC']
 
   const sortField = validSortFields.includes(sortBy) ? sortBy : 'ticker'
   const order = validOrders.includes(sortOrder.toUpperCase()) ? sortOrder : 'ASC'
 
-  const isNumericField = ['pe', 'pb', 'roe', 'divyield', 'ytdpricereturn'].includes(sortField)
+  const isNumericField = ['latest', 'marketcap', 'pe', 'pb', 'roe', 'divyield', 'ytdpricereturn'].includes(sortField)
 
   let orderClause
 

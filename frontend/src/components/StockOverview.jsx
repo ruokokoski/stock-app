@@ -1,6 +1,6 @@
 import Chart from './Chart'
 import DateInputs from './DateInputs'
-import { handleDateChange } from '../utils/helpers'
+import { handleDateChange, formatMarketCap } from '../utils/helpers'
 
 const StockOverview = ({
   name,
@@ -46,7 +46,7 @@ const StockOverview = ({
             <tbody>
               <tr>
                 <td>Market Cap</td>
-                <td>{metricsData.marketCap ?? 'N/A'}B</td>
+                <td>{metricsData.marketCap ? formatMarketCap(metricsData.marketCap) : 'N/A'}</td>
                 <td>Div yield</td>
                 <td>{metricsData.divYield ?? 'N/A'}%</td>
                 <td>ROE</td>

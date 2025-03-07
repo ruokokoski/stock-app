@@ -106,6 +106,11 @@ router.post('/search', async (request, response) => {
         return null
       }
 
+      if (quoteData.c < 0.01) {
+        console.log(`Skipping ${symbol} - price too low (${quoteData.c})`)
+        return null
+      }
+
       const timestampUTC = new Date(quoteData.t * 1000).toISOString()
       const cutoffDate = new Date('2020-01-01T00:00:00Z').toISOString()
       
@@ -268,7 +273,7 @@ router.post('/metrics', async (request, response) => {
 
     const filteredData = {
       marketCap: data.metric.marketCapitalization != null 
-        ? (data.metric.marketCapitalization / 1000).toFixed(0) 
+        ? data.metric.marketCapitalization.toFixed(0) 
         : '-',
       pe: data.metric.peAnnual?.toFixed(2) ?? '-',
       pb: data.metric.pbAnnual?.toFixed(2) ?? '-',

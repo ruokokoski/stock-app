@@ -39,7 +39,7 @@ export const formatCurrency = (amount) => {
   return `$${parseFloat(amount).toFixed(2)}`
 }
 
-export const formatMarketCap = (marketCap) => {
+export const formatCryptoMarketCap = (marketCap) => {
   return `$${(parseFloat(marketCap) / 1e9).toFixed(2)}B`
 }
 
@@ -96,4 +96,17 @@ export const handleDateChange = (type, value, setStartDate, setEndDate, setChart
     setEndDate(newDate)
   }
   setChartInterval('custom')
+}
+
+export const formatMarketCap = (marketCap) => {
+  if (marketCap == null || isNaN(marketCap)) {
+    return '-'
+  }
+
+  if (marketCap >= 1000000) {
+    return `${(marketCap / 1000000).toFixed(2)}T`
+  } else if (marketCap >= 1000) {
+    return `${(marketCap / 1000).toFixed(1)}B`
+  }
+  return `${marketCap.toFixed(1)}M`
 }

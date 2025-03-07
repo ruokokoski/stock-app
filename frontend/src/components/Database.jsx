@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
 import DatabaseTable from './DatabaseTable'
-import { getColor } from '../utils/helpers'
+import { getColor, formatMarketCap } from '../utils/helpers'
 
 const WATCHLIST_COUNT = 30
+const UPDATE_LIMIT = 15
 
 const Database = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState([])
@@ -41,9 +42,9 @@ const Database = ({ setMessage, setMessageVariant }) => {
       
       const oldestStocks = [...currentStocks]
         .sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt))
-        .slice(0, 20)
+        .slice(0, UPDATE_LIMIT)
 
-      console.log('Stocks to update (20 oldest):', oldestStocks.map(stock => stock.ticker))
+      console.log(`Stocks to update (${UPDATE_LIMIT} oldest): `, oldestStocks.map(stock => stock.ticker))
 
       const updateResults = await Promise.allSettled(
         oldestStocks.map(async (stock) => {
@@ -111,10 +112,6 @@ const Database = ({ setMessage, setMessageVariant }) => {
     const color = getColor(percentageChange)
     const ytdcolor = getColor(ytdChange)
 
-    const marketCap = stock.marketcap 
-      ? `${stock.marketcap >= 1000 ? `${(stock.marketcap / 1000).toFixed(1)}T` : `${stock.marketcap.toFixed(1)}B`}`
-      : '-'
-
     return (
       <tr key={stock.ticker}>
         <td>{stock.ticker}</td>
@@ -135,7 +132,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
         <td style={color}>{percentageChange}</td>
 
         <td style={ytdcolor}>{ytdChange}</td>
-        <td>{marketCap}</td>
+        <td>{stock.marketcap ? formatMarketCap(stock.marketcap) : '-'}</td>
         <td>{stock.pe || '-'}</td>
         <td>{stock.pb || '-'}</td>
         <td>{stock.roe ? `${stock.roe.toFixed(2)}%` : '-'}</td>

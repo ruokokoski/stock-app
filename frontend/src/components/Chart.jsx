@@ -5,13 +5,10 @@ import { formatChartData, createToolTip } from '../utils/helpers'
 const Chart = ({ chartData, name, selectedInterval }) => {
   const chartContainerRef = useRef(null)
   const chartRef = useRef(null)
-  //const areaSeriesRef = useRef(null)
   const currentSeriesRef = useRef(null)
   const toolTipRef = useRef(null)
   const [seriesType, setSeriesType] = useState('area')
-  /* eslint-disable no-unused-vars */
-  const [toolTip, setToolTip] = useState(null)
-  /* eslint-enable no-unused-vars */
+  //const [toolTip, setToolTip] = useState(null)
 
   useEffect(() => {
     const container = chartContainerRef.current
