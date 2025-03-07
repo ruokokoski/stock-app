@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         'description',
         'exchange',
         'createdAt',
-        'updatedAt'
+        //'updatedAt'
       ]
     },
     order: [[fn('LOWER', col(sortField)), order]]

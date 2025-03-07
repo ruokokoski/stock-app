@@ -40,20 +40,30 @@ const Database = ({ setMessage, setMessageVariant }) => {
       const currentStocks = await stockService.getAllFromDB(sortConfig)
       
       const oldestStocks = [...currentStocks]
-        .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+        .sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt))
         .slice(0, 25)
 
-      console.log('Stocks to update (25 oldest timestamps):', oldestStocks.map(stock => stock.ticker))
+      console.log('Stocks to update (20 oldest timestamps):', oldestStocks.map(stock => stock.ticker))
 
+      const updateResults = await Promise.allSettled(
+        oldestStocks.map(async (stock) => {
+          const tickerData = await finnhubService.getTicker(stock.ticker, null, stock.name)
+          const metricsData = await finnhubService.getMetrics(stock.ticker)
+          
+          //return { ticker: stock.ticker, tickerData, metricsData }
+        })
+      )
+      /*
       const updateResults = await Promise.allSettled(
         oldestStocks.map(stock => 
           finnhubService.getTicker(stock.ticker, null, stock.name)
         )
       )
+      */
 
-      updateResults.forEach((result, index) => {
+      updateResults.forEach((result) => {
         if (result.status === 'rejected') {
-          console.error('Failed to update:', oldestStocks[index].ticker, result.reason)
+          console.error('Failed to update:', result.reason)
         }
       })
 
