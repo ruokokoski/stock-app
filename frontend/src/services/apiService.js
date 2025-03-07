@@ -48,8 +48,13 @@ const apiService = (baseUrl) => ({
     const response = await axios.get(`${baseUrl}/${ticker}`)
     return response.data
   },
-  getAllFromDB: async () => { // own database
-    const response = await axios.get(baseUrl)
+  getAllFromDB: async (sortConfig) => { // own database
+    const response = await axios.get('/api/stocks', {
+      params: {
+        sortBy: sortConfig.field,
+        sortOrder: sortConfig.order
+      }
+    })
     return response.data
   }
 })

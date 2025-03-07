@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
-import StockTable from './StockTable'
+import DatabaseTable from './DatabaseTable'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 
 const WATCHLIST_COUNT = 30
@@ -10,10 +10,14 @@ const WATCHLIST_COUNT = 30
 const Database = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [sortConfig, setSortConfig] = useState({
+    field: 'ticker',
+    order: 'ASC'
+  })
 
   const fetchData = useCallback(async () => {
     try {
-      const items = await stockService.getAllFromDB()
+      const items = await stockService.getAllFromDB(sortConfig)
       setStockData(items)
       setLoading(false)
     } catch (error) {
@@ -22,11 +26,18 @@ const Database = ({ setMessage, setMessageVariant }) => {
       setMessageVariant('danger')
       setLoading(false)
     }
-  }, [setMessage, setMessageVariant])
+  }, [setMessage, setMessageVariant, sortConfig])
+
+  const handleSort = (field) => {
+    setSortConfig(prev => ({
+      field,
+      order: prev.field === field && prev.order === 'ASC' ? 'DESC' : 'ASC'
+    }))
+  }
 
   const updateOldestStocks = useCallback(async () => {
     try {
-      const currentStocks = await stockService.getAllFromDB()
+      const currentStocks = await stockService.getAllFromDB(sortConfig)
       
       const oldestStocks = [...currentStocks]
         .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
@@ -139,7 +150,12 @@ const Database = ({ setMessage, setMessageVariant }) => {
         <div>Database is empty</div>
         ) : (
         <>
-          <StockTable data={stockData} renderRow={renderStocks} />
+          <DatabaseTable 
+            data={stockData} 
+            renderRow={renderStocks}
+            sortConfig={sortConfig}
+            onSort={handleSort}
+          />
         </>
         )}
 

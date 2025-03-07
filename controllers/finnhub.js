@@ -129,12 +129,6 @@ router.post('/search', async (request, response) => {
         description: 'No description',
       }
 
-      /*
-      if (stockData.latest === 0) {
-        return null
-      }
-      */
-
       await saveStockDataToDatabase(stockData)
 
       return stockData

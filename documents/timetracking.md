@@ -48,4 +48,5 @@
 | 27.02 | 6    | add change to stock model, YTD and custom ranges to chart, fix more bugs, refactoring |
 | 28.02 | 6    | add History and Quarterly tabs, allow saving data to file, fetch metadata from own db |
 | 06.03 | 6    | create page for own db, add timed update to db, update StockPage and fix bugs |
-| **Total** | **168** | |
+| 07.03 | 2    | sorting to Database |
+| **Total** | **170** | |

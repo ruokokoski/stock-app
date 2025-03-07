@@ -1,8 +1,16 @@
 const router = require('express').Router()
-
+const { fn, col } = require('sequelize')
 const { Stock } = require('../models')
 
 router.get('/', async (req, res) => {
+  const { sortBy = 'ticker', sortOrder = 'ASC' } = req.query
+  
+  const validSortFields = ['ticker', 'name']
+  const validOrders = ['ASC', 'DESC']
+
+  const sortField = validSortFields.includes(sortBy) ? sortBy : 'ticker'
+  const order = validOrders.includes(sortOrder.toUpperCase()) ? sortOrder : 'ASC'
+
   const stocks = await Stock.findAll({
     attributes: {
       exclude: [
@@ -13,7 +21,7 @@ router.get('/', async (req, res) => {
         'updatedAt'
       ]
     },
-    order: [['ticker', 'ASC']]
+    order: [[fn('LOWER', col(sortField)), order]]
   })
   res.status(200).json(stocks)
 })
