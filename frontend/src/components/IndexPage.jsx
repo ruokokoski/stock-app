@@ -1,5 +1,5 @@
 import { useParams, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { twelvedataService, polygonService } from '../services/stockServices'
 import { getColor, formatDate, convertUTCToLocal } from '../utils/helpers'
 import Chart from './Chart'
@@ -14,21 +14,23 @@ const IndexPage = () => {
   const [initialDataUsed, setInitialDataUsed] = useState(false)
   const [selectedInterval, setSelectedInterval] = useState('1m')
 
-  const fetchData = async (range) => {
-    try {
-      const response = ticker.startsWith('I:') 
-        ? await polygonService.getTicker(ticker)
-        : await twelvedataService.getTicker(ticker, range)
-      setChartData(response.chartData || [])
-      if (response.chartData && response.chartData.length > 0) {
-        const latestTime = response.chartData[response.chartData.length - 1].time
-        setLastUpdated(formatDate(latestTime))
+  const fetchData = useCallback(
+    async (range) => {
+      try {
+        const response = ticker.startsWith('I:') 
+          ? await polygonService.getTicker(ticker)
+          : await twelvedataService.getTicker(ticker, range)
+        setChartData(response.chartData || [])
+        if (response.chartData && response.chartData.length > 0) {
+          const latestTime = response.chartData[response.chartData.length - 1].time
+          setLastUpdated(formatDate(latestTime))
+        }
+        console.log('Chart data was fetched from API')
+      } catch (error) {
+        console.error(`Error fetching data for ${ticker}:`, error)
       }
-      console.log('Chart data was fetched from API')
-    } catch (error) {
-      console.error(`Error fetching data for ${ticker}:`, error)
-    }
-  }
+    }, [ticker]
+  )
 
   useEffect(() => {
     setFullData(forwardedChartData)
@@ -42,7 +44,7 @@ const IndexPage = () => {
     } else if (!ticker.startsWith('I:')) {
       fetchData(selectedInterval)
     }
-  }, [ticker, forwardedChartData, selectedInterval, initialDataUsed])
+  }, [ticker, forwardedChartData, selectedInterval, initialDataUsed, fetchData])
 
   const setChartInterval = (interval) => {
     console.log(`Interval set to: ${interval}`)

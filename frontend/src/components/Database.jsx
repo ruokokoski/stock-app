@@ -63,7 +63,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
       setMessage('Error during stock updates')
       setMessageVariant('danger')
     }
-  }, [fetchData, setMessage, setMessageVariant])
+  }, [fetchData, setMessage, setMessageVariant, sortConfig])
 
   useEffect(() => {
     fetchData()
