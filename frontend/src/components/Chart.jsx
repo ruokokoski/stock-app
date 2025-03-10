@@ -154,6 +154,12 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       ticksVisible: true,
       allowBoldLabels: true,
     })
+
+    if (formattedData.length > 0) {
+      console.log('Chart interval: ', selectedInterval)
+      console.log('First element:', formattedData[0])
+      console.log('Last element:', formattedData[formattedData.length - 1])
+    }
     
   }, [chartData, selectedInterval, seriesType])
 

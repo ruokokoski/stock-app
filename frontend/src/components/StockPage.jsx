@@ -84,28 +84,32 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     const now = Date.now()
     //const shortExpirationTime = 60 * 1000 // 1 min
     //const longExpirationTime = 60 * 60 * 1000 // 1 hour
-    const storedData = localStorage.getItem(storageKey)
     
-    if (storedData) {
-      const parsedData = JSON.parse(storedData)
-        
-      const dataAge = now - parsedData.timestamp
-    
-      if (dataAge < 60 * 1000) { // 1 minute
-        setChartData(parsedData.chartData || []);
-        console.log(`Used cached data for ${ticker}, interval: ${range}`)
-        return
-      } else if (dataAge < 60 * 60 * 1000) { // 1 hour
-        setChartData(parsedData.chartData || [])
-      } else {
-        localStorage.removeItem(storageKey)
+    let storedData = null
+    if (range !== 'custom') {
+      storedData = localStorage.getItem(storageKey)
+      
+      if (storedData) {
+        const parsedData = JSON.parse(storedData)
+        const dataAge = now - parsedData.timestamp
+      
+        if (dataAge < 60 * 1000) { // 1 minute
+          setChartData(parsedData.chartData || [])
+          console.log(`Used cached data for ${ticker}, interval: ${range}`)
+          return
+        } else if (dataAge < 60 * 60 * 1000) { // 1 hour
+          setChartData(parsedData.chartData || [])
+        } else {
+          localStorage.removeItem(storageKey)
+        }
       }
     }
     try {
       let response
       if (range === 'custom') {
         if (startDate && endDate) {
-          response = await tiingoService.getHistorical(ticker, startDate, endDate);
+          console.log(`Fetching custom range data from ${startDate} to ${endDate}`)
+          response = await tiingoService.getHistorical(ticker, startDate, endDate)
         } else return
       }
       else if (range === 'YTD') {
@@ -124,10 +128,18 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
       if (response.chartData && response.chartData.length > 0) {
         setChartData(response.chartData)
 
-        localStorage.setItem(storageKey, JSON.stringify({
-          chartData: response.chartData,
-          timestamp: now
-        }))
+        //console.log("First element:", response.chartData[0])
+        //console.log("Last element:", response.chartData[response.chartData.length - 1])
+
+        if (range !== 'custom') {
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              chartData: response.chartData,
+              timestamp: now
+            })
+          )
+        }
       }
       console.log('Chart data was fetched from API')
     } catch (error) {
@@ -141,9 +153,10 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
   useEffect(() => {
     cleanExpiredData()
     if (selectedInterval === 'custom' && (!startDate || !endDate)) {
-      //console.log('Skipping fetch: startDate or endDate is missing')
+      console.log('Skipping fetch: startDate or endDate is missing')
       return
     }
+    console.log('Triggering fetchHistoricalData')
     fetchHistoricalData(selectedInterval)
   }, [ticker, selectedInterval, fetchHistoricalData, startDate, endDate])
 
