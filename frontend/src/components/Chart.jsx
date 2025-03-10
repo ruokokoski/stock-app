@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { createChart } from 'lightweight-charts'
 import { formatChartData, createToolTip } from '../utils/helpers'
 
@@ -9,6 +9,42 @@ const Chart = ({ chartData, name, selectedInterval }) => {
   const toolTipRef = useRef(null)
   const [seriesType, setSeriesType] = useState('area')
   //const [toolTip, setToolTip] = useState(null)
+
+  const handleToolTipMove = useCallback((param, newAreaSeries, toolTipInstance) => {
+    if (
+      param.point === undefined ||
+      !param.time ||
+      param.point.x < 0 ||
+      param.point.x > chartContainerRef.current.clientWidth ||
+      param.point.y < 0 ||
+      param.point.y > chartContainerRef.current.clientHeight
+    ) {
+      toolTipInstance.style.display = 'none'
+    } else {
+      const dateStr = new Date(param.time * 1000).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+      toolTipInstance.style.display = 'block'
+      const data = param.seriesData.get(newAreaSeries)
+      const price = data.value !== undefined ? data.value : data.close
+
+      toolTipInstance.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${name.split(' ')[0]}</div>
+        <div style="font-size: 16px; margin: 4px 0px; color: black">
+          ${Math.round(100 * price) / 100}
+        </div>
+        <div style="color: black">
+          ${dateStr}
+        </div>`
+
+      const padding = 120
+      const margin = 280
+
+      toolTipInstance.style.left = `${padding}}px`
+      toolTipInstance.style.top = `${margin + padding}px`
+    }
+  }, [name]) 
 
   useEffect(() => {
     const container = chartContainerRef.current
@@ -96,7 +132,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
         toolTipRef.current = null
       }
     }
-  }, [selectedInterval, name, seriesType])
+  }, [selectedInterval, name, seriesType, handleToolTipMove])
 
   useEffect(() => {
     const chart = chartRef.current
@@ -120,42 +156,6 @@ const Chart = ({ chartData, name, selectedInterval }) => {
     })
     
   }, [chartData, selectedInterval, seriesType])
-
-  const handleToolTipMove = (param, newAreaSeries, toolTipInstance) => {
-    if (
-      param.point === undefined ||
-      !param.time ||
-      param.point.x < 0 ||
-      param.point.x > chartContainerRef.current.clientWidth ||
-      param.point.y < 0 ||
-      param.point.y > chartContainerRef.current.clientHeight
-    ) {
-      toolTipInstance.style.display = 'none'
-    } else {
-      const dateStr = new Date(param.time * 1000).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-      toolTipInstance.style.display = 'block'
-      const data = param.seriesData.get(newAreaSeries)
-      const price = data.value !== undefined ? data.value : data.close
-
-      toolTipInstance.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${name.split(' ')[0]}</div>
-        <div style="font-size: 16px; margin: 4px 0px; color: black">
-          ${Math.round(100 * price) / 100}
-        </div>
-        <div style="color: black">
-          ${dateStr}
-        </div>`
-
-      const padding = 120
-      const margin = 280
-
-      toolTipInstance.style.left = `${padding}}px`
-      toolTipInstance.style.top = `${margin + padding}px`
-    }
-  }
 
   return (
     <div>
