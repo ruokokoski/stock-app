@@ -24,49 +24,54 @@ const COMMON_STOCKS = [
 ]
 
 const Stocks = ({ setMessage, setMessageVariant }) => {
-  const [stockData, setStockData] = useState(() => {
-    const initialStockData = {}
-    COMMON_STOCKS.forEach(({ ticker }) => {
-      const storedData = localStorage.getItem(`stock-${ticker}`)
-      if (storedData) {
-        initialStockData[ticker] = JSON.parse(storedData).data
-      }
-    })
-    return initialStockData
-  })
+  const [stockData, setStockData] = useState({})
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [searchLoading, setSearchLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
-      const newStockData = { ...stockData }
+      const newStockData = {}
       const now = Date.now()
       const expirationTime = 60 * 1000 // 1 min
       for (const { ticker, name } of COMMON_STOCKS) {
         const storageKey = `stock-${ticker}`
         const storedData = localStorage.getItem(storageKey)
 
-        if (!storedData || (storedData && now - JSON.parse(storedData).timestamp > expirationTime)) {
-          try {
-            const data = await finnhubService.getTicker(ticker, null, name)
-            const dataWithTimestamp = {
-              ...data,
-              //timestamp: now,
+        try {
+          if (storedData) {
+            const parsedData = JSON.parse(storedData)
+            if (now - parsedData.timestamp <= expirationTime) {
+              newStockData[ticker] = parsedData.data
+              console.log('Data was fresh.')
+              continue
             }
-            localStorage.setItem(
-              storageKey,
-              JSON.stringify({
-                data: dataWithTimestamp,
-                timestamp: now,
-              })
-            )
-            newStockData[ticker] = dataWithTimestamp
-          } catch (error) {
-            console.error('Error fetching data from Finnhub:', error)
-            setMessage('Error fetching data from Finnhub')
-            setMessageVariant('danger')
           }
+
+          const data = await finnhubService.getTicker(ticker, null, name)
+          const dataWithTimestamp = {
+            ...data,
+            //timestamp: now,
+          }
+
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              data: dataWithTimestamp,
+              timestamp: now,
+            })
+          )
+          newStockData[ticker] = dataWithTimestamp
+          //console.log('Data fetched from API for', ticker)
+        } catch (error) {
+          console.error(`Error fetching ${ticker} data:`, error)
+          newStockData[ticker] = {
+            latest: { close: '-', datetime: '-' },
+            previous: { close: '-', percentageChange: '-' },
+            timestamp: now,
+          }
+          setMessage(`Error fetching ${ticker} data`)
+          setMessageVariant('danger')
         }
       }
       
