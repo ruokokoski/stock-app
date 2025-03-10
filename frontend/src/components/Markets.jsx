@@ -20,23 +20,13 @@ const POLYGON_TICKERS = [
 ]
 
 const Markets = ({ setMessage, setMessageVariant }) => {
-  const [marketData, setMarketData] = useState(() => {
-    const initialMarketData = {}
-    const allTickers = [...TWELVEDATA_TICKERS, ...POLYGON_TICKERS]
-    allTickers.forEach(({ ticker }) => {
-      const storedData = localStorage.getItem(`market-${ticker}`)
-      if (storedData) {
-        initialMarketData[ticker] = JSON.parse(storedData).data
-      }
-    })
-    return initialMarketData
-  })
+  const [marketData, setMarketData] = useState({})
   const [newsData, setNewsData] = useState([])
   const [newsLoading, setNewsLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
-      const newMarketData = { ...marketData }
+      const newMarketData = { }
       const now = Date.now()
       const expirationTime = 60 * 1000 // 1 minute
 
@@ -45,32 +35,40 @@ const Markets = ({ setMessage, setMessageVariant }) => {
           const storageKey = `market-${ticker}`
           const storedData = localStorage.getItem(storageKey)
 
-          if (!storedData || (storedData && now - JSON.parse(storedData).timestamp > expirationTime)) {
-            try {
-              const data = await fetchService(ticker)
-              const dataWithTimestamp = {
-                ...data,
-                timestamp: now,
+          try {
+            if (storedData) {
+              const parsedData = JSON.parse(storedData)
+              if (now - parsedData.timestamp <= expirationTime) {
+                newMarketData[ticker] = parsedData.data
+                console.log('Data was fresh')
+                continue
               }
-              localStorage.setItem(
-                storageKey,
-                JSON.stringify({
-                  data: dataWithTimestamp,
-                  timestamp: now,
-                })
-              )
-              newMarketData[ticker] = dataWithTimestamp
-              console.log('Data was fetched from API')
-            } catch (error) {
-              console.log(`Error fetching ${ticker} data:`, error)
-              newMarketData[ticker] = {
-                latest: { close: '-', datetime: '-' },
-                previous: { close: '-', percentageChange: '-' },
-                timestamp: now,
-              }
-              setMessage(`Error fetching ${ticker} data`)
-              setMessageVariant('danger')
             }
+
+            const data = await fetchService(ticker)
+            const dataWithTimestamp = {
+              ...data,
+              timestamp: now,
+            }
+            
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                data: dataWithTimestamp,
+                timestamp: now,
+              })
+            )
+            newMarketData[ticker] = dataWithTimestamp
+            console.log('Data fetched from API for', ticker)
+          } catch (error) {
+            console.error(`Error fetching ${ticker} data:`, error)
+            newMarketData[ticker] = {
+              latest: { close: '-', datetime: '-' },
+              previous: { close: '-', percentageChange: '-' },
+              timestamp: now,
+            }
+            setMessage(`Error fetching ${ticker} data`)
+            setMessageVariant('danger')
           }
         }
       }

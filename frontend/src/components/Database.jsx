@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
-import { addToWatchlist } from '../services/watchlists'
 import DatabaseTable from './DatabaseTable'
 import { getColor, formatMarketCap, handleAddToWatchlist } from '../utils/helpers'
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { finnhubService } from '../services/stockServices'
-import { addToWatchlist } from '../services/watchlists'
 import StockTable from './StockTable'
 import SearchForm from './SearchForm'
 import { getColor, convertUTCToLocal, handleAddToWatchlist } from '../utils/helpers'
