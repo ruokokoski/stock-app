@@ -49,4 +49,5 @@
 | 28.02 | 6    | add History and Quarterly tabs, allow saving data to file, fetch metadata from own db |
 | 06.03 | 6    | create page for own db, add timed update to db, update StockPage and fix bugs |
 | 07.03 | 5    | sorting, showing and updating metrics on Database page, feature fixes |
-| **Total** | **173** | |
+| 10.03 | 1    | fixes, refactoring |
+| **Total** | **174** | |

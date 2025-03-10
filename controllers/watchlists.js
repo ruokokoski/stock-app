@@ -66,6 +66,7 @@ router.get('/', tokenExtractor, async (req, res) => {
     const watchlistItems = await Watchlist.findAll({
       where: { userId: req.user.id },
       include: [{ model: Stock, attributes: ['ticker', 'name'] }],
+      order: [[{ model: Stock }, 'ticker', 'ASC']],
     })
     const stocks = watchlistItems.map(item => ({
       id: item.id,

@@ -4,33 +4,22 @@ import { finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
 import StockTable from './StockTable'
 import SearchForm from './SearchForm'
-import { getColor, convertUTCToLocal } from '../utils/helpers'
-
-const WATCHLIST_COUNT = 30
+import { getColor, convertUTCToLocal, handleAddToWatchlist } from '../utils/helpers'
 
 const COMMON_STOCKS = [
   { ticker: 'AAPL', name: 'Apple Inc.' },
-  //{ ticker: 'AMZN', name: 'Amazon.com Inc.' },
-  //{ ticker: 'AVGO', name: 'Broadcom Inc.' },
-  //{ ticker: 'BAC', name: 'Bank of America Corp.' },
-  //{ ticker: 'COST', name: 'Costco Wholesale Corp.' },
   { ticker: 'CRM', name: 'Salesforce Inc.' },
   { ticker: 'CRWD', name: 'CrowdStrike Holdings Inc.' },
   { ticker: 'DIS', name: 'Walt Disney Co.' },
-  //{ ticker: 'F', name: 'Ford Motor Co.' },
   { ticker: 'GOOGL', name: 'Alphabet Inc.' },
   { ticker: 'JPM', name: 'JPMorgan Chase & Co.' },
   { ticker: 'KO', name: 'Coca-Cola Co.' },
-  //{ ticker: 'MCD', name: 'McDonald\'s Corp.' },
-  //{ ticker: 'META', name: 'Meta Platforms Inc.' },
   { ticker: 'MSFT', name: 'Microsoft Corp.' },
   { ticker: 'NFLX', name: 'Netflix Inc.' },
   { ticker: 'NKE', name: 'Nike Inc.' },
   { ticker: 'NVDA', name: 'NVIDIA Corp.' },
   { ticker: 'PFE', name: 'Pfizer Inc.' },
-  //{ ticker: 'PG', name: 'Procter & Gamble Co.' },
   { ticker: 'PLTR', name: 'Palantir Technologies Inc.' },
-  //{ ticker: 'PYPL', name: 'PayPal Holdings Inc.' },
   { ticker: 'V', name: 'Visa Inc.' },
   { ticker: 'WMT', name: 'Walmart Inc.' },
 ]
@@ -88,32 +77,6 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [setMessage, setMessageVariant])
 
-  const handleAddToWatchlist = async (ticker) => {
-    try {
-      const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
-      const user = JSON.parse(loggedUserJSON)
-
-      const currentWatchlist = JSON.parse(localStorage.getItem('watchlist') || '[]')
-      if (currentWatchlist.length >= WATCHLIST_COUNT) {
-        setMessage(`Watchlist limit reached (${WATCHLIST_COUNT} stocks). Remove some stocks first.`)
-        setMessageVariant('danger')
-        return
-      }
-
-      await addToWatchlist(ticker, user.token)
-      setMessage(`Added ${ticker} to your watchlist`)
-      setMessageVariant('success')
-
-      const newWatchlist = [...currentWatchlist, { ticker }]
-      localStorage.setItem('watchlist', JSON.stringify(newWatchlist))
-    } catch (error) {
-      console.error('Error adding to watchlist:', error)
-      const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
-      setMessage(errorMessage)
-      setMessageVariant('danger')
-    }
-  }
-
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
       setMessage('Search query is required')
@@ -125,9 +88,14 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
 
     try {
       const response = await finnhubService.searchSymbol(searchTerm)
-      console.log('Search response:', response.result)
+      //console.log('Search response:', response.result)
 
-      setSearchResults(response.result)
+      if (response.message) {
+        setMessage(response.message)
+        setMessageVariant('warning')
+      } else {
+        setSearchResults(response.result)
+      }
       setSearchLoading(false)
     } catch (error) {
       console.error('Error searching for symbols:', error)
@@ -167,7 +135,7 @@ const Stocks = ({ setMessage, setMessageVariant }) => {
         <td>{timestamp ? convertUTCToLocal(timestamp) : '-'}</td>
         <td>
           <button
-            onClick={() => handleAddToWatchlist(ticker)}
+            onClick={() => handleAddToWatchlist(ticker, setMessage, setMessageVariant)}
             style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
           >
             👁️

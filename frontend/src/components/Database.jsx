@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom'
 import { stockService, finnhubService } from '../services/stockServices'
 import { addToWatchlist } from '../services/watchlists'
 import DatabaseTable from './DatabaseTable'
-import { getColor, formatMarketCap } from '../utils/helpers'
+import { getColor, formatMarketCap, handleAddToWatchlist } from '../utils/helpers'
 
-const WATCHLIST_COUNT = 30
 const UPDATE_LIMIT = 15
 
 const Database = ({ setMessage, setMessageVariant }) => {
@@ -75,37 +74,6 @@ const Database = ({ setMessage, setMessageVariant }) => {
     return () => clearInterval(interval)
   }, [fetchData, updateOldestStocks])
 
-  const handleAddToWatchlist = async (ticker) => {
-    try {
-      const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
-      const user = JSON.parse(loggedUserJSON)
-
-      const currentWatchlist = JSON.parse(localStorage.getItem('watchlist') || '[]')
-      //console.log('Watchlist length: ', currentWatchlist.length)
-
-      if (currentWatchlist.length >= WATCHLIST_COUNT) {
-        setMessage(`Watchlist limit reached (${WATCHLIST_COUNT} stocks). Remove some stocks first.`)
-        setMessageVariant('warning')
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        return
-      }
-
-      await addToWatchlist(ticker, user.token)
-      setMessage(`Added ${ticker} to your watchlist`)
-      setMessageVariant('success')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-
-      const newWatchlist = [...currentWatchlist, { ticker }]
-      localStorage.setItem('watchlist', JSON.stringify(newWatchlist))
-    } catch (error) {
-      console.error('Error adding to watchlist:', error)
-      const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
-      setMessage(errorMessage)
-      setMessageVariant('danger')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }
-
   const renderStocks = (stock) => {
     const percentageChange = stock.pchange !== null ? `${stock.pchange.toFixed(2)}%` : '-'
     const ytdChange = stock.ytdpricereturn !== null ? `${stock.ytdpricereturn.toFixed(2)}%` : '-'
@@ -141,7 +109,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
         <td>{stock.timestamp ? new Date(stock.timestamp).toLocaleDateString() : '-'}</td>
         <td>
           <button
-            onClick={() => handleAddToWatchlist(stock.ticker)}
+            onClick={() => handleAddToWatchlist(stock.ticker, setMessage, setMessageVariant)}
             style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
           >
             👁️

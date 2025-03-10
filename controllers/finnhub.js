@@ -106,7 +106,7 @@ router.post('/search', async (request, response) => {
         return null
       }
 
-      if (quoteData.c < 0.01) {
+      if (quoteData.c <= 0.01) {
         console.log(`Skipping ${symbol} - price too low (${quoteData.c})`)
         return null
       }
@@ -140,6 +140,13 @@ router.post('/search', async (request, response) => {
     })
 
     const stocksWithData = (await Promise.all(stockDataPromises)).filter(Boolean)
+
+    if (stocksWithData.length === 0) {
+      return response.status(200).json({
+        result: [],
+        message: 'No stocks found, search something else.'
+      })
+    }
 
     response.status(200).json({ result: stocksWithData })
 

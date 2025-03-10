@@ -1,3 +1,7 @@
+import { addToWatchlist } from '../services/watchlists'
+
+const WATCHLIST_COUNT = 30
+
 export const getColor = (value) => {
   if (value === null || value === undefined || value === 'Loading...') {
     return { color: 'black' }
@@ -109,4 +113,35 @@ export const formatMarketCap = (marketCap) => {
     return `${(marketCap / 1000).toFixed(1)}B`
   }
   return `${marketCap.toFixed(1)}M`
+}
+
+export const handleAddToWatchlist = async (ticker, setMessage, setMessageVariant) => {
+  try {
+    const loggedUserJSON = window.localStorage.getItem('loggedStockappUser')
+    const user = JSON.parse(loggedUserJSON)
+
+    const currentWatchlist = JSON.parse(localStorage.getItem('watchlist') || '[]')
+    //console.log('Watchlist length: ', currentWatchlist.length)
+
+    if (currentWatchlist.length >= WATCHLIST_COUNT) {
+      setMessage(`Watchlist limit reached (${WATCHLIST_COUNT} stocks). Remove some stocks first.`)
+      setMessageVariant('warning')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    await addToWatchlist(ticker, user.token)
+    setMessage(`Added ${ticker} to your watchlist`)
+    setMessageVariant('success')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    const newWatchlist = [...currentWatchlist, { ticker }]
+    localStorage.setItem('watchlist', JSON.stringify(newWatchlist))
+  } catch (error) {
+    console.error('Error adding to watchlist:', error)
+    const errorMessage = error.response?.data?.error || 'Failed to add to watchlist'
+    setMessage(errorMessage)
+    setMessageVariant('danger')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
