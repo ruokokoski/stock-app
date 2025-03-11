@@ -25,6 +25,9 @@ const NavigationBar = ({ user, onLogout }) => {
               <Nav.Link as="span">
                 <Link to="/crypto" style={{ textDecoration: 'none', color: 'inherit' }}>Crypto</Link>
               </Nav.Link>
+              <Nav.Link as="span">
+                <Link to="/links" style={{ textDecoration: 'none', color: 'inherit' }}>Links</Link>
+              </Nav.Link>
             </>
           )}
           {user?.admin && (

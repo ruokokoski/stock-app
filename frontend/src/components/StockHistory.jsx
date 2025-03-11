@@ -36,7 +36,6 @@ const StockHistory = ({
   const [localEndDate, setLocalEndDate] = useState('')
   
   const handleSetCustomRange = () => {
-    console.log('handlecustom triggered')
     setChartInterval('custom')
     setStartDate(localStartDate)
     setEndDate(localEndDate)

@@ -9,6 +9,7 @@ import StockPage from './components/StockPage'
 import Watchlist from './components/Watchlist'
 import Database from './components/Database'
 import Crypto from './components/Crypto'
+import Links from './components/Links'
 import Users from './components/Users'
 import Password from './components/Password'
 import LoginForm from './components/LoginForm'
@@ -129,6 +130,7 @@ const App = () => {
           <Route path="/watchlist" element={user ? <Watchlist setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/db" element={user ? <Database setMessage={setMessage} setMessageVariant={setMessageVariant}/> : <Navigate replace to="/login" />} />
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
+          <Route path="/links" element={user ? <Links /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />

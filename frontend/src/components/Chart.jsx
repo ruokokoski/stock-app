@@ -8,7 +8,6 @@ const Chart = ({ chartData, name, selectedInterval }) => {
   const currentSeriesRef = useRef(null)
   const toolTipRef = useRef(null)
   const [seriesType, setSeriesType] = useState('area')
-  //const [toolTip, setToolTip] = useState(null)
 
   const handleToolTipMove = useCallback((param, newAreaSeries, toolTipInstance) => {
     if (

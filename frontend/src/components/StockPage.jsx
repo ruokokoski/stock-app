@@ -120,12 +120,11 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
         const endDate = `${currentYear}-${month}-${day}`
         response = await tiingoService.getHistorical(ticker, startDate, endDate)
       } else {
-        console.log('Range: ', range)
+        //console.log('Range: ', range)
         response = await twelvedataService.getTicker(ticker, range)
       }
       
       if (response.chartData && response.chartData.length > 0) {
-        //console.log('Setting chartData')
         setChartData(response.chartData)
 
         //console.log("First element:", response.chartData[0])
@@ -156,7 +155,6 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
       console.log('Skipping fetch: startDate or endDate is missing')
       return
     }
-    console.log('Triggering fetchHistoricalData')
     fetchHistoricalData(selectedInterval)
   }, [ticker, selectedInterval, fetchHistoricalData, startDate, endDate])
 
@@ -265,9 +263,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
           metricsData={metricsData}
           profileData={profileData}
           metadata={metadata}
-          //startDate={startDate}
           setStartDate={setStartDate}
-          //endDate={endDate}
           setEndDate={setEndDate}
         />
       ) : activeTab === 'history' ? (
