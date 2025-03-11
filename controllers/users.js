@@ -101,7 +101,8 @@ router.post('/change-password', tokenExtractor, async (req, res) => {
     : await bcrypt.compare(currentPassword, user.passwordhash)
 
   if (!passwordCorrect) {
-    return res.status(401).json({
+    console.log('Current password incorrect')
+    return res.status(400).json({
       error: 'Invalid current password'
     })
   }

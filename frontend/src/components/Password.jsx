@@ -5,34 +5,36 @@ import AuthInput from './AuthInput'
 import { FaLock } from 'react-icons/fa'
 import '../styles/styles.css'
 
-const Password = () => {
+const Password = ({ setMessage, setMessageVariant }) => {
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState(null)
-  const [messageVariant, setVariant] = useState('')
 
   const handleChangePassword = async (event) => {
     event.preventDefault()
     if (newPassword !== confirmPassword) {
       console.log('Password and confirmation do not match')
-      setMessage("New password and confirmation do not match!")
-      setVariant("danger")
+      setMessage('New password and confirmation do not match!')
+      setMessageVariant('danger')
       return
     }
 
     try {
       await userService.changePassword({ currentPassword, newPassword })
       console.log('Password changed')
-      setMessage("Password changed successfully!")
-      setVariant("success")
+      setMessage('Password changed successfully!')
+      setMessageVariant("success")
       setCurrentPassword('')
       setNewPassword('')
       setConfirmPassword('')
     } catch (error) {
       console.log('Password change failed:', error)
-      setMessage("Failed to change password.")
-      setVariant("danger")
+      if (error.response?.status === 400) {
+        setMessage('Wrong current password')
+      } else {
+        setMessage('Password change failed')
+      }
+      setMessageVariant('danger')
     }
   }
 
@@ -40,9 +42,6 @@ const Password = () => {
     <AuthForm
       title="Change Password"
       titleSize="1.5rem"
-      message={message}
-      messageVariant={messageVariant}
-      onCloseMessage={() => setMessage(null)}
       onSubmit={handleChangePassword}
     >
       <AuthInput

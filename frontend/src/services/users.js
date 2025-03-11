@@ -1,11 +1,11 @@
 import axios from 'axios'
 const baseUrl = '/api/users'
 
-// remove these later
-let token = null
+/*
 const setToken = (newToken) => {
-  token = newToken
+  let token = newToken
 }
+*/
 
 const getConfig = () => {
   const loggedUser = JSON.parse(localStorage.getItem('loggedStockappUser'))
@@ -41,4 +41,4 @@ const changeName = async ({ currentName, newName }) => {
   return response.data
 }
 
-export default { getAllUsers, setToken, updateUser, deleteUser, changePassword, changeName }
+export default { getAllUsers, updateUser, deleteUser, changePassword, changeName }

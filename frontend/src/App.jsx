@@ -20,7 +20,7 @@ import Marquee from './components/Marquee'
 import Message from './components/Message'
 import loginService from './services/login'
 import logoutService from './services/logout'
-import userService from './services/users'
+//import userService from './services/users'
 import signupService from './services/signup'
 
 const App = () => {
@@ -49,7 +49,7 @@ const App = () => {
 			const user = JSON.parse(loggedUserJSON)
 			if (user.token) {
         setUser(user)
-        userService.setToken(user.token)
+        //userService.setToken(user.token)
         console.log('Token is in localstorage')
       } else {
         console.log('No token found in localStorage')
@@ -69,7 +69,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedStockappUser', JSON.stringify(user)
       )
-      userService.setToken(user.token)
+      //userService.setToken(user.token)
       navigate('/')
       setMessage('logged in.')
       setMessageVariant('success')
@@ -133,8 +133,8 @@ const App = () => {
           <Route path="/crypto" element={user ? <Crypto /> : <Navigate replace to="/login" />} />
           <Route path="/links" element={user ? <Links /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
-          <Route path="/change-password" element={user ? <Password /> : <Navigate replace to="/login" />} />
-          <Route path="/change-name" element={user ? <Name /> : <Navigate replace to="/login" />} />
+          <Route path="/change-password" element={user ? <Password setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/login" />} />
+          <Route path="/change-name" element={user ? <Name setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
         </Routes>
