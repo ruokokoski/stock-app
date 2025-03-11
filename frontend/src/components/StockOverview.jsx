@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Chart from './Chart'
 import DateInputs from './DateInputs'
 import { handleDateChange, formatMarketCap } from '../utils/helpers'
@@ -10,11 +11,18 @@ const StockOverview = ({
   metricsData,
   profileData,
   metadata,
-  startDate,
   setStartDate,
-  endDate,
   setEndDate
 }) => {
+  const [localStartDate, setLocalStartDate] = useState('')
+  const [localEndDate, setLocalEndDate] = useState('')
+
+  const handleSetCustomRange = () => {
+    console.log('handlecustom triggered')
+    setChartInterval('custom')
+    setStartDate(localStartDate)
+    setEndDate(localEndDate)
+  }
   
   const renderIntervalButtons = (intervals) => {
     return intervals.map(interval => (
@@ -36,9 +44,16 @@ const StockOverview = ({
         <div className="buttons-container">
           {renderIntervalButtons(['1d', '1w', '1m', 'YTD', '1y', '5y', '10y'])}
           <DateInputs 
-            startDate={startDate} 
-            endDate={endDate} 
-            handleDateChange={(type, value) => handleDateChange(type, value, setStartDate, setEndDate, setChartInterval)}
+            startDate={localStartDate}
+            endDate={localEndDate}
+            handleDateChange={(type, value) => handleDateChange(
+              type, 
+              value, 
+              setLocalStartDate, 
+              setLocalEndDate
+            )}
+            onSet={handleSetCustomRange}
+            disabled={!localStartDate || !localEndDate}
           />
         </div>
         <div className="metrics-section">

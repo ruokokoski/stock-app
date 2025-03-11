@@ -50,4 +50,5 @@
 | 06.03 | 6    | create page for own db, add timed update to db, update StockPage and fix bugs |
 | 07.03 | 5    | sorting, showing and updating metrics on Database page, feature fixes |
 | 10.03 | 3    | fix bugs and lint warnings, refactoring code |
-| **Total** | **176** | |
+| 11.03 | 2    | fixing custo range for chart |
+| **Total** | **178** | |

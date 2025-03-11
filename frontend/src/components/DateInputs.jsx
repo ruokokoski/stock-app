@@ -1,4 +1,4 @@
-const DateInputs = ({ startDate, endDate, handleDateChange, label, maxWidth = 'none' }) => {
+const DateInputs = ({ startDate, endDate, handleDateChange, onSet, disabled, label, maxWidth = 'none' }) => {
     return (
       <div className="custom-date-range mt-2 d-flex align-items-center gap-2">
         {label && (
@@ -29,6 +29,13 @@ const DateInputs = ({ startDate, endDate, handleDateChange, label, maxWidth = 'n
             aria-label="End date"
             style={{ maxWidth: maxWidth }}
           />
+          <button
+            className="btn btn-sm btn-primary"
+            onClick={onSet}
+            disabled={disabled}
+          >
+            Set
+          </button>
         </div>
       </div>
     )

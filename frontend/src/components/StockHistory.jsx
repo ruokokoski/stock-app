@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { handleDateChange } from '../utils/helpers'
 import DateInputs from './DateInputs'
 import { Table, Button } from 'react-bootstrap'
@@ -31,6 +32,16 @@ const StockHistory = ({
     setMessage,
     setMessageVariant,
 }) => {
+  const [localStartDate, setLocalStartDate] = useState('')
+  const [localEndDate, setLocalEndDate] = useState('')
+  
+  const handleSetCustomRange = () => {
+    console.log('handlecustom triggered')
+    setChartInterval('custom')
+    setStartDate(localStartDate)
+    setEndDate(localEndDate)
+  }
+
   const copyTableToClipboard = async () => {
     const csvData = convertToCSV(chartData)
     
@@ -71,9 +82,16 @@ const StockHistory = ({
   return (
     <div>
       <DateInputs 
-        startDate={startDate} 
-        endDate={endDate} 
-        handleDateChange={(type, value) => handleDateChange(type, value, setStartDate, setEndDate, setChartInterval)}
+        startDate={localStartDate}
+        endDate={localEndDate}
+        handleDateChange={(type, value) => handleDateChange(
+          type, 
+          value, 
+          setLocalStartDate, 
+          setLocalEndDate
+        )}
+        onSet={handleSetCustomRange}
+        disabled={!localStartDate || !localEndDate}
         label="Select range for historical prices:"
         maxWidth="200px"
       />

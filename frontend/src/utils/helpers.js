@@ -99,7 +99,7 @@ export const handleDateChange = (type, value, setStartDate, setEndDate, setChart
   } else {
     setEndDate(newDate)
   }
-  setChartInterval('custom')
+  //setChartInterval('custom')
 }
 
 export const formatMarketCap = (marketCap) => {

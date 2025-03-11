@@ -82,8 +82,6 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
   const fetchHistoricalData = useCallback(async (range) => {
     const storageKey = `historicalData-${ticker}-${range}`
     const now = Date.now()
-    //const shortExpirationTime = 60 * 1000 // 1 min
-    //const longExpirationTime = 60 * 60 * 1000 // 1 hour
     
     let storedData = null
     if (range !== 'custom') {
@@ -98,7 +96,8 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
           console.log(`Used cached data for ${ticker}, interval: ${range}`)
           return
         } else if (dataAge < 60 * 60 * 1000) { // 1 hour
-          setChartData(parsedData.chartData || [])
+          console.log('Less than 1h')
+          //setChartData(parsedData.chartData || [])
         } else {
           localStorage.removeItem(storageKey)
         }
@@ -126,6 +125,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
       }
       
       if (response.chartData && response.chartData.length > 0) {
+        //console.log('Setting chartData')
         setChartData(response.chartData)
 
         //console.log("First element:", response.chartData[0])
@@ -265,9 +265,9 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
           metricsData={metricsData}
           profileData={profileData}
           metadata={metadata}
-          startDate={startDate}
+          //startDate={startDate}
           setStartDate={setStartDate}
-          endDate={endDate}
+          //endDate={endDate}
           setEndDate={setEndDate}
         />
       ) : activeTab === 'history' ? (

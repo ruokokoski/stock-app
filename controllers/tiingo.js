@@ -20,6 +20,9 @@ router.post('/historical', async (request, response) => {
     const { data } = await axios.get(url, tiingoHeader)
 
     //console.log('Data:', data)
+    const latestEntry = data[0]
+    const datePart = latestEntry.date.split('T')[0]
+    console.log('Date from tiingo: ', datePart)
 
     const chartData = data
       .map((entry) => ({
