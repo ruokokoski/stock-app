@@ -90,7 +90,6 @@ router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
 
 router.post('/change-password', tokenExtractor, async (req, res) => {
   const { currentPassword, newPassword } = req.body
-  //const user = await User.findByPk(req.decodedToken.id)
   const user = req.user
 
   const passwordCorrect = user === null
@@ -110,5 +109,20 @@ router.post('/change-password', tokenExtractor, async (req, res) => {
   res.status(200).json({ message: 'Password changed successfully' })
 })
 
+router.post('/change-name', tokenExtractor, async (req, res) => {
+  const { currentName, newName } = req.body
+  const user = req.user
+
+  if (!user || user.name !== currentName) {
+    return res.status(401).json({
+      error: 'Invalid current name'
+    })
+  }
+
+  user.name = newName
+  await user.save()
+
+  res.status(200).json({ message: 'Name changed successfully' })
+})
 
 module.exports = router

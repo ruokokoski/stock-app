@@ -38,8 +38,9 @@ const NavigationBar = ({ user, onLogout }) => {
         </Nav>
         <Nav className="ms-auto">
           {user ? (
-            <NavDropdown title={user.name} id="user-dropdown">
+            <NavDropdown title={<span style={{ textAlign: 'right', width: '100%' }}>{user.name}</span>} id="user-dropdown" style={{ minWidth: '100px' }} align="end">
               <NavDropdown.Item as={Link} to="/change-password">Change Password</NavDropdown.Item>
+              { /* <NavDropdown.Item as={Link} to="/change-name">Change Name</NavDropdown.Item> */}
               <NavDropdown.Item
                 onClick={(e) => {
                   e.preventDefault();

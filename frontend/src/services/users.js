@@ -38,4 +38,12 @@ const changePassword = async ({ currentPassword, newPassword }) => {
   return response.data
 }
 
-export default { getAllUsers, setToken, updateUser, deleteUser, changePassword }
+const changeName = async ({ currentName, newName }) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+  const response = await axios.post(`${baseUrl}/change-name`, { currentName, newName }, config)
+  return response.data
+}
+
+export default { getAllUsers, setToken, updateUser, deleteUser, changePassword, changeName }
