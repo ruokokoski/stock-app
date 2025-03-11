@@ -3,12 +3,16 @@ const Session = require('../models/session')
   
 const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization')
-  //console.log('Authorization header:', authorization)
+  console.log('Authorization header:', authorization)
+
   if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
     return res.status(401).json({ error: 'token missing' })
   }
 
   const session = await checkSession(authorization.substring(7))
+
+  console.log('Session exists:', !!session)
+  console.log('User in session:', session?.user?.id)
 
   if (!session) {
     return res.status(401).json({ error: 'Session invalid' })

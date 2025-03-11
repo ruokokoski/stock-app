@@ -1,48 +1,43 @@
 import axios from 'axios'
 const baseUrl = '/api/users'
 
+// remove these later
 let token = null
-
 const setToken = (newToken) => {
   token = newToken
 }
 
-const getAllUsers = async () => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
+const getConfig = () => {
+  const loggedUser = JSON.parse(localStorage.getItem('loggedStockappUser'))
+  if (!loggedUser?.token) {
+    throw new Error('No authentication token found')
   }
-  const response = await axios.get(baseUrl, config)
+  return {
+    headers: { Authorization: `Bearer ${loggedUser.token}` }
+  }
+}
+
+const getAllUsers = async () => {
+  const response = await axios.get(baseUrl, getConfig())
   return response.data
 }
 
 const updateUser = async (id, updatedData) => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-  const response = await axios.put(`${baseUrl}/${id}`, updatedData, config)
+  const response = await axios.put(`${baseUrl}/${id}`, updatedData, getConfig())
   return response.data
 }
 
 const deleteUser = async (id) => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-  await axios.delete(`${baseUrl}/${id}`, config)
+  await axios.delete(`${baseUrl}/${id}`, getConfig())
 }
 
 const changePassword = async ({ currentPassword, newPassword }) => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  }
-  const response = await axios.post(`${baseUrl}/change-password`, { currentPassword, newPassword }, config)
+  const response = await axios.post(`${baseUrl}/change-password`, { currentPassword, newPassword }, getConfig())
   return response.data
 }
 
 const changeName = async ({ currentName, newName }) => {
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  }
-  const response = await axios.post(`${baseUrl}/change-name`, { currentName, newName }, config)
+  const response = await axios.post(`${baseUrl}/change-name`, { currentName, newName }, getConfig())
   return response.data
 }
 

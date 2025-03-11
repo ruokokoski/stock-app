@@ -15,6 +15,7 @@ const Password = () => {
   const handleChangePassword = async (event) => {
     event.preventDefault()
     if (newPassword !== confirmPassword) {
+      console.log('Password and confirmation do not match')
       setMessage("New password and confirmation do not match!")
       setVariant("danger")
       return
@@ -22,6 +23,7 @@ const Password = () => {
 
     try {
       await userService.changePassword({ currentPassword, newPassword })
+      console.log('Password changed')
       setMessage("Password changed successfully!")
       setVariant("success")
       setCurrentPassword('')

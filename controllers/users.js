@@ -91,7 +91,10 @@ router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
 
 router.post('/change-password', tokenExtractor, async (req, res) => {
   const { currentPassword, newPassword } = req.body
-  const user = req.user
+  console.log('Start change-password')
+  const user = await User.findByPk(req.user.id)
+  if (!user) return res.status(401).json({ error: 'User not found' })
+  console.log('Name:', user.name)
 
   const passwordCorrect = user === null
     ? false
