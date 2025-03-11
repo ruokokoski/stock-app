@@ -18,12 +18,7 @@ router.post('/historical', async (request, response) => {
     //start and end format: YYYY-MM-DD
     const url = `https://api.tiingo.com/tiingo/daily/${ticker}/prices?startDate=${start}&endDate=${end}`
     const { data } = await axios.get(url, tiingoHeader)
-
-    //console.log('Data:', data)
-    const latestEntry = data[0]
-    const datePart = latestEntry.date.split('T')[0]
-    console.log('Date from tiingo: ', datePart)
-
+    
     const chartData = data
       .map((entry) => ({
         time: entry.date.split('T')[0],
@@ -34,8 +29,6 @@ router.post('/historical', async (request, response) => {
         volume: parseInt(entry.volume)
       }))
       .sort((a, b) => new Date(a.time) - new Date(b.time))
-    
-    //console.log('Chart data: ', chartData)
 
     response.status(200).json({
       ticker,

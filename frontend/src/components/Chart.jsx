@@ -92,6 +92,10 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       //autoSize: true,
       timeScale: {
         tickMarkFormatter: tickMarkFormatter,
+        barSpacing: chartData.length > 1000 ? 0.1 : 0.5,
+        rightBarStretch: chartData.length > 1000 ? 0.1 : 0.5,
+        fixLeftEdge: true,
+        fixRightEdge: true,
       }
     }
 
@@ -139,7 +143,10 @@ const Chart = ({ chartData, name, selectedInterval }) => {
     const currentSeries = currentSeriesRef.current
     if (!chart || !currentSeries || chartData.length === 0) return
     
+    
     const formattedData = formatChartData(chartData, seriesType)
+    //console.log('Data length:', chartData.length)
+    //console.log('Formatted data length:', formattedData.length)
 
     currentSeries.setData(formattedData)
     chart.timeScale().fitContent()
@@ -155,11 +162,13 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       allowBoldLabels: true,
     })
 
+    /*
     if (formattedData.length > 0) {
-      console.log('Chart interval: ', selectedInterval)
-      console.log('First element:', formattedData[0])
-      console.log('Last element:', formattedData[formattedData.length - 1])
+      console.log('Chart interval:', selectedInterval)
+      console.log('First element:', new Date(formattedData[0].time*1000).toLocaleDateString())
+      console.log('Last element:', new Date(formattedData[formattedData.length - 1].time*1000).toLocaleDateString())
     }
+    */
     
   }, [chartData, selectedInterval, seriesType])
 
