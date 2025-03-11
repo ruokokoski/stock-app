@@ -23,13 +23,19 @@ const StockOverview = ({
     setStartDate(localStartDate)
     setEndDate(localEndDate)
   }
+
+  const handleIntervalChange = (interval) => {
+    setChartInterval(interval)
+    setLocalStartDate('')
+    setLocalEndDate('')
+  }
   
   const renderIntervalButtons = (intervals) => {
     return intervals.map(interval => (
       <button
         key={interval}
         className={`gradient-button gradient-button-xsmall ${selectedInterval === interval ? 'selected' : ''}`}
-        onClick={() => setChartInterval(interval)}
+        onClick={() => handleIntervalChange(interval)}
         disabled={selectedInterval === interval}
       >
         {interval}

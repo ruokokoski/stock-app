@@ -30,7 +30,7 @@ const DateInputs = ({ startDate, endDate, handleDateChange, onSet, disabled, lab
             style={{ maxWidth: maxWidth }}
           />
           <button
-            className="btn btn-sm btn-primary"
+            className="gradient-button gradient-button-small"
             onClick={onSet}
             disabled={disabled}
           >
