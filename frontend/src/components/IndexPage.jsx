@@ -38,7 +38,7 @@ const IndexPage = () => {
       console.log('initialDataUsed:', initialDataUsed)
       setChartData(forwardedChartData)
       const latestTime = forwardedChartData[forwardedChartData.length - 1].time
-      console.log('Latest time:', latestTime)
+      //console.log('Latest time:', latestTime)
       setLastUpdated(formatDate(latestTime))
       setInitialDataUsed(true)
     } else if (!ticker.startsWith('I:')) {
@@ -93,13 +93,13 @@ const IndexPage = () => {
         </span>
       </div>
       <div className="stock-details">
-        <span className="last-updated">Updated: {convertUTCToLocal(lastUpdated)} EET</span>
+        <span className="last-updated">Updated: {convertUTCToLocal(lastUpdated)} ET</span>
       </div>
     </div>
     <div>
       <Chart 
         chartData={chartData} 
-        name={name} 
+        ticker={ticker} 
         selectedInterval={selectedInterval} 
       />
       <div className="buttons-container">

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { createChart } from 'lightweight-charts'
 import { formatChartData, createToolTip } from '../utils/helpers'
 
-const Chart = ({ chartData, name, selectedInterval }) => {
+const Chart = ({ chartData, ticker, selectedInterval }) => {
   const chartContainerRef = useRef(null)
   const chartRef = useRef(null)
   const currentSeriesRef = useRef(null)
@@ -29,7 +29,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       const data = param.seriesData.get(newAreaSeries)
       const price = data.value !== undefined ? data.value : data.close
 
-      toolTipInstance.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${name.split(' ')[0]}</div>
+      toolTipInstance.innerHTML = `<div style="color: rgba(38, 166, 154, 1)">${ticker.split(' ')[0]}</div>
         <div style="font-size: 16px; margin: 4px 0px; color: black">
           ${Math.round(100 * price) / 100}
         </div>
@@ -43,7 +43,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       toolTipInstance.style.left = `${padding}}px`
       toolTipInstance.style.top = `${margin + padding}px`
     }
-  }, [name]) 
+  }, [ticker]) 
 
   useEffect(() => {
     const container = chartContainerRef.current
@@ -116,7 +116,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
       })
     }
 
-    const toolTipInstance = createToolTip(container, name)
+    const toolTipInstance = createToolTip(container, ticker)
 
     newChart.subscribeCrosshairMove(param => {
       handleToolTipMove(param, currentSeriesRef.current, toolTipInstance)
@@ -135,7 +135,7 @@ const Chart = ({ chartData, name, selectedInterval }) => {
         toolTipRef.current = null
       }
     }
-  }, [selectedInterval, name, seriesType, handleToolTipMove])
+  }, [selectedInterval, ticker, seriesType, handleToolTipMove])
 
   useEffect(() => {
     const chart = chartRef.current
