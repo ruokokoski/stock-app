@@ -51,5 +51,5 @@
 | 07.03 | 5    | sorting, showing and updating metrics on Database page, feature fixes |
 | 10.03 | 3    | fix bugs and lint warnings, refactoring code |
 | 11.03 | 7    | fixing custom range for chart, add Links, small fixes, bug fix to change-password |
-| 12.03 | 3    | enhance links, implement change-name, add help and User Manual |
-| **Total** | **186** | |
+| 12.03 | 6    | enhance links, implement change-name, add help and User Manual, webscraper for indices |
+| **Total** | **189** | |

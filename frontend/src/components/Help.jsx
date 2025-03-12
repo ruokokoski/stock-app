@@ -11,9 +11,9 @@ const Help = () => {
           <div className="help-section">
             <h6 className="text-secondary mb-2">Markets</h6>
             <p className="mb-4">
-              This page displays the performance of key stock indices, including S&P 500, OMX Helsinki, and OMX Stockholm. Below the indices, the latest financial news is shown. Clicking on an index takes the user to a page with historical performance data.
+            The Markets page provides real-time and historical data for key stock indices, including OMX Helsinki, DAX, STOXX Europe 600, NASDAQ 100, and S&P 500. Real-time prices are scraped directly from Kauppalehti, while historical data is fetched from APIs. Below the indices, the latest financial news is displayed for market insights.
               <br/><br/>
-              Due to limitations of free stock market APIs, the S&P 500 index is represented by the SPY ETF, and European stock index charts are available only with end-of-day data.
+              Due to limitations of free stock market APIs, the S&P 500 chart is represented by the SPY ETF, and OMX Helsinki and OMX Stockholm stock index charts are available only with end-of-day data.
             </p>
 
             <h6 className="text-secondary mb-2">Stocks</h6>

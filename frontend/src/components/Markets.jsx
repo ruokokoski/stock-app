@@ -1,27 +1,26 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { twelvedataService, polygonService, finnhubService } from '../services/stockServices'
+import { twelvedataService, polygonService, finnhubService, scrapeService } from '../services/stockServices'
 import { Table } from 'react-bootstrap'
 import { getColor, convertUTCToLocal } from '../utils/helpers'
 import NewsArticles from './NewsArticles'
 
 // Free plan for Twelvedata provides only US ETF tickers e.g. SPX and QQQ now outdated!
 const TWELVEDATA_TICKERS = [
-  { ticker: 'SPY', name: 'S&P 500 (SPY ETF)', flag: '🇺🇸' },
-  //{ ticker: 'ADYEN:Euronext', name: 'Adyen N.V.', flag: '🇳🇱' },
-  //{ ticker: '005930:KRX', name: 'Samsumg Electronics Co.', flag: '🇰🇷' },
+  { ticker: 'SPY', name: 'SPDR S&P 500 ETF Trust', flag: '🇺🇸' },
 ]
 
 // Polygon tickers are not real-time
 const POLYGON_TICKERS = [
-  { ticker: 'I:OMXHPI', name: 'OMX Helsinki PI', flag: '🇫🇮' },
-  { ticker: 'I:OMXS30', name: 'OMX Stockholm 30', flag: '🇸🇪' },
-  //{ ticker: 'I:NQJP', name: 'Nasdaq Japan Index', flag: '🇯🇵' },
+  { ticker: 'I:OMXHPI', name: 'OMX HELSINKI PI', flag: '🇫🇮' },
+  { ticker: 'I:OMXS30', name: 'OMX STOCKHOLM 30', flag: '🇸🇪' },
 ]
 
 const Markets = ({ setMessage, setMessageVariant }) => {
   const [marketData, setMarketData] = useState({})
+  const [scrapedIndices, setScrapedIndices] = useState([])
   const [newsData, setNewsData] = useState([])
+  const [marketLoading, setMarketLoading] = useState(false)
   const [newsLoading, setNewsLoading] = useState(false)
 
   useEffect(() => {
@@ -82,6 +81,35 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     fetchData()
   }, [setMessage, setMessageVariant])
 
+  //web scraping:
+  useEffect(() => {
+    const fetchScrapedIndices = async () => {
+      setMarketLoading(true)
+      try {
+        const data = await scrapeService.scrapeIndices()
+        const updatedData = data.map((index) => {
+          return {
+            ...index,
+            flag:
+              index.name.includes('OMX HELSINKI PI') ? '🇫🇮' :
+              index.name.includes('DAX') ? '🇩🇪' :
+              index.name.includes('STOXX EUROPE 600') ? '🇪🇺' :
+              index.name.includes('NASDAQ 100') ? '🇺🇸' :
+              index.name.includes('S&P 500') ? '🇺🇸' :
+              '',
+          }
+        })
+        setMarketLoading(false)
+        setScrapedIndices(updatedData)
+      } catch (error) {
+        console.error('Error scraping indices:', error)
+        setMessage('Error scraping indices')
+        setMessageVariant('danger')
+      }
+    }
+    fetchScrapedIndices()
+  }, [setMessage, setMessageVariant])
+
   useEffect(() => {
     const fetchNewsData = async () => {
       setNewsLoading(true)
@@ -125,18 +153,45 @@ const Markets = ({ setMessage, setMessageVariant }) => {
   return (
     <div className='content-padding'>
       <h3>Markets overview</h3>
+      {marketLoading ? (
+        <div className="spinner" />
+      ) : (
+        <Table striped bordered hover style={{ width: '100%' }}>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Price</th>
+              <th>% Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scrapedIndices.map((index, idx) => (
+              <tr key={idx}>
+                <td>
+                  <span>{index.flag} </span>
+                  {index.name}
+                </td>
+                <td>{index.price}</td>
+                <td style={getColor(index.change)}>{index.change}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+
+      <h3>Historical data</h3>
       <Table striped bordered hover style={{ width: '100%' }}>
         <thead>
           <tr>
             <th style={{ width: '36%' }}>Index</th>
-            <th style={{ width: '19%' }}>Points</th>
+            <th style={{ width: '19%' }}>Price</th>
             <th style={{ width: '19%' }}>% Change</th>
             <th style={{ width: '26%' }}>Date/Time</th>
           </tr>
         </thead>
         <tbody>
-          {renderTableRows(TWELVEDATA_TICKERS)}
           {renderTableRows(POLYGON_TICKERS)}
+          {renderTableRows(TWELVEDATA_TICKERS)}
         </tbody>
       </Table>
 

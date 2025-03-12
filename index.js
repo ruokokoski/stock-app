@@ -17,6 +17,7 @@ const polygonRouter = require('./controllers/polygon')
 const cryptoRouter = require('./controllers/coincap')
 const stocksRouter = require('./controllers/stocks')
 const watchlistsRouter = require('./controllers/watchlists')
+const scrapeRouter = require('./controllers/scrape')
 
 const { unknownEndpoint, errorHandler } = require('./util/middleware')
 
@@ -36,6 +37,7 @@ app.use('/api/polygon', polygonRouter)
 app.use('/api/crypto', cryptoRouter)
 app.use('/api/stocks', stocksRouter)
 app.use('/api/watchlist', watchlistsRouter)
+app.use('/api/scrape', scrapeRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

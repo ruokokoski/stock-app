@@ -4,9 +4,20 @@
 The application is a web-based tool for monitoring U.S. stock markets. Its various pages provide the following functionalities:
 
 ## Markets
-This page displays the performance of key stock indices, including S&P 500, OMX Helsinki, and OMX Stockholm. Below the indices, the latest financial news is shown. Clicking on an index takes the user to a page with historical performance data.
+The Markets page provides real-time and historical data for key stock indices, along with the latest financial news. It consists of three main sections:
 
-Due to limitations of free stock market APIs, the S&P 500 index is represented by the SPY ETF, and European stock index charts are available only with end-of-day data.
+1. **Real-Time Market Overview**
+   - Displays the latest prices and percentage changes for major indices, including OMX Helsinki, DAX, DAX, STOXX Europe 600, NASDAQ 100, and S&P 500.
+   - Data is scraped directly from the web for accurate and timely updates.
+
+2. **Historical Data**
+   - Provides historical performance data for OMX Helsinki, OMX Stockholm, and the S&P 500 ETF.
+   - Users can click on an index to view detailed historical charts.
+
+3. **Financial News**
+   - Displays the latest financial news articles from Finnhub, offering insights into global market trends.
+
+The page combines data from web scraping and APIs to provide comprehensive market coverage.
 
 ## Stocks
 Users can search for U.S. stocks by entering a keyword in the search field. The search returns up to five of the most relevant results. Below the search, a selection of popular U.S. stocks, such as Apple, Coca-Cola, and Microsoft, is displayed along with their latest performance. Clicking on a stock directs the user to a detailed stock page. Stocks can be added to the watchlist by clicking the eye icon.

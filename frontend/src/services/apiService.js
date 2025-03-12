@@ -56,6 +56,10 @@ const apiService = (baseUrl) => ({
       }
     })
     return response.data
+  },
+  scrapeIndices: async () => { //web scraping
+    const response = await axios.get(`${baseUrl}/indices`)
+    return response.data
   }
 })
 
