@@ -472,3 +472,21 @@ h4 {
 .link-item:hover .link-description {
   color: #666;
 }
+
+.help-section h6 {
+  font-weight: 600;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.help-section p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-left: 1rem;
+}
+
+.help-section br {
+  content: "";
+  display: block;
+  margin-bottom: 0.75rem;
+}

@@ -41,6 +41,9 @@ const NavigationBar = ({ user, onLogout }) => {
             <NavDropdown title={<span style={{ textAlign: 'right', width: '100%' }}>{user.name}</span>} id="user-dropdown" style={{ minWidth: '100px' }} align="end">
               <NavDropdown.Item as={Link} to="/change-name">Change Name</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/change-password">Change Password</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item as={Link} to="/help">Help</NavDropdown.Item>
+              <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={(e) => {
                   e.preventDefault();

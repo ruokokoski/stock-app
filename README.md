@@ -4,7 +4,7 @@
 
 This stock market app is a 10-credit project developed for the Fullstack Open course at the University of Helsinki.
 
-The application is a web application designed for monitoring stock markets. It fetches real-time stock data from a stock API, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own watchlists within the application, which are saved in a database. Additionally, users can screen stocks based on selected metrics.
+The application is a web application designed for monitoring stock markets. It fetches real-time stock data from stock APIs, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own watchlists within the application, which are saved in a database. Historical price and key metrics information for individual stocks can be saved as csv-files.
 
 ## Tech Stack
 - **Backend:** The backend of the application is built using **Node.js**, which is used to handle server-side logic, manage API requests, and interact with the database. Node.js provides an efficient environment for processing real-time data and handling asynchronous operations.
@@ -12,6 +12,7 @@ The application is a web application designed for monitoring stock markets. It f
 - **Database:** The application uses **PostgreSQL** as its database management system. PostgreSQL is a powerful, open-source relational database that provides robust performance, reliability, and support for complex queries.
 
 ## Documents
+- [User Manual](./documents/user_manual.md)
 - [Requirement specs](./documents/requirement_specs.md)
 - [Comparison of stock APIs](./documents/stock_apis.md)
 - [Hours tracking](./documents/timetracking.md)
@@ -23,8 +24,11 @@ The application is a web application designed for monitoring stock markets. It f
 2. **npm**: Node.js comes with npm (Node Package Manager) installed. Alternatively, you can use **yarn** if preferred.
 3. **Fly.io Signup**: Create an account on [Fly.io](https://fly.io) for deploying and hosting the application.
 4. **API Registrations**:
+   - **Finnhub API**: Sign up for a free Finnhub API key from [Finnhub](https://www.finnhub.io).
    - **Tiingo API**: Sign up for a free Tiingo API key from [Tiingo](https://www.tiingo.com).
-   - **TwelveData API**: Register for a free TwelveData API key at [TwelveData](https://twelvedata.com). 
+   - **TwelveData API**: Register for a free TwelveData API key at [TwelveData](https://twelvedata.com).
+   - **Polygon API**: Free Polygon API key from [Polygon](https://www.polygon.io).
+   - **Coincap API**: Free Coincap API key from [Coincap](https://www.coincap.io).
 
 ### Setup
 

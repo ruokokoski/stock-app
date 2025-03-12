@@ -13,6 +13,7 @@ import Links from './components/Links'
 import Users from './components/Users'
 import Password from './components/Password'
 import Name from './components/Name'
+import Help from './components/Help'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
 import NavigationBar from './components/NavigationBar'
@@ -64,7 +65,6 @@ const App = () => {
 				username,
 				password,
 			})
-      //console.log('Logged in user:', user)
       setUser(user)
       window.localStorage.setItem(
         'loggedStockappUser', JSON.stringify(user)
@@ -135,6 +135,7 @@ const App = () => {
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/login" />} />
           <Route path="/change-name" element={user ? <Name setMessage={setMessage} setMessageVariant={setMessageVariant} setUser={setUser} /> : <Navigate replace to="/login" />} />
+          <Route path="/help" element={user ? <Help /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
         </Routes>
