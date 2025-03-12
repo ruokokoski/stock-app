@@ -116,13 +116,26 @@ router.post('/change-password', tokenExtractor, async (req, res) => {
 
 router.post('/change-name', tokenExtractor, async (req, res) => {
   const { newName } = req.body
+  if (!newName || newName.trim().length < 2) {
+    return res.status(400).json({ error: 'Name must be at least 2 characters' })
+  }
+  
   const user = await User.findByPk(req.user.id)
   if (!user) return res.status(404).json({ error: 'User not found' })
 
   user.name = newName.trim()
   await user.save()
 
-  res.status(200).json({ message: 'Name changed successfully' })
+  const userResponse = {
+    id: user.id,
+    name: user.name,
+    username: user.username,
+    admin: user.admin,
+    disabled: user.disabled,
+    token: req.headers.authorization.split(' ')[1]
+  }
+
+  res.status(200).json(userResponse)
 })
 
 module.exports = router

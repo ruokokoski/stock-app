@@ -5,7 +5,7 @@ import AuthInput from './AuthInput'
 import { FaUserCircle } from 'react-icons/fa'
 import '../styles/styles.css'
 
-const Name = ({ setMessage, setMessageVariant }) => {
+const Name = ({ setMessage, setMessageVariant, setUser }) => {
   const [newName, setNewName] = useState('')
   const [confirmName, setConfirmName] = useState('')
 
@@ -18,14 +18,22 @@ const Name = ({ setMessage, setMessageVariant }) => {
     }
 
     try {
-      await userService.changeName(newName)
+      const updatedUser = await userService.changeName(newName)
+    
+      setUser(updatedUser)
+      window.localStorage.setItem(
+        'loggedStockappUser', 
+        JSON.stringify(updatedUser)
+      )
+
       setMessage("Name changed successfully!")
       setMessageVariant("success")
       setNewName('')
       setConfirmName('')
     } catch (error) {
       console.log('Name change failed:', error)
-      setMessage("Failed to change name.")
+      const errorMessage = error.response?.data?.error || "Failed to change name"
+      setMessage(errorMessage)
       setMessageVariant("danger")
     }
   }

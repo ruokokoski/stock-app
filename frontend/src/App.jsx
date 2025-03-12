@@ -134,7 +134,7 @@ const App = () => {
           <Route path="/links" element={user ? <Links /> : <Navigate replace to="/login" />} />
           <Route path="/users" element={user ? (user.admin ? <Users setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/" />) : <Navigate replace to="/login" />} />
           <Route path="/change-password" element={user ? <Password setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/login" />} />
-          <Route path="/change-name" element={user ? <Name setMessage={setMessage} setMessageVariant={setMessageVariant} /> : <Navigate replace to="/login" />} />
+          <Route path="/change-name" element={user ? <Name setMessage={setMessage} setMessageVariant={setMessageVariant} setUser={setUser} /> : <Navigate replace to="/login" />} />
           <Route path="/login" element={<LoginForm onLogin={handleLogin} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
           <Route path="/signup" element={<SignupForm onSignup={handleSignup} setMessage={setMessage} setMessageVariant={setMessageVariant} />} />
         </Routes>
