@@ -140,7 +140,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
         </tbody>
       </Table>
 
-      <h3>Latest News</h3>
+      <h3>Financial News</h3>
       <NewsArticles newsData={newsData} newsLoading={newsLoading} />
     </div>
   )

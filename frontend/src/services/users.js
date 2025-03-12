@@ -36,8 +36,8 @@ const changePassword = async ({ currentPassword, newPassword }) => {
   return response.data
 }
 
-const changeName = async ({ currentName, newName }) => {
-  const response = await axios.post(`${baseUrl}/change-name`, { currentName, newName }, getConfig())
+const changeName = async (newName) => {
+  const response = await axios.post(`${baseUrl}/change-name`, { newName }, getConfig())
   return response.data
 }
 

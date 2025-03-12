@@ -115,16 +115,11 @@ router.post('/change-password', tokenExtractor, async (req, res) => {
 })
 
 router.post('/change-name', tokenExtractor, async (req, res) => {
-  const { currentName, newName } = req.body
-  const user = req.user
+  const { newName } = req.body
+  const user = await User.findByPk(req.user.id)
+  if (!user) return res.status(404).json({ error: 'User not found' })
 
-  if (!user || user.name !== currentName) {
-    return res.status(401).json({
-      error: 'Invalid current name'
-    })
-  }
-
-  user.name = newName
+  user.name = newName.trim()
   await user.save()
 
   res.status(200).json({ message: 'Name changed successfully' })

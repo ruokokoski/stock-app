@@ -5,32 +5,28 @@ import AuthInput from './AuthInput'
 import { FaUserCircle } from 'react-icons/fa'
 import '../styles/styles.css'
 
-const Name = () => {
-  const [currentName, setCurrentName] = useState('')
+const Name = ({ setMessage, setMessageVariant }) => {
   const [newName, setNewName] = useState('')
   const [confirmName, setConfirmName] = useState('')
-  const [message, setMessage] = useState(null)
-  const [messageVariant, setVariant] = useState('')
 
   const handleChangeName = async (event) => {
     event.preventDefault()
     if (newName !== confirmName) {
       setMessage("New name and confirmation do not match!")
-      setVariant("danger")
+      setMessageVariant("danger")
       return
     }
 
     try {
-      await userService.changeName({ currentName, newName })
+      await userService.changeName(newName)
       setMessage("Name changed successfully!")
-      setVariant("success")
-      setCurrentName('')
+      setMessageVariant("success")
       setNewName('')
       setConfirmName('')
     } catch (error) {
       console.log('Name change failed:', error)
       setMessage("Failed to change name.")
-      setVariant("danger")
+      setMessageVariant("danger")
     }
   }
 
@@ -38,20 +34,8 @@ const Name = () => {
     <AuthForm
       title="Change Name"
       titleSize="1.5rem"
-      message={message}
-      messageVariant={messageVariant}
-      onCloseMessage={() => setMessage(null)}
       onSubmit={handleChangeName}
     >
-      <AuthInput
-        controlId="currentName"
-        label="Current Name"
-        type="text"
-        value={currentName}
-        placeholder="Enter current name"
-        onChange={({ target }) => setCurrentName(target.value)}
-        icon={FaUserCircle}
-      />
       <AuthInput
         controlId="newName"
         label="New Name"
