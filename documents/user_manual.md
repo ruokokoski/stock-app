@@ -1,13 +1,12 @@
 # User Manual
 
-## The Application
 The application is a web-based tool for monitoring U.S. stock markets. Its various pages provide the following functionalities:
 
 ## Markets
 The Markets page provides real-time and historical data for key stock indices, along with the latest financial news. It consists of three main sections:
 
 1. **Real-Time Market Overview**
-   - Displays the latest prices and percentage changes for major indices, including OMX Helsinki, DAX, DAX, STOXX Europe 600, NASDAQ 100, and S&P 500.
+   - Displays the latest prices and percentage changes for major indices, including OMX Helsinki, DAX, STOXX Europe 600, NASDAQ 100, and S&P 500.
    - Data is scraped directly from the web for accurate and timely updates.
 
 2. **Historical Data**
