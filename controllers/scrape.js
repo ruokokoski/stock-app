@@ -2,7 +2,16 @@ const router = require('express').Router()
 const puppeteer = require('puppeteer')
 
 router.get('/indices', async (req, res) => {
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+    ],
+  })
+
   const page = await browser.newPage()
   
   try {
