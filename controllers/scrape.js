@@ -33,6 +33,11 @@ router.get('/indices', async (req, res) => {
     res.json(indices)
   } catch (error) {
     console.error('Scraping error:', error)
+    if (browser) {
+      const page = await browser.pages()[0]
+      const status = await page.status()
+      console.error(`Page status: ${status}`)
+    }
     await browser.close()
     res.status(500).json({ error: 'Scraping failed' })
   }
