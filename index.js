@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const app = express()
 require('express-async-errors')
 
@@ -22,9 +23,9 @@ const scrapeRouter = require('./controllers/scrape')
 const { unknownEndpoint, errorHandler } = require('./util/middleware')
 
 app.use(cors())
-
 app.use(express.json())
-//app.use(express.static('dist')) // for using frontend build later
+
+app.use(express.static(path.join(__dirname, 'frontend', 'dist'))) // for frontend build
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
@@ -44,9 +45,15 @@ app.use(errorHandler)
 
 const start = async () => {
   await connectToDatabase()
+  // Fix for fly.io:
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`)
+  })
+  /*
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
+  */
 }
 
 start()

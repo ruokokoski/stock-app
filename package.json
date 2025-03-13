@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@flydotio/dockerfile": "^0.7.8",
     "@stylistic/eslint-plugin-js": "^2.6.4",
     "eslint": "^9.9.0",
     "globals": "^15.9.0",

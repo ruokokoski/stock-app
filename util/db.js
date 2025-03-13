@@ -2,6 +2,8 @@ const Sequelize = require('sequelize')
 const { DATABASE_URL } = require('./config')
 const { Umzug, SequelizeStorage } = require('umzug')
 
+const isTestEnv = process.env.NODE_ENV === 'test'
+
 const sequelize = new Sequelize(
   process.env.DB_DIALECT === 'sqlite'
     ? {
@@ -10,11 +12,11 @@ const sequelize = new Sequelize(
       logging: false, // Disable logging for CI
     }
     : DATABASE_URL,
-  /* Disable logging:
+  // Disable logging:
   {
+    dialect: process.env.DB_DIALECT || 'postgres',
     logging: false,
   }
-  */
 )
 
 const connectToDatabase = async () => {
