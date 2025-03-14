@@ -88,7 +88,7 @@ router.post('/search', async (request, response) => {
     }
     
     const commonStocks = data.result
-      .filter(item => item.type.toLowerCase() === 'common stock')
+      .filter(item => ['common stock', 'reit'].includes(item.type.toLowerCase()))
       .slice(0, SEARCH_RESULTS_LIMIT)
     //console.log('Common Stocks: ', commonStocks)
 
