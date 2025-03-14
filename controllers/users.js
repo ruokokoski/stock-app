@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-const { User, Session } = require('../models')
+const { User, Session, Watchlist } = require('../models')
 const { tokenExtractor, isAdmin } = require('../util/middleware')
 
 router.get('/', async (req, res) => {
@@ -83,7 +83,9 @@ router.delete('/:id', tokenExtractor, isAdmin, async (req, res) => {
   if (user.admin) {
     return res.status(400).json({ error: 'Cannot delete an admin user' })
   }
-  
+  console.log('Deleting: ', user.name)
+
+  await Watchlist.destroy({ where: { userId: user.id } })
   await Session.destroy({ where: { userId: user.id } })
   await user.destroy()
   res.status(204).end()

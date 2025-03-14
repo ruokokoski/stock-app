@@ -53,4 +53,5 @@
 | 11.03 | 7    | fixing custom range for chart, add Links, small fixes, bug fix to change-password |
 | 12.03 | 6    | enhance links, implement change-name, add help and User Manual, webscraper for indices |
 | 13.03 | 3    | fix configurations and deploy to fly.io |
-| **Total** | **192** | |
+| 14.03 | 1    | fix bugs |
+| **Total** | **193** | |

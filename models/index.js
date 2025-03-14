@@ -13,9 +13,8 @@ Stock.belongsToMany(User, { through: Watchlist })
 Watchlist.belongsTo(User, { foreignKey: 'userId' })
 Watchlist.belongsTo(Stock, { foreignKey: 'stockId' })
 
-User.hasMany(Session)
+User.hasMany(Session, { onDelete: 'CASCADE' })
 Session.belongsTo(User, { onDelete: 'CASCADE' })
-//Session.belongsTo(User)
 
 module.exports = {
   User,

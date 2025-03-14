@@ -4,7 +4,7 @@ import { stockService, finnhubService } from '../services/stockServices'
 import DatabaseTable from './DatabaseTable'
 import { getColor, formatMarketCap, handleAddToWatchlist } from '../utils/helpers'
 
-const UPDATE_LIMIT = 15
+const UPDATE_LIMIT = 14 // Finnhub rate limit: 60 calls/min and 30 calls/sec
 
 const Database = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState([])
