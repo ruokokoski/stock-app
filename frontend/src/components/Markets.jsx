@@ -27,7 +27,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
     const fetchData = async () => {
       const newMarketData = { }
       const now = Date.now()
-      const expirationTime = 60 * 1000 // 1 minute
+      const expirationTime = 60 * 1000 // 1 minute delay due to API rate limits
 
       const fetchTickerData = async (tickers, fetchService) => {
         for (const { ticker } of tickers) {
@@ -39,7 +39,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
               const parsedData = JSON.parse(storedData)
               if (now - parsedData.timestamp <= expirationTime) {
                 newMarketData[ticker] = parsedData.data
-                console.log('Data was fresh')
+                //console.log('Data was fresh')
                 continue
               }
             }
@@ -85,6 +85,14 @@ const Markets = ({ setMessage, setMessageVariant }) => {
   useEffect(() => {
     const fetchScrapedIndices = async () => {
       setMarketLoading(true)
+      const storageKey = 'scraped-indices'
+      const storedData = localStorage.getItem(storageKey)
+      
+      if (storedData) {
+        const parsedData = JSON.parse(storedData)
+        setScrapedIndices(parsedData)
+      }
+
       try {
         const data = await scrapeService.scrapeIndices()
         const updatedData = data.map((index) => {
@@ -97,12 +105,16 @@ const Markets = ({ setMessage, setMessageVariant }) => {
               index.name.includes('NASDAQ 100') ? '🇺🇸' :
               index.name.includes('S&P 500') ? '🇺🇸' :
               '',
+            formattedTimestamp: convertUTCToLocal(index.timestamp),
           }
         })
+        localStorage.setItem(storageKey, JSON.stringify(updatedData))
+        
         setMarketLoading(false)
         setScrapedIndices(updatedData)
       } catch (error) {
         console.error('Error scraping indices:', error)
+        setMarketLoading(false)
         setMessage('Error scraping indices')
         setMessageVariant('danger')
       }
@@ -159,9 +171,10 @@ const Markets = ({ setMessage, setMessageVariant }) => {
         <Table striped bordered hover style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th>Index</th>
-              <th>Price</th>
-              <th>% Change</th>
+              <th style={{ width: '36%' }}>Index</th>
+              <th style={{ width: '19%' }}>Price</th>
+              <th style={{ width: '19%' }}>% Change</th>
+              <th style={{ width: '26%' }}>Date/Time</th>
             </tr>
           </thead>
           <tbody>
@@ -173,6 +186,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
                 </td>
                 <td>{index.price}</td>
                 <td style={getColor(index.change)}>{index.change}</td>
+                <td>{index.formattedTimestamp || '-'}</td>
               </tr>
             ))}
           </tbody>

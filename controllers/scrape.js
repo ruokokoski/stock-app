@@ -20,23 +20,26 @@ router.get('/indices', async (req, res) => {
       timeout: 30000
     })
 
-    const indices = await page.evaluate(() => {
+    const timestamp = new Date().toISOString()
+
+    const indices = await page.evaluate((timestamp) => {
       // eslint-disable-next-line no-undef
       const marketHeaders = Array.from(document.querySelectorAll('[data-k5a-pos^="MarketHeader"]'))
-      
+
       return marketHeaders.map(header => {
         const nameElement = header.querySelector('.tmcl-__sc-e37vct-1.fqPyXf')
         const priceElement = header.querySelector('.tmcl-__sc-ytji64-1.gxJroE')
         const changeElement = header.querySelector('.tmcl-__sc-lsh9h-1')
-        
+
         return {
           name: nameElement ? nameElement.innerText : 'N/A',
           price: priceElement ? parseFloat(priceElement.innerText.replace(',', '.')) : 0,
           change: changeElement ? changeElement.innerText : '0%',
-          changeValue: changeElement ? parseFloat(changeElement.innerText.replace(',', '.')) : 0
+          changeValue: changeElement ? parseFloat(changeElement.innerText.replace(',', '.')) : 0,
+          timestamp: timestamp
         }
       })
-    })
+    }, timestamp)
 
     await browser.close()
     res.json(indices)
