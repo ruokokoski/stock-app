@@ -306,6 +306,8 @@ router.post('/metrics', async (request, response) => {
       quarterlyMetrics,
     }
 
+    //console.log('Filtered data without quarterlyMetrics: ', (({ quarterlyMetrics, ...rest }) => rest)(filteredData))
+
     await saveMetricsToDatabase(ticker, filteredData)
 
     response.status(200).json(filteredData)

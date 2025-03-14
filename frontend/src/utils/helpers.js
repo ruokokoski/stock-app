@@ -103,16 +103,16 @@ export const handleDateChange = (type, value, setStartDate, setEndDate) => {
 }
 
 export const formatMarketCap = (marketCap) => {
-  if (marketCap == null || isNaN(marketCap)) {
-    return '-'
-  }
+  const numericValue = Number(marketCap)
+  if (isNaN(numericValue)) return '-'
 
-  if (marketCap >= 1000000) {
-    return `${(marketCap / 1000000).toFixed(2)}T`
-  } else if (marketCap >= 1000) {
-    return `${(marketCap / 1000).toFixed(1)}B`
+  if (numericValue >= 1e6) {
+    return `${(numericValue / 1e6).toFixed(2)}T`
+  } 
+  if (numericValue >= 1e3) {
+    return `${(numericValue / 1e3).toFixed(1)}B`
   }
-  return `${marketCap.toFixed(1)}M`
+  return `${numericValue.toFixed(1)}M`
 }
 
 export const handleAddToWatchlist = async (ticker, setMessage, setMessageVariant) => {

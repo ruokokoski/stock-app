@@ -46,7 +46,8 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
             const apiData = await finnhubService.getTicker(ticker, null, state.name)
             newData = {
               ...apiData,
-              percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+              percentageChange: apiData.pchange && !isNaN(apiData.pchange) ? 
+                `${Number(apiData.pchange).toFixed(2)}%` : '-'
             }
           } else {
             console.log('Using fresh data from state')
@@ -63,7 +64,8 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
           const apiData = await finnhubService.getTicker(ticker, null, null)
           newData = {
             ...apiData,
-            percentageChange: apiData.pchange ? `${apiData.pchange.toFixed(2)}%` : '-'
+            percentageChange: apiData.pchange ? 
+              `${Number(apiData.pchange).toFixed(2)}%` : '-'
           }
         }
         
@@ -209,6 +211,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     const fetchProfile = async (ticker) => {
       try {
         const data = await finnhubService.getCompanyProfile(ticker)
+        console.log('Fetching profile data')
         setProfileData(data)
       } catch (error) {
         console.error('Error fetching company profile:', error)
@@ -221,6 +224,7 @@ const StockPage = ({ setMessage, setMessageVariant }) => {
     const fetchMetrics = async (ticker) => {
       try {
         const data = await finnhubService.getMetrics(ticker)
+        console.log('Fetching metrics')
         setMetricsData(data)
       } catch (error) {
         console.error('Error fetching key metrics:', error)

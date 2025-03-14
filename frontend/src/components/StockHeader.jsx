@@ -29,6 +29,7 @@ const StockHeader = ({ name, profileData, ytdPriceReturn, metadata, ticker, perc
       </div>
       <div className="stock-price">
         <span className="latest-price">{latest}</span>
+
         <span className="price-change" style={getColor(change)}>
           {change > 0 ? `+${change}` : change}
         </span>
