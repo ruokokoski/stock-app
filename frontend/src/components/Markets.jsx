@@ -90,6 +90,7 @@ const Markets = ({ setMessage, setMessageVariant }) => {
       
       if (storedData) {
         const parsedData = JSON.parse(storedData)
+        setMarketLoading(false)
         setScrapedIndices(parsedData)
       }
 
