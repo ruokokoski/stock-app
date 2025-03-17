@@ -54,4 +54,5 @@
 | 12.03 | 6    | enhance links, implement change-name, add help and User Manual, webscraper for indices |
 | 13.03 | 3    | fix configurations and deploy to fly.io |
 | 14.03 | 4    | fix bugs, add localstorage for scraped indices, testing |
-| **Total** | **196** | |
+| 17.03 | 1    | improve StockPage layout for mobile devices |
+| **Total** | **197** | |
