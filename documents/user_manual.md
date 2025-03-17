@@ -36,6 +36,8 @@ The watchlist displays stocks selected by the user. Stocks can be removed from w
 ## Database
 Each time a user searches for stocks, the results are also stored in the database. The database page lists all stored stocks along with their latest performance and key metrics. By default, stocks are ordered by ticker, but users can sort them by other criteria such as name, YTD price return, or market cap. The list updates every minute by fetching the latest price and metrics for the 15 stocks with the oldest timestamps, considering API rate limits.
 
+Users can also filter the stock list based on financial metrics. By clicking the Filter data button, they can set minimum and maximum values for P/E, P/B, ROE (%), and dividend yield (%). Only stocks matching the specified criteria will be displayed, allowing for more targeted analysis.
+
 ## Crypto
 This page displays the top 20 cryptocurrencies by market cap along with their latest performance.
 

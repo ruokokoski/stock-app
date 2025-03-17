@@ -40,6 +40,8 @@ const Help = () => {
             <h6 className="text-secondary mb-2">Database</h6>
             <p className="mb-4">
               Each time a user searches for stocks, the results are also stored in the database. The database page lists all stored stocks along with their latest performance and key metrics. By default, stocks are ordered by ticker, but users can sort them by other criteria such as name, YTD price return, or market cap. The list updates every minute by fetching the latest price and metrics for the 15 stocks with the oldest timestamps, considering API rate limits.
+              <br></br>
+              Users can also filter the stock list based on financial metrics. By clicking the Filter data button, they can set minimum and maximum values for P/E, P/B, ROE (%), and dividend yield (%). Only stocks matching the specified criteria will be displayed, allowing for more targeted analysis.
             </p>
 
             <h6 className="text-secondary mb-2">Crypto</h6>

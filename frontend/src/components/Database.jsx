@@ -8,11 +8,19 @@ const UPDATE_LIMIT = 15 // Finnhub rate limit: 60 calls/min and 30 calls/sec
 
 const Database = ({ setMessage, setMessageVariant }) => {
   const [stockData, setStockData] = useState([])
+  const [filteredData, setFilteredData] = useState([])
   const [loading, setLoading] = useState(true)
   const [sortConfig, setSortConfig] = useState({
     field: 'ticker',
     order: 'ASC'
   })
+  const [filters, setFilters] = useState({
+    pe: { min: '', max: '' },
+    pb: { min: '', max: '' },
+    roe: { min: '', max: '' },
+    divyield: { min: '', max: '' }
+  })
+  const [showFilters, setShowFilters] = useState(false)
 
   const fetchData = useCallback(async () => {
     try {
@@ -26,6 +34,81 @@ const Database = ({ setMessage, setMessageVariant }) => {
       setLoading(false)
     }
   }, [setMessage, setMessageVariant, sortConfig])
+
+  useEffect(() => {
+    const filterStocks = () => {
+      return stockData.filter(stock => {
+        const passesPE = checkFilter(stock.pe, filters.pe)
+        const passesPB = checkFilter(stock.pb, filters.pb)
+        const passesROE = checkFilter(stock.roe, filters.roe)
+        const passesDiv = checkFilter(stock.divyield, filters.divyield)
+        return passesPE && passesPB && passesROE && passesDiv
+      })
+    }
+    
+    setFilteredData(filterStocks())
+  }, [stockData, filters])
+
+  const checkFilter = (value, { min, max }) => {
+    if (min === '' && max === '') return true
+    
+    if (value === '-' || value === null || value === undefined) {
+      return false
+    }
+
+    const numValue = Number(value)
+    if (isNaN(numValue)) return false
+    const minVal = min !== '' ? Number(min) : -Infinity
+    const maxVal = max !== '' ? Number(max) : Infinity
+    return numValue >= minVal && numValue <= maxVal
+  }
+
+  const handleFilterChange = (field, type, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [field]: { ...prev[field], [type]: value }
+    }))
+  }
+
+  const toggleFilters = () => {
+    setShowFilters(prev => {
+      if (prev) {
+        setFilters({
+          pe: { min: '', max: '' },
+          pb: { min: '', max: '' },
+          roe: { min: '', max: '' },
+          divyield: { min: '', max: '' }
+        })
+      }
+      return !prev
+    })
+  }
+
+  const renderFilters = () => {
+    if (!showFilters) return null
+
+    return (
+    <div className="filter-container">
+      {['pe', 'pb', 'roe', 'divyield'].map((field) => (
+        <div key={field} className="filter-group">
+          <label>{field.toUpperCase()}</label>
+          <input
+            type="number"
+            placeholder="Min"
+            value={filters[field].min}
+            onChange={(e) => handleFilterChange(field, 'min', e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Max"
+            value={filters[field].max}
+            onChange={(e) => handleFilterChange(field, 'max', e.target.value)}
+          />
+        </div>
+      ))}
+    </div>
+    )
+  }
 
   const handleSort = (field) => {
     setSortConfig(prev => ({
@@ -124,13 +207,30 @@ const Database = ({ setMessage, setMessageVariant }) => {
     
   return (
     <div className='content-padding'>
-      <h3>Stocks in own database ({stockData.length})</h3>
+      <h3>Stocks in own database: {stockData.length}</h3>
+
+      <button
+        className="gradient-button"
+        onClick={toggleFilters}
+        style={{ marginBottom: '1rem' }}
+      >
+        {showFilters ? 'Hide filters' : 'Filter data'}
+      </button>
+
+      {renderFilters()}
+
+      {filteredData.length !== stockData.length && (
+        <div className="filtered-count" style={{ margin: '10px 0', color: '#666' }}>
+          Showing {filteredData.length} stocks matching filters
+        </div>
+      )}
+
       {stockData.length === 0 ? (
         <div>Database is empty</div>
         ) : (
         <>
           <DatabaseTable 
-            data={stockData} 
+            data={filteredData} 
             renderRow={renderStocks}
             sortConfig={sortConfig}
             onSort={handleSort}

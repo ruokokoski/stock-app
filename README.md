@@ -4,7 +4,7 @@
 
 This stock market app is a 10-credit project developed for the Fullstack Open course at the University of Helsinki.
 
-The application is a web application designed for monitoring stock markets. It fetches real-time stock data from stock APIs, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own watchlists within the application, which are saved in a database. Historical price and key metrics information for individual stocks can be saved as csv-files.
+The application is a web application designed for monitoring U.S. stock markets. It fetches real-time stock data from stock APIs, allowing users to track historical data for both indices and individual stocks. Detailed information and fundamental metrics for individual stocks can also be displayed. Users can create their own watchlists within the application, which are saved in a database. Historical price and key metrics information for individual stocks can be saved as csv-files. Users can also filter and analyze stocks based on selected metrics.
 
 ## Tech Stack
 - **Backend:** The backend of the application is built using **Node.js**, which is used to handle server-side logic, manage API requests, and interact with the database. Node.js provides an efficient environment for processing real-time data and handling asynchronous operations.
