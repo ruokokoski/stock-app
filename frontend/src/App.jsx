@@ -38,6 +38,8 @@ const App = () => {
         console.log('Token expired or invalid')
         window.localStorage.removeItem('loggedStockappUser')
         setUser(null)
+        setMessage('Your session has expired. Please log in again.')
+        setMessageVariant('danger')
         navigate('/login')
       }
       return Promise.reject(error)

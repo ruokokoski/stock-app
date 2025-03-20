@@ -55,4 +55,5 @@
 | 13.03 | 3    | fix configurations and deploy to fly.io |
 | 14.03 | 4    | fix bugs, add localstorage for scraped indices, testing |
 | 17.03 | 3    | improve StockPage layout for mobile devices, add filtering for database |
-| **Total** | **199** | |
+| 20.03 | 1    | testing and sall fixes |
+| **Total** | **200** | |

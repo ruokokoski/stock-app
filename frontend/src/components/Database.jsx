@@ -51,7 +51,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
 
   const checkFilter = (value, { min, max }) => {
     if (min === '' && max === '') return true
-    
+
     if (value === '-' || value === null || value === undefined) {
       return false
     }
@@ -158,7 +158,7 @@ const Database = ({ setMessage, setMessageVariant }) => {
 
   const renderStocks = (stock) => {
     const percentageChange = stock.pchange !== null ? `${stock.pchange.toFixed(2)}%` : '-'
-    const ytdChange = stock.ytdpricereturn !== null ? `${stock.ytdpricereturn.toFixed(2)}%` : '-'
+    const ytdChange = stock.ytdpricereturn !== null ? `${stock.ytdpricereturn.toFixed(1)}%` : '-'
     const color = getColor(percentageChange)
     const ytdcolor = getColor(ytdChange)
 

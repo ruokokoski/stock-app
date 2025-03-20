@@ -18,7 +18,7 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
             Tick {getSortIndicator('ticker')}
           </th>
           <th 
-            style={{ width: '29%', cursor: 'pointer' }}
+            style={{ width: '28%', cursor: 'pointer' }}
             onClick={() => onSort('name')}
           >
             Name {getSortIndicator('name')}
@@ -37,7 +37,7 @@ const DatabaseTable = ({ data, renderRow, sortConfig, onSort }) => {
             YTD {getSortIndicator('ytdpricereturn')}
           </th>
           <th 
-            style={{ width: '9%', cursor: 'pointer' }}
+            style={{ width: '10%', cursor: 'pointer' }}
             onClick={() => onSort('marketcap')}
           >
             MCap {getSortIndicator('marketcap')}
