@@ -56,5 +56,5 @@
 | 14.03 | 4    | fix bugs, add localstorage for scraped indices, testing |
 | 17.03 | 3    | improve StockPage layout for mobile devices, add filtering for database |
 | 20.03 | 1    | testing and sall fixes |
-| 17.04 | 1    | fix fly.io database |
+| 17.04 | 1    | fix fly.io database and coincap API |
 | **Total** | **201** | |

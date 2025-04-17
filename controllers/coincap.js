@@ -13,7 +13,7 @@ router.post('/', async (request, response) => {
   }
 
   try {
-    const url = `https://api.coincap.io/v2/assets?limit=${limit}`
+    const url = `https://rest.coincap.io/v3/assets?limit=${limit}`
     const data = await axios.get(url, coincapHeader)
     //console.log('Coincap data:', data.data)
 
